@@ -1,11 +1,11 @@
-import { DEX_NAMES } from "../data/dex-names.js?v=65";
-import { iconSprite, frontSprite } from "../data/sprites.js?v=65";
-import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=65";
-import { pixelIcon } from "./pixel.js?v=65";
-import { badgeHtml } from "./badge.js?v=65";
-import { NATURES, natureLabel } from "../data/natures.js?v=65";
-import { shinyOdds } from "../data/shiny.js?v=65";
-import { getPokemon } from "../data/pokeapi.js?v=65";
+import { DEX_NAMES } from "../data/dex-names.js?v=100";
+import { iconSprite, frontSprite } from "../data/sprites.js?v=100";
+import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=100";
+import { pixelIcon } from "./pixel.js?v=100";
+import { badgeHtml } from "./badge.js?v=100";
+import { NATURES, natureLabel } from "../data/natures.js?v=100";
+import { shinyOdds } from "../data/shiny.js?v=100";
+import { getPokemon } from "../data/pokeapi.js?v=100";
 
 /** Dos naturalezas recomendadas según las estadísticas base. */
 function recommendNatures(b) {

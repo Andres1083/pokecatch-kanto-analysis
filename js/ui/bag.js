@@ -1,8 +1,8 @@
 // Mochila: panel plegable + hoja de acción para usar / vender objetos.
 
-import { CATEGORIES, ITEMS, bagKinds, useItem, sellItem } from "../data/items.js?v=65";
-import { pixelIcon } from "./pixel.js?v=65";
-import { frontSprite } from "../data/sprites.js?v=65";
+import { CATEGORIES, ITEMS, bagKinds, useItem, sellItem } from "../data/items.js?v=100";
+import { pixelIcon } from "./pixel.js?v=100";
+import { frontSprite } from "../data/sprites.js?v=100";
 
 const icon = (id) => {
   const it = ITEMS[id] || {};

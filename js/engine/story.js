@@ -1,8 +1,8 @@
 // Historia de Kanto: capítulos → tramos → nodos, y tablas de aparición.
 // Datos tomados del Poke'Catch original (pesos, horarios, clima).
 
-import { CHAPTERS } from "../data/story.js?v=65";
-import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=65";
+import { CHAPTERS } from "../data/story.js?v=100";
+import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=100";
 
 export { CHAPTERS };
 
@@ -56,13 +56,34 @@ export function buildChapter(ci, rand = Math.random) {
       nodes.push({ t: "center", seg: segIdx });
     } else if (st.kind === "find") {
       pendingFind = st;
+    } else if (st.kind === "unlock") {
+      const segIdx = Math.max(0, segs.length - 1);
+      nodes.push({ t: "unlock", seg: segIdx, key: st.once, text: st.text });
     } else if (st.kind === "gym") {
       const segIdx = segs.length;
       segs.push({ name: st.name, kind: "gym", areas: [], bg: st.bg, step: si, gym: st });
       if (pendingFind) { nodes.push({ t: "find", seg: segIdx, item: pendingFind.item }); pendingFind = null; }
       nodes.push({ t: "gym", seg: segIdx });
+    } else if (st.kind === "legend") {
+      const segIdx = segs.length;
+      segs.push({
+        name: st.name,
+        kind: "legend",
+        areas: [],
+        bg: st.bg || "cave",
+        step: si,
+        legendId: st.id,
+        legendLevel: st.level,
+      });
+      nodes.push({
+        t: "legend",
+        seg: segIdx,
+        id: st.id,
+        level: st.level,
+        once: st.once || `legend-${st.id}`,
+      });
     }
-    // gift / static / trade / unlock: aún no implementados (se omiten)
+    // gift / static / trade: aún no implementados (se omiten)
   });
   return { segs, nodes };
 }
@@ -195,6 +216,7 @@ export function chapterSpecies(segs) {
       for (let l = a; l <= b + 1; l++) set.set(`${e.id}:${l}`, { id: e.id, level: l });
     }
     if (seg.gym) for (const [id, level] of seg.gym.team) set.set(`${id}:${level}`, { id, level });
+    if (seg.legendId) set.set(`${seg.legendId}:${seg.legendLevel}`, { id: seg.legendId, level: seg.legendLevel });
   }
   return [...set.values()];
 }

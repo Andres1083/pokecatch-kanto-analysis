@@ -1,6 +1,6 @@
 // Barra superior de progreso del capítulo: arbustos, entrenadores, "?", centro y gimnasio.
 
-import { pixelIcon } from "./pixel.js?v=65";
+import { pixelIcon } from "./pixel.js?v=100";
 
 const WINDOW = 7;
 const px = (shape, pal) => `<img src="${pixelIcon(shape, pal)}" alt="" width="24" height="24" style="width:24px;height:24px" />`;
@@ -11,6 +11,8 @@ function inner(type) {
     case "wild":    return px("bush");
     case "center":  return px("center");
     case "gym":     return px("gem", MEDAL);
+    case "legend":  return `<span class="rnode-legend" aria-label="Encuentro legendario">✦</span>`;
+    case "unlock":  return `<span class="rnode-q">!</span>`;
     case "item":
     case "find":    return `<span class="rnode-q">?</span>`;
     case "trainer": return `<span class="rnode-dot"></span>`;
@@ -31,7 +33,7 @@ export function renderRouteBar({ name, nodes, progress, fighting = false }) {
     if (i > start) parts.push(`<span class="rlink ${i <= progress ? "done" : ""}"></span>`);
     let body = inner(t);
     // Completados: salvajes se atenúan; entrenadores/objetos pasan a punto verde
-    if (st === "done" && (t === "trainer" || t === "item" || t === "find")) body = `<span class="rnode-ok"></span>`;
+    if (st === "done" && (t === "trainer" || t === "item" || t === "find" || t === "legend" || t === "unlock")) body = `<span class="rnode-ok"></span>`;
     // En pelea, el nodo actual pasa a cuadro blanco
     if (st === "cur" && fighting && (t === "wild" || t === "trainer")) body = `<span class="rnode-now"></span>`;
     parts.push(`<span class="rnode ${t} ${st}" data-node="${i}">${body}</span>`);

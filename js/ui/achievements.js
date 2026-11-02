@@ -1,4 +1,4 @@
-import { evaluateAchievements, achievementSummary } from "../data/achievements.js?v=93";
+import { evaluateAchievements, achievementSummary } from "../data/achievements.js?v=100";
 
 const KIND_LBL = { aspect: "ASPECTO", frame: "MARCO", scene: "ESCENA" };
 
@@ -112,7 +112,9 @@ function row(a, unlocked) {
   return `
   <article class="ach-row ${a.done ? "done" : "locked"}">
     <div class="ach-ico">${a.done
-      ? `<img src="assets/trainers/${a.reward || "youngster"}.png" alt="" onerror="this.style.display='none'" />`
+      ? (a.kind === "frame"
+        ? `<span class="ach-frame-reward">◇</span>`
+        : `<img src="assets/trainers/still/${a.reward || "youngster"}.png" alt="" onerror="this.style.display='none'" />`)
       : `<span class="ach-lock">🔒</span>`}</div>
     <div class="ach-meta">
       <small>${KIND_LBL[a.kind] || ""}</small>

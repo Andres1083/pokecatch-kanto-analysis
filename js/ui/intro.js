@@ -6,6 +6,8 @@ const DIALOGUES = [
   "Pero dime... ¿qué personaje te representa mejor?",
 ];
 
+import { starterMarkup, playStarterReveal } from "./starter-reveal.js?v=100";
+
 export function startIntro({ onComplete }) {
   const app = document.getElementById("app");
   app.innerHTML = `
@@ -46,24 +48,7 @@ export function startIntro({ onComplete }) {
         </div>
       </div>
 
-      <div id="starter-select" class="starter-select hidden">
-        <p class="starter-title">¡El Profesor Oak te ofrece un Pokémon!</p>
-        <div class="starters">
-          <button class="starter-card" data-id="1" type="button">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur" />
-            <span>Bulbasaur</span>
-          </button>
-          <button class="starter-card" data-id="4" type="button">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charmander" />
-            <span>Charmander</span>
-          </button>
-          <button class="starter-card" data-id="7" type="button">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" alt="Squirtle" />
-            <span>Squirtle</span>
-          </button>
-        </div>
-        <button id="btn-choose-starter" class="btn-confirm" disabled type="button">ELIGE UN POKÉMON</button>
-      </div>
+      <div id="starter-select" class="starter-select hidden">${starterMarkup()}</div>
     </div>
   `;
 
@@ -135,12 +120,14 @@ export function startIntro({ onComplete }) {
         btnSkip.classList.add("hidden");
         if (introBottom) introBottom.classList.add("hidden");
         starterSelect.classList.remove("hidden");
+        playStarterReveal(starterSelect);
       }, 1600);
     }, 1400);
   });
 
   starterSelect.querySelectorAll(".starter-card").forEach(card => {
     card.addEventListener("click", () => {
+      if (!starterSelect.dataset.ready && card.disabled) return;
       starterSelect.querySelectorAll(".starter-card").forEach(c => c.classList.remove("selected"));
       card.classList.add("selected");
       selectedStarter = Number(card.dataset.id);

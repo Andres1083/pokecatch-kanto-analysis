@@ -143,25 +143,37 @@ body {
 }
 
 .char-card {
-  background: #1e293b;
-  border: 3px solid #334155;
-  border-radius: 16px;
-  padding: 1rem;
+  background: #141a2b;
+  border: 3px solid #2a3350;
+  border-radius: 18px;
+  padding: 1.15rem 1.25rem 1rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .12s ease;
+  width: 148px;
+  min-height: 168px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .char-card img {
-  width: 100px;
-  height: 100px;
+  width: 132px;
+  height: 132px;
   object-fit: contain;
   image-rendering: pixelated;
+  filter: drop-shadow(0 3px 0 rgba(0,0,0,.25));
 }
 
+/* Selección como el original: relleno ámbar en toda la tarjeta */
 .char-card.selected {
-  border-color: #fbbf24;
-  box-shadow: 0 0 0 2px #fbbf24;
+  background: #3a3420;
+  border-color: #e8c84a;
+  box-shadow:
+    0 0 0 2px rgba(232,200,74,.55),
+    inset 0 0 0 1px rgba(255,230,120,.12),
+    0 6px 18px rgba(0,0,0,.35);
 }
+.char-card:active { transform: scale(.98); }
 
 .btn-confirm {
   background: var(--accent);
@@ -3000,7 +3012,27 @@ b.cs-bar { font-size: 1.15rem; color: #ffd84a; background: #20120a; border: 3px 
 
 /* ───── Pantalla de título ───── */
 .ttl { position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 35%, #2a1424 0, #141626 55%, #0d1020 100%); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; font-family: "Press Start 2P", monospace; color: #fff; }
-.ttl::before { content: ""; position: absolute; inset: 0; opacity: .07; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ccircle cx='45' cy='45' r='30' fill='none' stroke='white' stroke-width='5'/%3E%3Cpath d='M15 45h60' stroke='white' stroke-width='5'/%3E%3Ccircle cx='45' cy='45' r='9' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E"); background-size: 90px 90px; }
+/* Pokéballs en diagonal, drift lento hacia abajo-derecha */
+.ttl::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: .09;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='4'%3E%3Ccircle cx='48' cy='48' r='28'/%3E%3Cpath d='M20 48h56'/%3E%3Ccircle cx='48' cy='48' r='8'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 96px 96px;
+  transform: rotate(-18deg);
+  animation: ttlBallsDrift 48s linear infinite;
+}
+@keyframes ttlBallsDrift {
+  0%   { transform: rotate(-18deg) translate(0, 0); }
+  100% { transform: rotate(-18deg) translate(96px, 96px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ttl::before { animation: none; }
+}
 .ttl-field { position: absolute; inset: 0; pointer-events: none; }
 .ttl-mon { position: absolute; left: 0; top: 0; image-rendering: pixelated; will-change: translate; filter: drop-shadow(0 4px 0 rgba(0,0,0,.35)); }
 .ttl-ball { filter: drop-shadow(0 3px 0 rgba(0,0,0,.35)); }
@@ -5654,6 +5686,74 @@ button.rail-slot.active,
   transform-origin: bottom center !important;
 }
 
+/* v93: Cueva Celeste desbloqueada */
+.pg-secret.open { cursor: pointer; background: linear-gradient(90deg, #2a1f4a, #1b2235); border-left-color: #c9a0ff; color: #e8dcff; }
+.pg-secret.open small { color: #c9a0ff; }
+.pg-secret i { margin-left: auto; font-style: normal; font-size: 1.6rem; color: #c9a0ff; }
+
+/* v96: más estados */
+.st-badge.brn { background: #f0703a; }
+.st-badge.slp { background: #7d869c; }
+.st-badge.frz { background: #6ad0f0; color: #06323f; }
+.st-badge.cnf { background: #ff8fd0; color: #4a0f33; }
+
+/* v98: título y barra inferior como el original */
+.ttl-actions { width: min(92vw, 440px); }
+.ttl-primary { font-size: 1.75rem !important; padding: 1.1rem .8rem !important; letter-spacing: 1px; width: 100%; }
+.ttl-row { display: flex; gap: 10px; width: 100%; }
+.ttl-row .ttl-btn { flex: 1; font-size: 1.25rem; padding: 1rem .4rem; position: relative; white-space: nowrap; }
+.ttl-new { position: absolute; top: -12px; right: -4px; background: #ffcb05; color: #3a2a00; font-style: normal; font-size: .8rem; padding: 2px 8px; border-radius: 999px; }
+.ttl-log ul { margin: .3rem 0 0; padding-left: 1.1rem; color: #dfe3f5; font-size: 1.05rem; line-height: 1.3; }
+.ttl-log small { display: block; color: #9aa3bb; font-size: .95rem; }
+.ttl-btn { font-size: 1.15rem; }
+
+#bottom-nav { gap: 6px; padding: 8px; background: #20222e; border-color: #3a4160; }
+#bottom-nav button { flex: 1 1 0; height: 62px; padding: 0; border-radius: 14px; background: #272a3a; color: #fff; gap: 2px; transition: flex-grow .22s ease; overflow: hidden; }
+#bottom-nav button em { display: none; }
+#bottom-nav .nav-ico { height: 32px; width: auto; max-width: 78%; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+#bottom-nav button.active { flex: 2.6 1 0; background: #e5534f; box-shadow: inset 0 -5px 0 #a8262e, 0 0 0 0 transparent; }
+#bottom-nav button.active .nav-ico { height: 34px; }
+#bottom-nav button.active em { display: block; font-family: "Jersey 10", var(--font-ui), sans-serif; font-size: 1.05rem; letter-spacing: .5px; text-transform: uppercase; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,.35); line-height: 1; }
+#enemy-img[data-loading="1"] { opacity: 0 !important; }
+/* sin dibujo (src vacío) no se pinta nada: evita el recuadro transparente antes de que salga el rival */
+#enemy-img:not([src]), #enemy-img[src=""], #ally-img:not([src]), #ally-img[src=""] { visibility: hidden !important; }
+
+/* v99: elección del inicial animada (plataformas, balls, silueta) */
+.starter-select { background: #080b18 !important; overflow: hidden; justify-content: flex-start; padding-top: 18vh; gap: 0; }
+.sx-stars { position: absolute; inset: 0; pointer-events: none; opacity: .8;
+  background:
+    radial-gradient(1px 1px at 12% 18%, #9fb4ff 50%, transparent 51%), radial-gradient(1px 1px at 78% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 33% 72%, #8aa0e8 50%, transparent 51%), radial-gradient(1px 1px at 90% 66%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 30%, #9fb4ff 50%, transparent 51%), radial-gradient(1px 1px at 7% 55%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 66% 84%, #8aa0e8 50%, transparent 51%), radial-gradient(1px 1px at 44% 8%, #fff 50%, transparent 51%); }
+.starter-select .starter-title { font-size: .9rem; color: #dbe4ff; margin: 0 0 14vh; position: relative; z-index: 2; }
+.starters.sx { display: flex; justify-content: space-around; width: 100%; max-width: 460px; gap: 0; margin: 0; position: relative; z-index: 2; }
+.sx-slot { position: relative; width: 31%; height: 150px; padding: 0; min-width: 0; background: transparent !important; border: 0 !important; box-shadow: none !important; cursor: pointer; }
+.sx-slot:disabled { cursor: default; }
+.sx-pad { position: absolute; left: 50%; bottom: 6px; width: 92px; height: 24px; transform: translateX(-50%) scale(.5); opacity: 0; border-radius: 50%;
+  background: radial-gradient(#7fb0ff 1px, transparent 1.6px) 0 0 / 4px 4px, #1b3a86; border: 2px solid #4f8dff; transition: opacity .35s, transform .35s; image-rendering: pixelated; }
+.sx-slot.pad-on .sx-pad { opacity: 1; transform: translateX(-50%) scale(1); }
+.sx-ball { position: absolute; left: 50%; bottom: 14px; width: 28px; height: 28px; display: none; image-rendering: pixelated; z-index: 3; transform: translate(-50%, -520px); }
+.sx-mon { position: absolute; left: 50%; bottom: 14px; width: 100px; height: 100px; transform: translateX(-50%); object-fit: contain; image-rendering: pixelated; visibility: hidden; z-index: 2; }
+.sx-mon.sil { filter: brightness(0) invert(1); }
+.sx-mon:not(.sil) { transition: filter .4s; }
+.sx-mon.idle { animation: sxBob 1.2s ease-in-out infinite; }
+.sx-slot:nth-child(2) .sx-mon.idle { animation-delay: .25s; } .sx-slot:nth-child(3) .sx-mon.idle { animation-delay: .5s; }
+@keyframes sxBob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+.sx-slot.ready:hover .sx-pad, .sx-slot.selected .sx-pad { border-color: #ffd54a; box-shadow: 0 0 14px #ffd54a88; }
+.sx-slot.selected .sx-mon { filter: drop-shadow(0 0 6px #ffd54a); }
+.sx-fx { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.sx-dialog { position: relative; z-index: 3; width: min(90vw, 460px); min-height: 58px; margin-top: 22px; padding: 16px 18px; border: 2px solid #3a4160; border-radius: 12px; background: #23263a; color: #fff; font-size: 1.2rem; text-align: left; }
+.sx-dialog em { position: absolute; right: 12px; bottom: 6px; font-style: normal; font-size: .7rem; color: #9aa3bb; }
+.sx-go { position: relative; z-index: 3; margin-top: 18px; }
+.sx-skip { position: absolute; left: 50%; bottom: 7vh; transform: translateX(-50%); z-index: 5; }
+.sx-mon { width: 132px; height: 132px; bottom: 12px; }
+.sx-ball { width: 32px; height: 32px; }
+.sx-skip { width: auto !important; padding: .5rem 1.1rem !important; }
+.sx-slot { height: 190px; }
+.sx-mon { width: 200px; height: 200px; bottom: -22px; }
+.sx-slot { height: 150px; }
+.sx-mon { width: auto; height: auto; bottom: 20px; max-width: 150px; }
 /* ───── Logros ───── */
 .ach-screen {
   position: fixed; inset: 0; z-index: 80;
@@ -5756,3 +5856,25 @@ button.rail-slot.active,
   position: absolute; inset: 12px; background: #0a0e18; border-radius: 8px;
   opacity: .9;
 }
+
+
+/* Aspectos y marcos bloqueados hasta cumplir su logro */
+.me-item.locked { opacity: .48; filter: grayscale(.8); cursor: not-allowed; }
+.me-item.locked img { opacity: .55; }
+.me-item.frame.locked { border-style: dashed; }
+
+.ach-frame-reward { display:grid; place-items:center; width:42px; height:42px; border:3px solid #e8c050; border-radius:12px; color:#ffe58a; font-size:1.8rem; box-shadow:0 0 10px #e8c05055; }
+
+
+/* Nodo especial para encuentros legendarios en el mapa de Kanto */
+.rnode.legend .rnode-legend {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: #ffe58a;
+  font-size: 25px;
+  line-height: 1;
+  text-shadow: 0 0 7px #f4c542, 0 0 14px #e8a91c;
+}
+.rnode.legend.done .rnode-legend { color: #72d6a1; text-shadow: 0 0 7px #36b87b; }

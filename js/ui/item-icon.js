@@ -1,6 +1,6 @@
 // Icono de objeto: usa el PNG de assets/items/<id>.png y, si falta, el icono generado.
-import { ITEMS } from "../data/items.js?v=65";
-import { pixelIcon } from "./pixel.js?v=65";
+import { ITEMS } from "../data/items.js?v=100";
+import { pixelIcon } from "./pixel.js?v=100";
 
 export function itemIconSrc(id) { return `assets/items/${id}.png`; }
 export function itemFallback(id) {

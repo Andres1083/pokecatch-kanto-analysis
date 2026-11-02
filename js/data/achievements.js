@@ -49,7 +49,7 @@ export const ACHIEVEMENTS = [
   {
     id: "rocketgrunt",
     kind: "aspect",
-    reward: "grunt",
+    reward: "rocket",
     title: "Variocolor ×10",
     desc: "Ten 10 Pokémon variocolor.",
     max: 10,
@@ -58,11 +58,38 @@ export const ACHIEVEMENTS = [
   {
     id: "pokefan-f",
     kind: "aspect",
-    reward: "lass",
+    reward: "pokefan-f",
     title: "Guardería",
     desc: "Haz eclosionar 50 Huevos.",
     max: 50,
     progress: (s) => ({ cur: Math.min(50, s.stats?.hatched || 0), max: 50 }),
+  },
+  {
+    id: "lass",
+    kind: "aspect",
+    reward: "lass",
+    title: "Capturador",
+    desc: "Captura 10 Pokémon.",
+    max: 10,
+    progress: (s) => ({ cur: Math.min(10, totalCaptures(s)), max: 10 }),
+  },
+  {
+    id: "swimmer-f",
+    kind: "aspect",
+    reward: "swimmer-f",
+    title: "Nadador",
+    desc: "Captura 10 especies de tipo Agua.",
+    max: 10,
+    progress: (s) => ({ cur: Math.min(10, countIds(s, WATER_IDS).cur), max: 10 }),
+  },
+  {
+    id: "hiker",
+    kind: "aspect",
+    reward: "hiker",
+    title: "Montañista",
+    desc: "Captura 10 especies de tipo Roca o Tierra.",
+    max: 10,
+    progress: (s) => ({ cur: Math.min(10, countIds(s, ROCK_GROUND_IDS).cur), max: 10 }),
   },
   {
     id: "youngster",
@@ -77,13 +104,13 @@ export const ACHIEVEMENTS = [
     id: "picnicker",
     kind: "aspect",
     reward: "picnicker",
-    title: "10 capturas",
-    desc: "Captura 10 Pokémon.",
-    max: 10,
-    progress: (s) => ({ cur: Math.min(10, s.stats?.caught || 0), max: 10 }),
+    title: "Medalla Cascada",
+    desc: "Consigue la Medalla Cascada.",
+    max: 1,
+    progress: (s) => ({ cur: hasBadge(s, "Cascada") ? 1 : 0, max: 1 }),
   },
   {
-    id: "brock-outfit",
+    id: "camper",
     kind: "aspect",
     reward: "camper",
     title: "Medalla Roca",
@@ -92,16 +119,7 @@ export const ACHIEVEMENTS = [
     progress: (s) => ({ cur: hasBadge(s, "Roca") ? 1 : 0, max: 1 }),
   },
   {
-    id: "misty-outfit",
-    kind: "aspect",
-    reward: "swimmer-f",
-    title: "Medalla Cascada",
-    desc: "Consigue la Medalla Cascada.",
-    max: 1,
-    progress: (s) => ({ cur: hasBadge(s, "Cascada") ? 1 : 0, max: 1 }),
-  },
-  {
-    id: "erika-outfit",
+    id: "beauty",
     kind: "aspect",
     reward: "beauty",
     title: "Medalla Arcoíris",
@@ -110,16 +128,16 @@ export const ACHIEVEMENTS = [
     progress: (s) => ({ cur: hasBadge(s, "Arcoíris") ? 1 : 0, max: 1 }),
   },
   {
-    id: "sabrina-outfit",
+    id: "psychic-f",
     kind: "aspect",
-    reward: "channeler",
+    reward: "psychic-f",
     title: "Medalla Pantano",
     desc: "Consigue la Medalla Pantano.",
     max: 1,
     progress: (s) => ({ cur: hasBadge(s, "Pantano") ? 1 : 0, max: 1 }),
   },
   {
-    id: "badges8",
+    id: "acetrainer",
     kind: "aspect",
     reward: "cooltrainer-m",
     title: "8 medallas",
@@ -128,13 +146,13 @@ export const ACHIEVEMENTS = [
     progress: (s) => ({ cur: Math.min(8, (s.badges || []).length), max: 8 }),
   },
   {
-    id: "evolve30",
+    id: "acetrainer-f",
     kind: "aspect",
     reward: "supernerd",
     title: "Evoluciones",
     desc: "Haz evolucionar 30 Pokémon.",
     max: 30,
-    progress: (s) => ({ cur: Math.min(30, s.stats?.evolved || 0), max: 30 }),
+    progress: (s) => ({ cur: Math.min(30, s.stats?.evolutions || s.stats?.evolved || 0), max: 30 }),
   },
   {
     id: "blue",
@@ -152,7 +170,7 @@ export const ACHIEVEMENTS = [
     title: "Pokémaníaco",
     desc: "Captura 500 Pokémon, duplicados incluidos.",
     max: 500,
-    progress: (s) => ({ cur: Math.min(500, s.stats?.caught || 0), max: 500 }),
+    progress: (s) => ({ cur: Math.min(500, totalCaptures(s)), max: 500 }),
   },
   {
     id: "gentleman",
@@ -170,7 +188,15 @@ export const ACHIEVEMENTS = [
     title: "Giovanni",
     desc: "Derrota a Giovanni en Ciudad Verde sin que ninguno de tus Pokémon se debilite.",
     max: 1,
-    progress: (s) => ({ cur: s.feats?.giovanni ? 1 : 0, max: 1 }),
+    progress: (s) => ({ cur: s.feats?.giovanni || s.stats?.feats?.giovanni ? 1 : 0, max: 1 }),
+  },
+
+  {
+    id: "blackbelt", kind: "aspect", reward: "blackbelt",
+    title: "Maestro de incursiones",
+    desc: "Gana 25 incursiones variocolor.",
+    max: 25,
+    progress: (s) => ({ cur: Math.min(25, Number(s.raids?.clears || s.stats?.raidClears || 0)), max: 25 }),
   },
 
   // ── Marcos (frames) ──
@@ -226,7 +252,7 @@ export const ACHIEVEMENTS = [
     title: "Casino",
     desc: "Desbloquea el Casino de Ciudad Azulona.",
     max: 1,
-    progress: (s) => ({ cur: hasBadge(s, "Cascada") || s.casinoUnlocked ? 1 : 0, max: 1 }),
+    progress: (s) => ({ cur: casinoProgress(s) ? 1 : 0, max: 1 }),
   },
 
   // ── Escenas (cinemáticas Kanto) ──
@@ -293,7 +319,7 @@ export const ACHIEVEMENTS = [
 ];
 
 function dexSet(s) {
-  const set = new Set();
+  const set = new Set((Array.isArray(s.stats?.caught) ? s.stats.caught : []).map(Number));
   for (const m of [...(s.playerTeam || []), ...(s.box || [])]) if (m?.id) set.add(m.id);
   if (s.dex) for (const k of Object.keys(s.dex)) set.add(+k);
   return set;
@@ -314,6 +340,20 @@ function countDex(s, from, to) {
 function countShiny(s) {
   return [...(s.playerTeam || []), ...(s.box || [])].filter((m) => m?.shiny).length;
 }
+function totalCaptures(s) {
+  return Number(s.stats?.captures ?? (Array.isArray(s.stats?.caught) ? s.stats.caught.length : 0)) || 0;
+}
+function casinoProgress(s) {
+  return !!s.casinoUnlocked || Math.max(s.badges?.length || 0, Math.min(8, s.chapter || 0)) >= 3;
+}
+
+const WATER_IDS = [7,8,9,54,55,60,61,62,72,73,79,80,86,87,90,91,98,99,116,117,118,119,120,121,129,130,131,134,138,139,140,141];
+const ROCK_GROUND_IDS = [27,28,31,34,50,51,74,75,76,95,104,105,111,112,138,139,140,141,142];
+
+export const FRAME_REWARD_MAP = {
+  trade: "pokeball", dex: "league", nursery: "pokeball",
+  shiny: "league", raid: "rocket", casino: "casino",
+};
 function hasBadge(s, name) {
   return (s.badges || []).some((b) => String(b).toLowerCase().includes(String(name).toLowerCase()));
 }
