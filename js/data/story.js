@@ -444,6 +444,35 @@ export const CHAPTERS = [
   "steps": [
    {
     "kind": "route",
+    "name": "Guarida Rocket",
+    "bg": "rocket",
+    "areas": [
+     "kanto-route-7-area",
+     "kanto-route-8-area"
+    ],
+    "wild": 0,
+    "trainers": 3,
+    "item": true
+   },
+   {
+    "kind": "unlock",
+    "name": "Guarida Rocket",
+    "bg": "cave",
+    "once": "silph-scope",
+    "text": "Tu mets la main sur le Scope Sylphe : les Spectres de la Tour Pokémon ne pourront plus se cacher !"
+   },
+   {
+    "kind": "route",
+    "name": "Ruta 8 hacia Pueblo Lavanda",
+    "bg": "prairie",
+    "areas": [
+     "kanto-route-8-area"
+    ],
+    "wild": 3,
+    "trainers": 2
+   },
+   {
+    "kind": "route",
     "name": "Torre Pokémon",
     "bg": "cave",
     "areas": [
@@ -608,25 +637,6 @@ export const CHAPTERS = [
    },
    {
     "kind": "route",
-    "name": "Guarida Rocket",
-    "bg": "cave",
-    "areas": [
-     "kanto-route-7-area",
-     "kanto-route-8-area"
-    ],
-    "wild": 0,
-    "trainers": 3,
-    "item": true
-   },
-   {
-    "kind": "unlock",
-    "name": "Guarida Rocket",
-    "bg": "cave",
-    "once": "silph-scope",
-    "text": "Tu mets la main sur le Scope Sylphe : les Spectres de la Tour Pokémon ne pourront plus se cacher !"
-   },
-   {
-    "kind": "route",
     "name": "Rutas 7-8",
     "bg": "prairie",
     "areas": [
@@ -727,17 +737,6 @@ export const CHAPTERS = [
   "steps": [
    {
     "kind": "route",
-    "name": "Rutas 19-20",
-    "bg": "pier",
-    "areas": [
-     "kanto-sea-route-19-area",
-     "kanto-sea-route-20-area"
-    ],
-    "wild": 2,
-    "trainers": 3
-   },
-   {
-    "kind": "route",
     "name": "Central Energía",
     "bg": "cave",
     "areas": [
@@ -750,6 +749,25 @@ export const CHAPTERS = [
     "kind": "heal",
     "name": "Central Energía",
     "bg": "cave"
+   },
+   {
+    "kind": "legend",
+    "name": "Zapdos — Central Energía",
+    "bg": "cave",
+    "id": 145,
+    "level": 50,
+    "once": "legend-145"
+   },
+   {
+    "kind": "route",
+    "name": "Rutas 19-20",
+    "bg": "pier",
+    "areas": [
+     "kanto-sea-route-19-area",
+     "kanto-sea-route-20-area"
+    ],
+    "wild": 2,
+    "trainers": 3
    },
    {
     "kind": "route",
@@ -769,6 +787,14 @@ export const CHAPTERS = [
     "wild": 3,
     "trainers": 3,
     "item": true
+   },
+   {
+    "kind": "legend",
+    "name": "Articuno — Islas Espuma",
+    "bg": "cave",
+    "id": 144,
+    "level": 50,
+    "once": "legend-144"
    },
    {
     "kind": "heal",
@@ -1006,6 +1032,14 @@ export const CHAPTERS = [
      "blackbelt",
      "psychic"
     ]
+   },
+   {
+    "kind": "legend",
+    "name": "Moltres — Calzada Victoria",
+    "bg": "victory",
+    "id": 146,
+    "level": 50,
+    "once": "legend-146"
    },
    {
     "kind": "heal",
@@ -1393,6 +1427,37 @@ export const CHAPTERS = [
     "leaderEs": "Azul",
     "badgeEs": "Maestro",
     "typeEs": "Normal"
+   }
+  ]
+ },
+ {
+  "name": "Encuentros legendarios",
+  "steps": [
+   {
+    "kind": "route",
+    "name": "Cueva Celeste",
+    "bg": "cerulean-cave",
+    "areas": [
+     "cerulean-cave-b1f"
+    ],
+    "wild": 0,
+    "trainers": 0
+   },
+   {
+    "kind": "legend",
+    "name": "Mewtwo — Cueva Celeste",
+    "bg": "cerulean-cave",
+    "id": 150,
+    "level": 70,
+    "once": "legend-150"
+   },
+   {
+    "kind": "legend",
+    "name": "Mew — Encuentro errante",
+    "bg": "prairie",
+    "id": 151,
+    "level": 30,
+    "once": "legend-151"
    }
   ]
  }
