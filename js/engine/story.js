@@ -1,8 +1,8 @@
 // Historia de Kanto: capítulos → tramos → nodos, y tablas de aparición.
 // Datos tomados del Poke'Catch original (pesos, horarios, clima).
 
-import { CHAPTERS } from "../data/story.js?v=3";
-import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=3";
+import { CHAPTERS } from "../data/story.js?v=65";
+import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=65";
 
 export { CHAPTERS };
 
@@ -61,10 +61,6 @@ export function buildChapter(ci, rand = Math.random) {
       segs.push({ name: st.name, kind: "gym", areas: [], bg: st.bg, step: si, gym: st });
       if (pendingFind) { nodes.push({ t: "find", seg: segIdx, item: pendingFind.item }); pendingFind = null; }
       nodes.push({ t: "gym", seg: segIdx });
-    } else if (st.kind === "legend") {
-      const segIdx = segs.length;
-      segs.push({ name: st.name, kind: "legend", areas: [], bg: st.bg, step: si, legend: st });
-      nodes.push({ t: "legend", seg: segIdx });
     }
     // gift / static / trade / unlock: aún no implementados (se omiten)
   });

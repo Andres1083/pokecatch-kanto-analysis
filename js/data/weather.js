@@ -1,4 +1,6 @@
-// Clima interno del juego + ciclo día/noche
+// Clima + ciclo día/noche en tiempo real
+
+const HOUR_WEATHERS = ["clear", "sun", "rain", "storm", "cloud"];
 
 /** Semilla estable por hora local */
 function hourSeed(d = new Date()) {
@@ -28,7 +30,10 @@ export function isDusk(d = new Date()) {
   return h === 19 || h === 6;
 }
 
-/** Clima de juego estable durante la hora local actual. */
+/**
+ * Clima de la hora actual (estable hasta la próxima hora).
+ * Si hay fetch de Open-Meteo se puede mezclar después.
+ */
 export function weatherForNow(d = new Date()) {
   const seed = hourSeed(d);
   const rnd = mulberry32(seed);
@@ -83,11 +88,41 @@ export function formatClock(d = new Date()) {
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
-/**
- * Clima interno del mundo del juego.
- * Se mantiene estable durante cada hora y no depende del tiempo meteorológico real
- * ni de las coordenadas del jugador.
- */
-export function getGameWeather() {
-  return { ...weatherForNow(), source: "game" };
+/** Intenta clima real (Open-Meteo, sin API key). Fallback al generador. */
+export async function fetchWeather(lat = 4.71, lon = -74.07) {
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code&timezone=auto`;
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error("weather http");
+    const data = await res.json();
+    const code = data?.current?.weather_code ?? 0;
+    const key = codeToKey(code);
+    const d = new Date();
+    const night = isNight(d);
+    return {
+      key,
+      night,
+      dusk: isDusk(d),
+      hour: d.getHours(),
+      untilHour: (d.getHours() + 1) % 24,
+      label: labelFor(key, night),
+      icon: iconFor(key, night),
+      source: "meteo",
+    };
+  } catch {
+    return { ...weatherForNow(), source: "local" };
+  }
+}
+
+function codeToKey(code) {
+  // WMO weather interpretation codes
+  if (code === 0) return "clear";
+  if (code <= 3) return "sun";
+  if (code <= 48) return "cloud";
+  if (code <= 67 || (code >= 80 && code <= 82)) return "rain";
+  if (code >= 95 || (code >= 71 && code <= 77)) return "storm";
+  return "cloud";
 }

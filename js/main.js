@@ -1,51 +1,51 @@
-import { startIntro } from "./ui/intro.js?v=3";
-import { showTitle } from "./ui/title.js?v=3";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=3";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=3";
-import { LEGENDS } from "./data/legends.js?v=3";
-import { STATUS_INFO } from "./data/status.js?v=3";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=3";
+import { startIntro } from "./ui/intro.js?v=65";
+import { showTitle } from "./ui/title.js?v=65";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=80";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=65";
+import { LEGENDS } from "./data/legends.js?v=65";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=65";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=3";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=3";
-import { runIdleBattle } from "./engine/idle-battle.js?v=3";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=3";
-import { showTeamScreen } from "./ui/team.js?v=3";
-import { showCollection } from "./ui/collection.js?v=3";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=3";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=3";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=3";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=3";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=3";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=3";
-import { Sfx } from "./engine/sfx.js?v=3";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=3";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=3";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=3";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=3";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=3";
-import { SCENES } from "./data/scenes.js?v=3";
-import { BG_DATA } from "./data/backgrounds.js?v=3";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=3";
-import { evosOf } from "./data/evolutions.js?v=3";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=3";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=3";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=3";
-import { renderRouteBar } from "./ui/route-bar.js?v=3";
-import { renderBag, bindBag } from "./ui/bag.js?v=3";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=3";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=3";
-import { itemImg } from "./ui/item-icon.js?v=3";
-import { pixelIcon } from "./ui/pixel.js?v=3";
-import { SHINY_RATE } from "./data/shiny.js?v=3";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=3";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=3";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=3";
-import { EGG_LEVEL } from "./data/breeding.js?v=3";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=3";
-import { casinoUnlocked } from "./data/casino.js?v=3";
-import { sceneWipe } from "./ui/transition.js?v=3";
-import { dissolve, imgReady } from "./ui/sendout.js?v=3";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=65";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=65";
+import { runIdleBattle } from "./engine/idle-battle.js?v=65";
+import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=91";
+import { showTeamScreen } from "./ui/team.js?v=65";
+import { showCollection } from "./ui/collection.js?v=65";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=65";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=65";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=91";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=65";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=65";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=65";
+import { Sfx } from "./engine/sfx.js?v=65";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=65";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=65";
+import { weatherForNow, fetchWeather, formatClock, formatHour } from "./data/weather.js?v=65";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=65";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=65";
+import { SCENES } from "./data/scenes.js?v=80";
+import { BG_DATA } from "./data/backgrounds.js?v=65";
+import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=65";
+import { evosOf } from "./data/evolutions.js?v=65";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=65";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=65";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=65";
+import { renderRouteBar } from "./ui/route-bar.js?v=65";
+import { renderBag, bindBag } from "./ui/bag.js?v=65";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=65";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=65";
+import { itemImg } from "./ui/item-icon.js?v=65";
+import { pixelIcon } from "./ui/pixel.js?v=65";
+import { SHINY_RATE } from "./data/shiny.js?v=65";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=65";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=65";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=65";
+import { EGG_LEVEL } from "./data/breeding.js?v=65";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=65";
+import { openAchievements } from "./ui/achievements.js?v=93";
+import { casinoUnlocked } from "./data/casino.js?v=65";
+import { sceneWipe } from "./ui/transition.js?v=65";
+import { dissolve, imgReady } from "./ui/sendout.js?v=65";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -233,24 +233,19 @@ function applyXp(mon, amount) {
   return levels;
 }
 
-async function processTeamEvolutions({ animate = true } = {}) {
+async function processTeamEvolutions() {
   const msgs = [];
-  const process = async (mon, inTeam) => {
+  for (const mon of state.playerTeam) {
     const evos = await checkLevelEvolutions(mon);
     for (const e of evos) {
-      // Las evoluciones automáticas también deben quedar registradas en el Pokédex.
-      dexAdd("seen", e.toId);
-      dexAdd("caught", e.toId);
-      const message = `¡${e.from} evolucionó a ${e.to}!`;
-      msgs.push(message);
-      if (animate && inTeam) {
-        try { Sfx.evolve(); } catch (_) {}
-        await showEvolveFx(mon, e);
-      }
+      try { Sfx.evolve(); } catch (_) {}
+      await showEvolveFx(mon, e);
+      msgs.push(`¡${e.from} evolucionó a ${e.to}!`);
     }
-  };
-  for (const mon of state.playerTeam) await process(mon, true);
-  for (const mon of (state.box || [])) await process(mon, false);
+  }
+  for (const mon of (state.box || [])) {
+    await checkLevelEvolutions(mon);
+  }
   if (msgs.length) saveGame();
   return msgs;
 }
@@ -453,13 +448,6 @@ function makeTrainer(seg) {
   return { ...randomTrainer(seg), mons: makeTrainerTeam(seg, encCtx()) };
 }
 
-/** Legendarios del original: HP × lg.hp y ataques × lg.power (nivel 100). */
-function scaleLegend(e, lg) {
-  e.stats.hp = Math.round(e.stats.hp * (lg.hp || 1));
-  for (const k of ["atk", "spa"]) e.stats[k] = Math.round(e.stats[k] * (lg.power || 1));
-  e.maxHp = e.stats.hp; e.currentHp = e.maxHp;
-  return e;
-}
 function scaleEnemy(e, power) {
   if (!power || power === 1) return e;
   for (const k of Object.keys(e.stats)) e.stats[k] = Math.round(e.stats[k] * power);
@@ -478,7 +466,6 @@ async function processOffline(elapsedMs) {
   const result = simulateOffline({
     state,
     elapsedMs,
-    weatherForTime: (timestamp) => weatherForNow(new Date(timestamp)),
     enemyFor: (id, level, power) => {
       const c = enemyCache.get(`${id}:${level}`);
       return scaleEnemy(c ? cloneEnemy(c) : fallbackEnemy(id, level), power);
@@ -494,9 +481,6 @@ async function processOffline(elapsedMs) {
     captureWild: captureWildOffline,
   });
   if (!result.steps) return null;
-  // Las subidas de nivel durante el progreso offline también deben evolucionar
-  // y registrar las nuevas especies, aunque no haya animación en segundo plano.
-  await processTeamEvolutions({ animate: false });
   state.routeTotal = state.routeNodes.length;
 
   const team = state.playerTeam.map((m, i) => ({
@@ -664,7 +648,7 @@ async function startRoute() {
   state.busy = false;
   ensureRoute();
   try {
-    state.weatherInfo = await getGameWeather();
+    state.weatherInfo = await fetchWeather(4.71, -74.07);
     state.weather = state.weatherInfo.key;
   } catch (_) { state.weatherInfo = weatherForNow(); state.weather = state.weatherInfo.key; }
   renderRoute();
@@ -740,8 +724,6 @@ const BG_FILES = {
   silph: "assets/bg/scenes/23-sylphe-sarl-710x400.webp",
   victory: "assets/bg/scenes/24-route-victoire-710x400.webp",
   "cerulean-cave": "assets/bg/scenes/25-caverne-azuree-710x400.webp",
-  "power-plant": "assets/bg/scenes/19-centrale-abandonnee-710x400.webp",
-  seafoam: "assets/bg/scenes/20-iles-ecume-v2-710x400.webp",
   "gym-rock": "assets/bg/scenes/26-arene-pierre-710x400.webp",
   "gym-water": "assets/bg/scenes/27-arene-ondine-710x400.webp",
   "gym-electric": "assets/bg/scenes/28-arene-major-bob-710x400.webp",
@@ -799,18 +781,6 @@ const progressApi = {
       onAction: () => progressApi.onReplay(LEAGUE_FIRST, true),
     });
   },
-  onCave(key = "mewtwo") {
-    const i = CHAPTERS.findIndex(c => c.post === key);
-    if (i < 0) return;
-    const owned = new Set([...state.playerTeam, ...(state.box || [])].map(m => m.id));
-    const c = buildChapter(i);
-    showBriefing({
-      chapterName: CHAPTERS[i].name, segs: c.segs, owned, weather: state.weather, bg: sceneBg(c.segs.find(x => x.legend)?.bg || "cave"), closeLabel: "CERRAR",
-      status: state.chapter === i ? "current" : "done", color: "#c9a0ff",
-      actionLabel: state.chapter === i ? null : "IR AL MAPA",
-      onAction: () => progressApi.onReplay(i, true),
-    });
-  },
   onReplay(i, noConfirm) {
     if (!noConfirm && !confirm(`¿Volver a «${CHAPTERS[i].name}»? Se reinicia el recorrido de ese capítulo.`)) return;
     state.chapter = i;
@@ -837,12 +807,12 @@ function openTeam() {
 }
 
 const NAV = [
-  { id: "adventure", icon: "ball", label: "Aventura" },
-  { id: "progress", icon: "map", label: "Progreso" },
-  { id: "team", icon: "pc", label: "Equipo/PC", act: true },
-  { id: "dex", icon: "dex", label: "Pokédex" },
-  { id: "bag", icon: "store", label: "Mochila" },
-  { id: "act", icon: "card", label: "Actividades", act: true },
+  { id: "adventure", icon: "⚔️", label: "Aventura" },
+  { id: "progress", icon: "🗺️", label: "Progreso" },
+  { id: "team", icon: "🎯", label: "Equipo", act: true },
+  { id: "dex", icon: "📕", label: "Pokédex" },
+  { id: "bag", icon: "🎒", label: "Mochila" },
+  { id: "act", icon: "🎴", label: "Actividades", act: true },
 ];
 
 function ensureNav() {
@@ -850,7 +820,7 @@ function ensureNav() {
   if (!nav) {
     nav = document.createElement("nav");
     nav.id = "bottom-nav";
-    nav.innerHTML = NAV.map(n => `<button type="button" data-nav="${n.id}" aria-label="${n.label}"><img class="nav-ico" src="assets/nav/${n.icon}.png" alt="" draggable="false" /><em>${n.label}</em></button>`).join("");
+    nav.innerHTML = NAV.map(n => `<button type="button" data-nav="${n.id}"><span>${n.icon}</span><em>${n.label}</em></button>`).join("");
     nav.addEventListener("click", (e) => {
       const b = e.target.closest("[data-nav]");
       if (!b) return;
@@ -1150,7 +1120,8 @@ function initWeatherParticles() {
   }
 }
 
-const STATUS_LBL = Object.fromEntries(Object.entries(STATUS_INFO).map(([k, v]) => [k, v.tag]));
+const STATUS_LBL = { psn: "ENV", par: "PAR" };
+const STATUS_TXT = { psn: "fue envenenado", par: "está paralizado" };
 function setStatusBadge(side, idx, status) {
   if (side === "ally") {
     const slot = document.querySelector(`.rail-slot[data-team-idx="${idx}"]`);
@@ -1339,7 +1310,7 @@ async function playLegendIntro(id, root = $("#scene")) {
     await playLegendAnnounce({
       root, name: L.name, color: L.color,
       text: (L.announce || L.text).replace("{zona}", "Kanto"),
-      sprite: `assets/pokemon/${id}.png`,
+      sprite: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
       holdMs: 1600 / Math.max(1, state.speed || 1),
     });
   } finally { bg?.remove(); }
@@ -1486,25 +1457,14 @@ function showEnemy(enemy) {
     img.style.opacity = "1";
     img.style.display = "block";
     img.style.cssText = spriteSizeStyle(enemy) + "visibility:visible;opacity:1;display:block;";
-    // Hasta que el dibujo cargue no se muestra (evita el recuadro vacío); si falla, cae a la copia local
-    img.dataset.pending = "1";
-    img.style.visibility = "hidden";
-    const reveal = () => { if (img.dataset.pending) { delete img.dataset.pending; img.style.visibility = "visible"; try { fitSprite(img); } catch (_) {} } };
-    img.dataset.loading = "1"; // CSS: invisible hasta que haya dibujo (en cualquier flujo: salvaje, entrenador, gimnasio)
-    const done = () => { delete img.dataset.loading; reveal(); };
-    img.onload = done;
-    img.onerror = () => {
-      img.onerror = () => { img.onerror = () => { img.onerror = null; delete img.dataset.loading; }; img.src = `assets/pokemon/${enemy.id}.png`; };
-      img.src = frontSprite(enemy);
-    };
+    img.onerror = () => { img.onerror = null; img.src = frontSprite(enemy); };
     img.src = src;
-    if (img.complete && img.naturalWidth) done();
     img.classList.remove("anim-faint", "anim-hit", "anim-attack");
     img.decode?.().then(() => { try { fitSprite(img); } catch (_) {} }).catch(() => {});
     try { fitSprite(img); } catch (_) {}
   }
   if ($("#enemy-lv")) $("#enemy-lv").textContent = `Nv.${enemy.level}`;
-  enemy.status = null; delete enemy.confused; delete enemy.sleep; setStatusBadge("enemy", 0, null);
+  enemy.status = null; setStatusBadge("enemy", 0, null);
   if ($("#enemy-hp")) $("#enemy-hp").style.width = "100%";
 }
 
@@ -1519,7 +1479,7 @@ async function runFight(enemy) {
   try { const r = await runFightInner(enemy); state.stats.battles++; if (r) state.stats.wins++; return r; }
   finally {
     state.fighting = false; updateRouteBar();
-    state.playerTeam.forEach((m, i) => { if (m.status || m.confused) { m.status = null; delete m.confused; delete m.sleep; setStatusBadge("ally", i, null); } });
+    state.playerTeam.forEach((m, i) => { if (m.status) { m.status = null; setStatusBadge("ally", i, null); } });
   }
 }
 
@@ -1579,31 +1539,19 @@ async function runFightInner(enemy) {
           await delay(600);
         }
       }
-    } else if (ev.type === "use-move") {
-      setMsg(`¡${ev.attacker.nameEs || ev.attacker.name} usa ${ev.move.nameEs || ev.move.name}!`);
-      try { Sfx.attack(); } catch (_) {}
-      try { await playMoveFx({ move: ev.move, side: ev.side === "ally" ? "ally" : "enemy", speed: state.speed }); } catch (_) { await delay(300); }
-      await delay(250);
     } else if (ev.type === "status") {
       const nm = ev.pokemon.nameEs || ev.pokemon.name;
-      const info = STATUS_INFO[ev.status];
-      const real = ev.side === "ally" ? state.playerTeam[ev.teamIndex] : enemy;
-      if (real) { if (ev.status === "cnf") real.confused = 2; else real.status = ev.status; }
-      if (ev.status !== "cnf" || !real?.status) setStatusBadge(ev.side, ev.teamIndex, ev.status === "cnf" ? "cnf" : ev.status);
-      setMsg(`¡${nm} ${info.got}!`);
+      if (ev.side === "ally") { const m = state.playerTeam[ev.teamIndex]; if (m) m.status = ev.status; }
+      else enemy.status = ev.status;
+      setStatusBadge(ev.side, ev.teamIndex, ev.status);
+      setMsg(ev.status === "psn" ? `¡${nm} fue envenenado!` : `¡${nm} está paralizado! Quizá no pueda moverse`);
       await delay(650 / Math.max(1, state.speed || 1));
-    } else if (ev.type === "status-end") {
-      const nm = ev.pokemon.nameEs || ev.pokemon.name;
-      const real = ev.side === "ally" ? state.playerTeam[ev.teamIndex] : enemy;
-      if (real) { if (ev.status === "cnf") delete real.confused; else delete real.status; setStatusBadge(ev.side, ev.teamIndex, real.status || (real.confused ? "cnf" : null)); }
-      setMsg(`¡${nm} ${STATUS_INFO[ev.status].end}!`);
-      await delay(550 / Math.max(1, state.speed || 1));
     } else if (ev.type === "status-skip") {
-      setMsg(`¡${ev.pokemon.nameEs || ev.pokemon.name} ${STATUS_INFO[ev.status].stuck}`);
+      setMsg(`¡${ev.pokemon.nameEs || ev.pokemon.name} está paralizado! ¡No se puede mover!`);
       shakeMon(ev.side);
       await delay(600 / Math.max(1, state.speed || 1));
     } else if (ev.type === "status-dmg") {
-      setMsg(`¡${ev.pokemon.nameEs || ev.pokemon.name} ${STATUS_INFO[ev.status].hurt}!`);
+      setMsg(`¡${ev.pokemon.nameEs || ev.pokemon.name} sufre por el veneno!`);
       floatDamage(ev.side, ev.damage);
       if (ev.side === "ally") {
         const m = state.playerTeam[ev.teamIndex];
@@ -1750,65 +1698,6 @@ async function nodeWild() {
   return true;
 }
 
-/** Legendario del postjuego (Mewtwo): intro, combate y hasta 5 Poké Balls con poca probabilidad. */
-async function nodeLegend() {
-  const lg = curSeg().legend;
-  // Los legendarios con needType solo se pueden desafiar si el equipo activo
-  // contiene al menos un Pokémon de ese tipo (el mismo criterio que Progreso).
-  if (lg.needType && !state.playerTeam.some(m => (m.types || []).includes(lg.needType))) {
-    const typeNames = { electric: "Eléctrico", ice: "Hielo", fire: "Fuego" };
-    setMsg(`Para encontrar a ${lg.name}, necesitas un Pokémon de tipo ${typeNames[lg.needType] || lg.needType} en tu equipo.`);
-    await delay(1100);
-    return false;
-  }
-  const LEGEND_BALL_CHANCE = lg.ball ?? 0.22, LEGEND_BALLS = lg.balls ?? 5;
-  // Zapdos: la Central se llena de tormenta mientras dura el encuentro
-  const prevWeather = state.weather;
-  const restoreWeather = () => { if (state.weather !== prevWeather) { state.weather = prevWeather; try { initWeatherParticles(); } catch (_) {} } };
-  if (lg.weather === "storm") { state.weather = "storm"; try { initWeatherParticles(); } catch (_) {} }
-  try { return await legendBody(lg, LEGEND_BALL_CHANCE, LEGEND_BALLS); } finally { restoreWeather(); }
-}
-async function legendBody(lg, LEGEND_BALL_CHANCE, LEGEND_BALLS) {
-  try { await playLegendIntro(lg.id); } catch (e) { if (e instanceof AbortFight) throw e; }
-  const enemy = scaleLegend(await loadEnemy(lg.id, lg.level), lg);
-  try { await showTrainerSendOut(); } catch (e) { if (e instanceof AbortFight) throw e; }
-  showEnemy(enemy);
-  setMsg(`¡${enemy.nameEs} salvaje apareció!`);
-  await delay(700);
-  state.keepEnemyOnFaint = true;
-  let won;
-  try { won = await runFight(enemy); } finally { state.keepEnemyOnFaint = false; }
-  if (!won) { const im = $("#enemy-img"); if (im) im.style.filter = ""; return false; }
-  const xp = Math.round(calcXpGain(enemy) * 2);
-  giveTeamXp(xp);
-  await processTeamEvolutions();
-  state.money += 2000;
-  advanceRoute();
-  setMsg(`¡${enemy.nameEs} está debilitado! +${xp} XP`);
-  await delay(800);
-  let caught = false;
-  for (let n = 1; n <= LEGEND_BALLS && !caught; n++) {
-    setMsg(`¡Poké Ball ${n}/${LEGEND_BALLS} a ${enemy.nameEs}!`);
-    state.stats.balls++;
-    const ok = Math.random() < LEGEND_BALL_CHANCE;
-    if (n <= 3 || ok) {
-      try { Sfx.ball(); await playCaptureFx({ success: ok, speed: state.speed }); if (ok) Sfx.capture(); else Sfx.escape(); } catch (_) { await delay(900); }
-    } else await delay(90);
-    caught = ok;
-  }
-  if (caught) {
-    const r = resolveCapture(enemy);
-    setMsg(r.status === "family" ? `¡Repetido! ${enemy.nameEs} → +${r.totalXp} PE a su familia`
-      : r.status === "box" ? `¡${enemy.nameEs} capturado! Enviado a la caja` : `¡${enemy.nameEs} capturado! Se unió al equipo`);
-  } else {
-    setMsg(`${enemy.nameEs} huyó… volverá a aparecer en este mapa`);
-    const im = $("#enemy-img"); if (im) { im.style.filter = ""; im.classList.add("anim-faint"); }
-  }
-  saveGame();
-  await delay(1100);
-  return true;
-}
-
 async function nodeTrainer() {
   const t = makeTrainer(curSeg());
   await showVs(t);
@@ -1821,7 +1710,7 @@ async function nodeTrainer() {
     if (first) {
       first = false;
       showEnemy(enemy);
-      const ei = $("#enemy-img"); if (ei) { delete ei.dataset.pending; ei.style.visibility = "hidden"; }
+      const ei = $("#enemy-img"); if (ei) ei.style.visibility = "hidden";
       setMsg(`¡${t.name} quiere luchar! ¡${t.name} saca a ${enemy.nameEs}!`);
       try { await Promise.all([showTrainerSendOut("in", true), foeSendOut(t.sprite, enemy)]); } catch (e) { if (e instanceof AbortFight) throw e; }
     } else { await peekRival(t.sprite, `¡${t.name} saca a ${enemy.nameEs}!`); showEnemy(enemy); }
@@ -1976,7 +1865,7 @@ async function nodeGym() {
     if (firstG) {
       firstG = false;
       showEnemy(enemy);
-      const ei = $("#enemy-img"); if (ei) { delete ei.dataset.pending; ei.style.visibility = "hidden"; }
+      const ei = $("#enemy-img"); if (ei) ei.style.visibility = "hidden";
       setMsg(`¡${gym.leaderEs} quiere luchar! ¡${gym.leaderEs} saca a ${enemy.nameEs}!`);
       try { await Promise.all([showTrainerSendOut("in", true), foeSendOut(gym.sprite, enemy)]); } catch (e) { if (e instanceof AbortFight) throw e; }
     } else { await peekRival(gym.sprite, `¡${gym.leaderEs} saca a ${enemy.nameEs}!`); showEnemy(enemy); }
@@ -1991,12 +1880,6 @@ async function nodeGym() {
     await delay(300);
   }
   clearFoeTeam();
-  // Procesar las evoluciones que hayan quedado disponibles tras ganar el gimnasio.
-  const evoMsgs = await processTeamEvolutions();
-  if (evoMsgs.length) {
-    setMsg(evoMsgs.join(" · "));
-    await delay(900);
-  }
   await showBanner(`¡Has derrotado a ${gym.leaderEs}!`);
   setMsg(gym.badgeEs === "Maestro" ? `¡Eres el Campeón de la Liga! +${fmtMoney(gym.reward)} ₽`
     : gym.badgeEs ? `¡Ganaste la Medalla ${gym.badgeEs}! +${fmtMoney(gym.reward)} ₽`
@@ -2063,7 +1946,7 @@ async function doEncounter() {
     // Actualizar clima si cambió la hora
     const nowW = weatherForNow();
     if (!state.weatherInfo || state.weatherInfo.hour !== nowW.hour) {
-      state.weatherInfo = await getGameWeather().catch(() => nowW);
+      state.weatherInfo = await fetchWeather(4.71, -74.07).catch(() => nowW);
       state.weather = state.weatherInfo.key;
     }
     await pauseGate();
@@ -2076,11 +1959,10 @@ async function doEncounter() {
     else if (node.t === "find") await nodeFind();
     else if (node.t === "item") await nodeItem();
     else if (node.t === "center") await nodeCenter();
-    else if (node.t === "legend") ok = await nodeLegend();
     else ok = await nodeWild();
 
     hideEnemy();
-    if (ok && (node.t === "wild" || node.t === "trainer" || node.t === "gym" || node.t === "legend") && state.playerTeam[state.activeIndex]?.currentHp > 0) {
+    if (ok && (node.t === "wild" || node.t === "trainer" || node.t === "gym") && state.playerTeam[state.activeIndex]?.currentHp > 0) {
       try { await showTrainerSendOut("out"); } catch (_) {}
     }
     state.busy = false;
@@ -2112,11 +1994,7 @@ async function doEncounter() {
     }
 
     // Ruta completada → nueva vuelta (el juego sigue en bucle)
-    if (state.routeProgress >= state.routeNodes.length) {
-      // Mapas de postjuego (Cueva Celeste): se repiten en bucle en vez de avanzar de capítulo
-      if (CHAPTERS[state.chapter]?.post) loadChapter(); else finishChapter(null);
-      saveGame();
-    }
+    if (state.routeProgress >= state.routeNodes.length) { finishChapter(null); saveGame(); }
 
     if (state.view === "adventure") await sceneWipe(() => renderRoute(), state.speed);
     else renderRoute();
@@ -2193,7 +2071,6 @@ async function bootGame() {
     });
     if (want > state.chapter && want < CHAPTERS.length) { state.chapter = want; state.routeNodes = []; }
   }
-  if (CHAPTERS[state.chapter]?.post && !state.chapSegs?.some?.(x => x.kind === "legend")) state.routeNodes = [];
   ensureRoute();
   document.getElementById("app").innerHTML = `
     <div id="status-bar" class="top-status">Partida cargada</div>
@@ -2234,3 +2111,7 @@ async function bootGame() {
     else if (demo === "vs") await playVsIntro({ root, playerName: state.player?.name || "Tú", playerSprite: `assets/trainers/${playerSprite()}.png`, trainerName: "Brock", trainerSprite: "assets/trainers/brock.png" });
   }, 1800);
 }
+
+
+// Logros (UI)
+try { window.openLogros = () => openAchievements(state); } catch (_) {}

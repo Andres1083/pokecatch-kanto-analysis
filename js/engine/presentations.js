@@ -131,7 +131,7 @@ export async function playVsIntro({
 }
 
 /** Disolución a bloques (dither) de un nodo, usando máscaras CSS pre-generadas. dir: "out" | "in". */
-export async function pixelMask(node, dir = "out", ms = 420, block = 8) {
+async function pixelMask(node, dir = "out", ms = 420, block = 8) {
   const W = Math.max(8, Math.round(node.clientWidth)), H = Math.max(8, Math.round(node.clientHeight));
   const cols = Math.ceil(W / block), rows = Math.ceil(H / block);
   const th = new Float32Array(cols * rows).map(() => Math.random());
@@ -156,7 +156,7 @@ export async function pixelMask(node, dir = "out", ms = 420, block = 8) {
 }
 
 /** Partículas en anillo + burst (aprox. del canvas del original). */
-export function spawnRing(layer, cx, cy, r, color) {
+function spawnRing(layer, cx, cy, r, color) {
   const n = 28;
   for (let i = 0; i < n; i++) {
     const a = (i / n) * Math.PI * 2;

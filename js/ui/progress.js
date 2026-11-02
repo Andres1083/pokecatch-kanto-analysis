@@ -1,11 +1,10 @@
 // Pestaña «Progreso»: lista de gimnasios/capítulos con nivel recomendado, clima y medallas.
 
-import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=3";
-import { badgeHtml } from "./badge.js?v=3";
-import { rainTable } from "./briefing.js?v=3";
-import { pixelIcon } from "./pixel.js?v=3";
-import { BG_DATA } from "../data/backgrounds.js?v=3";
-import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=3";
+import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=65";
+import { badgeHtml } from "./badge.js?v=65";
+import { rainTable } from "./briefing.js?v=65";
+import { pixelIcon } from "./pixel.js?v=65";
+import { BG_DATA } from "../data/backgrounds.js?v=65";
 
 const bgOf = (key) => BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);
 
@@ -86,34 +85,9 @@ export function renderProgress(state) {
   const rows = [];
   for (let i = 0; i < LEAGUE_FIRST; i++) {
     rows.push(row(i));
-    if (i === 1) {
-      const unlocked = state.badges.includes("Maestro");
-      rows.push(unlocked
-        ? `<div class="pg-secret open" data-cave="mewtwo"><span>🌀</span><div><b>Cueva Celeste</b><small>Desbloqueada · ¡Mewtwo te espera!</small></div><i>›</i></div>`
-        : `<div class="pg-secret"><span>🔒</span><div><b>Cueva Celeste</b><small>Vence a la Liga Pokémon</small></div></div>`);
-    }
+    if (i === 1) rows.push(`<div class="pg-secret"><span>🔒</span><div><b>Cueva Celeste</b><small>Vence a la Liga Pokémon</small></div></div>`);
   }
   rows.push(leagueRow);
-  const leagueWon = state.badges.includes("Maestro");
-  rows.push(leagueWon
-    ? `<div class="pg-secret open" data-cave="mew" style="border-left-color:#ff9ad5"><span>🌸</span><div><b>Mew</b><small>Desbloqueado · ¡Mew aparece tras vencer la Liga!</small></div><i>›</i></div>`
-    : `<div class="pg-secret"><span>🔒</span><div><b>Mew</b><small>Vence a la Liga Pokémon</small></div></div>`);
-  const caught = new Set([...(state.stats?.caught || []), ...state.playerTeam.map(x => x.id), ...(state.box || []).map(x => x.id)].map(Number));
-  const BIRDS = [
-    { key: "zapdos", name: "Central Eléctrica", who: "Zapdos", type: "electric", typeEs: "Eléctrico", ico: "⚡", c: "#f7d02c" },
-    { key: "articuno", name: "Isla Espuma", who: "Articuno", type: "ice", typeEs: "Hielo", ico: "❄️", c: "#96d9d6" },
-    { key: "moltres", name: "Gruta Ardiente", who: "Moltres", type: "fire", typeEs: "Fuego", ico: "🔥", c: "#ee8130" },
-  ];
-  rows.push(`<div class="pg-sub">ZONAS LEGENDARIAS</div>`);
-  for (const bird of BIRDS) {
-    const required = TYPE_DEX_IDS[bird.type] || [];
-    const count = required.filter(id => caught.has(id)).length;
-    const unlocked = count === required.length;
-    const detail = unlocked ? `Desbloqueada · ¡${bird.who} te espera!` : `Captura todos los Pokémon de tipo ${bird.typeEs} (${count}/${required.length})`;
-    rows.push(unlocked
-      ? `<div class="pg-secret open" data-cave="${bird.key}" style="border-left-color:${bird.c}"><span>${bird.ico}</span><div><b>${bird.name}</b><small style="color:${bird.c}">${detail}</small></div><i>›</i></div>`
-      : `<div class="pg-secret"><span>🔒</span><div><b>${bird.name}</b><small>${detail}</small></div></div>`);
-  }
 
   return `
     <section class="pg-card">
@@ -128,7 +102,6 @@ export function renderProgress(state) {
 export function bindProgress(api) {
   const hp = document.getElementById("pg-help");
   if (hp) hp.onclick = () => alert("Aventura: supera los gimnasios de cada región para avanzar. Toca un gimnasio para ver los Pokémon que aparecen (de día, de noche y con lluvia) y ↻ para volver a repetir ese capítulo.");
-  document.querySelectorAll("[data-cave]").forEach(el => { el.onclick = () => api.onCave?.(el.dataset.cave); });
   document.querySelectorAll("[data-league]").forEach(el => { el.onclick = () => api.onLeague?.(); });
   document.querySelectorAll("[data-open]").forEach(el => {
     el.onclick = (e) => {

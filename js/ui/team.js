@@ -1,9 +1,9 @@
 // Pantalla de equipo + detalle (estilo original)
 
-import { frontSprite } from "../data/sprites.js?v=3";
-import { showPokemonDetail } from "./pokemon-detail.js?v=3";
-import { TYPE_INFO } from "./collection.js?v=3";
-import { NATURES, natureLabel } from "../data/natures.js?v=3";
+import { frontSprite } from "../data/sprites.js?v=65";
+import { showPokemonDetail } from "./pokemon-detail.js?v=65";
+import { TYPE_INFO } from "./collection.js?v=65";
+import { NATURES, natureLabel } from "../data/natures.js?v=65";
 
 const filters = { nature: "", types: new Set(), sort: "recent", shiny: false };
 const power = (m) => ["hp", "atk", "def", "spa", "spd", "spe"].reduce((a, k) => a + (m.stats?.[k] || 0), 0);

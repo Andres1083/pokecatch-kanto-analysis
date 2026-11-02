@@ -1395,49 +1395,5 @@ export const CHAPTERS = [
     "typeEs": "Normal"
    }
   ]
- },
- {
-  "name": "Cueva Celeste",
-  "post": "mewtwo",
-  "steps": [
-   {
-    "kind": "route",
-    "name": "Cueva Celeste",
-    "bg": "cerulean-cave",
-    "areas": ["cerulean-cave-1f", "cerulean-cave-2f", "cerulean-cave-b1f"],
-    "wild": 6,
-    "trainers": 0,
-    "item": true
-   },
-   { "kind": "heal", "name": "Ciudad Celeste" },
-   { "kind": "legend", "name": "Mewtwo", "bg": "cerulean-cave", "id": 150, "level": 100, "hp": 3.29, "power": 0.55, "ball": 0.01176, "balls": 40 }
-  ]
- },
- {
-  "name": "Central Eléctrica",
-  "post": "zapdos",
-  "steps": [
-   { "kind": "route", "name": "Central Eléctrica", "bg": "power-plant", "areas": ["kanto-power-plant-area"], "wild": 6, "trainers": 0, "item": true },
-   { "kind": "heal", "name": "Centro Pokémon" },
-   { "kind": "legend", "name": "Zapdos", "bg": "power-plant", "id": 145, "level": 100, "hp": 5.97, "power": 0.99, "ball": 0.01176, "balls": 40, "needType": "electric", "weather": "storm" }
-  ]
- },
- {
-  "name": "Islas Espuma",
-  "post": "articuno",
-  "steps": [
-   { "kind": "route", "name": "Islas Espuma", "bg": "seafoam", "areas": ["seafoam-islands-1f", "seafoam-islands-b1f", "seafoam-islands-b2f", "seafoam-islands-b3f", "seafoam-islands-b4f"], "wild": 6, "trainers": 0, "item": true },
-   { "kind": "heal", "name": "Centro Pokémon" },
-   { "kind": "legend", "name": "Articuno", "bg": "seafoam", "id": 144, "level": 100, "hp": 5.83, "power": 0.77, "ball": 0.01176, "balls": 40, "needType": "ice" }
-  ]
- },
- {
-  "name": "Cueva Ardiente",
-  "post": "moltres",
-  "steps": [
-   { "kind": "route", "name": "Cueva Ardiente", "bg": "victory", "areas": ["kanto-victory-road-2-1f", "kanto-victory-road-2-2f", "kanto-victory-road-2-3f"], "wild": 6, "trainers": 0, "item": true },
-   { "kind": "heal", "name": "Centro Pokémon" },
-   { "kind": "legend", "name": "Moltres", "bg": "victory", "id": 146, "level": 100, "hp": 6.14, "power": 0.76, "ball": 0.01176, "balls": 40, "needType": "fire" }
-  ]
  }
 ];

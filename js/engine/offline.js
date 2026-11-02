@@ -2,7 +2,7 @@
 // Usa el mismo motor de combate que el juego (runIdleBattle) y recorre los
 // nodos de la ruta igual que en directo: arbustos, entrenadores, "?" y centro.
 
-import { runIdleBattle } from "./idle-battle.js?v=3";
+import { runIdleBattle } from "./idle-battle.js?v=65";
 
 export const OFFLINE = {
   MAX_MS: 8 * 3600 * 1000,   // máximo de tiempo que cuenta
@@ -71,15 +71,7 @@ export function simulateOffline(ctx) {
     out.itemsCount += qty;
   };
 
-  const offlineStart = Date.now() - ms;
-  const realMsPerStep = OFFLINE.STEP_MS / OFFLINE.MULT;
-
   for (let s = 0; s < steps; s++) {
-    // El clima avanza con el tiempo que habría transcurrido mientras el jugador estaba ausente.
-    if (ctx.weatherForTime) {
-      const weather = ctx.weatherForTime(offlineStart + (s + 1) * realMsPerStep);
-      if (weather?.key) state.weather = weather.key;
-    }
     out.steps++;
     const node = state.routeNodes[state.routeProgress];
     if (!node) break;

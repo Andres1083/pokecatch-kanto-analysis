@@ -35,8 +35,7 @@ export async function fitSprite(img) {
   const b = await bbox(src);
   if (!img.isConnected || (img.currentSrc || img.src) !== src) return;
   if (!b) { img.dataset.fit = key; return; }
-  // k acotado: un dibujo casi vacío o atípico no debe inflar el sprite y solaparlo con el rival
-  const k = Math.min(art / Math.max(1, b.bottom - b.top), (art * 1.9) / Math.max(1, b.w));
+  const k = art / Math.max(1, b.bottom - b.top);
   const s = img.style;
   s.setProperty("width", `${Math.round(b.w * k)}px`, "important");
   s.setProperty("height", `${Math.round(b.h * k)}px`, "important");

@@ -1,10 +1,10 @@
 // Casino: tragaperras + tienda de premios (fichas)
-import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=3";
-import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=3";
-import { frontSprite } from "../data/sprites.js?v=3";
-import { DEX_NAMES } from "../data/dex-names.js?v=3";
-import { itemImg } from "./item-icon.js?v=3";
-import { dexSets } from "./dex.js?v=3";
+import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=65";
+import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=65";
+import { frontSprite } from "../data/sprites.js?v=65";
+import { DEX_NAMES } from "../data/dex-names.js?v=65";
+import { itemImg } from "./item-icon.js?v=65";
+import { dexSets } from "./dex.js?v=65";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const ui = { tab: "slots", mult: 1, spinning: false, auto: false, grid: null };
