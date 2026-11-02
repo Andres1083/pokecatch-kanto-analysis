@@ -1,6 +1,6 @@
 // Captura + almacenamiento por familia + PE a la familia si está llena
 
-import { familyRoot, familySlots, countFamily, canStore } from "../data/families.js?v=65";
+import { familyRoot, familySlots, countFamily, canStore } from "../data/families.js?v=1";
 
 export function captureChance(enemy, { ball = "poke" } = {}) {
   const ballMod = { poke: 1, great: 1.5, ultra: 2 }[ball] || 1;
