@@ -884,7 +884,7 @@ function toggleActMenu() {
   if (document.getElementById("act-menu")) return closeActMenu();
   const unlocked = casinoUnlocked(state);
   const items = [
-    { id: "ach", label: "Logros", ic: "🏅" },
+    { id: "ach", label: "LOGROS", ic: "🏅" },
     { id: "nursery", label: "Guardería", ic: "🥚" },
     { id: "casino", label: "Casino", ic: "🎰", lock: !unlocked, hint: "Medalla Trueno" },
     { id: "raids", label: "Incursiones", ic: "💜" },
