@@ -5764,3 +5764,17 @@ button.rail-slot.active,
 .me-item.frame.locked { border-style: dashed; }
 
 .ach-frame-reward { display:grid; place-items:center; width:42px; height:42px; border:3px solid #e8c050; border-radius:12px; color:#ffe58a; font-size:1.8rem; box-shadow:0 0 10px #e8c05055; }
+
+
+/* Nodo especial para encuentros legendarios en el mapa de Kanto */
+.rnode.legend .rnode-legend {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: #ffe58a;
+  font-size: 25px;
+  line-height: 1;
+  text-shadow: 0 0 7px #f4c542, 0 0 14px #e8a91c;
+}
+.rnode.legend.done .rnode-legend { color: #72d6a1; text-shadow: 0 0 7px #36b87b; }
