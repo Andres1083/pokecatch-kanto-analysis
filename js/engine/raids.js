@@ -3,7 +3,7 @@
  * Flujo: wild → trainer → wild → trainer → heal → boss
  * Boss shiny nv.100, captura ~1%, pity Master Ball a 200.
  */
-import { frontSprite } from "../data/sprites.js?v=65";
+import { frontSprite } from "../data/sprites.js?v=100";
 
 export const RAID_CFG = {
   LEVEL: 100,

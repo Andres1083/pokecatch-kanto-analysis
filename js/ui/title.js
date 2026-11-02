@@ -1,6 +1,7 @@
 // Pantalla de título: sprites con movimiento, Continuar/Nueva partida, Cómo jugar, Invitado / Google.
-import { frontSprite } from "../data/sprites.js?v=65";
-import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=65";
+import { frontSprite } from "../data/sprites.js?v=100";
+import { CHANGELOG, LATEST } from "../data/changelog.js?v=100";
+import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=100";
 
 const BALLS = ["poke-ball", "great-ball", "ultra-ball"];
 const HOWTO = [
@@ -15,6 +16,7 @@ const HOWTO = [
 export function showTitle({ hasSave, onContinue, onNew }) {
   const app = document.getElementById("app");
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const seenLog = () => { try { return localStorage.getItem("pokecatch-kanto-changelog"); } catch (_) { return null; } };
   const render = () => {
     const ses = getSession();
     app.innerHTML = `
@@ -27,7 +29,10 @@ export function showTitle({ hasSave, onContinue, onNew }) {
               ? `<button class="ttl-btn ttl-primary" id="t-go">CONTINUAR</button>`
               : `<button class="ttl-btn ttl-primary" id="t-go">NUEVA PARTIDA</button>`}
             ${hasSave ? `<button class="ttl-link" id="t-new">Empezar una partida nueva</button>` : ""}
-            <button class="ttl-btn ttl-dark" id="t-how">CÓMO JUGAR</button>
+            <div class="ttl-row">
+              <button class="ttl-btn ttl-dark" id="t-how">CÓMO JUGAR</button>
+              <button class="ttl-btn ttl-dark ttl-cl" id="t-log">🎟️ CHANGELOGS${seenLog() === LATEST ? "" : `<i class="ttl-new">NEW</i>`}</button>
+            </div>
             ${ses
               ? `<div class="ttl-ses">${ses.photo ? `<img src="${esc(ses.photo)}" alt="" referrerpolicy="no-referrer">` : `<span class="ttl-ava">${ses.mode === "guest" ? "👤" : "🙂"}</span>`}
                    <span>Sesión: <b>${esc(ses.name)}</b>${ses.mode === "guest" ? " (invitado)" : ""}</span>
@@ -53,6 +58,7 @@ export function showTitle({ hasSave, onContinue, onNew }) {
       if (confirm("Se borrará tu partida guardada en este dispositivo. ¿Empezar de nuevo?")) { if (!getSession()) playAsGuest(); stopWander(); onNew(); }
     });
     $("t-how").onclick = showHow;
+    $("t-log").onclick = showLog;
     $("t-guest")?.addEventListener("click", () => { playAsGuest(); render(); });
     $("t-out")?.addEventListener("click", () => { signOut(); render(); });
     $("t-google")?.addEventListener("click", async () => {
@@ -60,6 +66,18 @@ export function showTitle({ hasSave, onContinue, onNew }) {
       msg("Abriendo Google…");
       try { await signInWithGoogle(); render(); } catch (e) { msg(e.message); }
     });
+  }
+
+  function showLog() {
+    try { localStorage.setItem("pokecatch-kanto-changelog", LATEST); } catch (_) {}
+    const d = document.createElement("div");
+    d.className = "ttl-modal";
+    d.innerHTML = `<div class="ttl-card"><button class="ttl-x" aria-label="Cerrar">✕</button><h2>Changelogs</h2>
+      ${CHANGELOG.map((c) => `<div class="ttl-how ttl-log"><div><b>v${c.v} · ${esc(c.title)}</b><small>${esc(c.date)}</small>
+        <ul>${c.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div></div>`).join("")}
+      <button class="ttl-btn ttl-primary" style="margin-top:.6rem;width:100%">CERRAR</button></div>`;
+    d.addEventListener("click", (e) => { if (e.target === d || e.target.closest(".ttl-x,.ttl-primary")) { d.remove(); const n = document.querySelector("#t-log .ttl-new"); if (n) n.remove(); } });
+    app.querySelector("#ttl").appendChild(d);
   }
 
   function showHow() {
