@@ -21,7 +21,24 @@ export function starterMarkup() {
     <button id="sx-skip" class="btn-skip sx-skip" type="button">SALTAR ⏭</button>`;
 }
 
+/** Recorta el dibujo (sin el margen transparente) para poder escalarlo grande sin perder nitidez. */
+async function cropSprite(img, scale = 4.5) {
+  try {
+    if (!img.complete || !img.naturalWidth) await new Promise((res, rej) => { img.onload = res; img.onerror = rej; });
+    const w = img.naturalWidth, h = img.naturalHeight, c = document.createElement("canvas"); c.width = w; c.height = h;
+    const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(img, 0, 0);
+    const d = x.getImageData(0, 0, w, h).data; let l = w, t = h, r = -1, b = -1;
+    for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) if (d[(y * w + i) * 4 + 3] > 24) { if (i < l) l = i; if (i > r) r = i; if (y < t) t = y; if (y > b) b = y; }
+    if (r < 0) return;
+    const cw = r - l + 1, ch = b - t + 1, o = document.createElement("canvas"); o.width = cw; o.height = ch;
+    o.getContext("2d").drawImage(c, l, t, cw, ch, 0, 0, cw, ch);
+    img.src = o.toDataURL("image/png");
+    img.style.width = `${Math.round(cw * scale)}px`; img.style.height = `${Math.round(ch * scale)}px`;
+  } catch (_) {}
+}
+
 export async function playStarterReveal(root) {
+  await Promise.all([...root.querySelectorAll(".sx-mon")].map((m) => cropSprite(m)));
   const slots = [...root.querySelectorAll(".sx-slot")];
   const fx = root.querySelector("#sx-fx");
   const textEl = root.querySelector("#sx-text");

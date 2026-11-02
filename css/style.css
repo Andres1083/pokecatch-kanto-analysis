@@ -5718,3 +5718,7 @@ button.rail-slot.active,
 .sx-mon { width: 132px; height: 132px; bottom: 12px; }
 .sx-ball { width: 32px; height: 32px; }
 .sx-skip { width: auto !important; padding: .5rem 1.1rem !important; }
+.sx-slot { height: 190px; }
+.sx-mon { width: 200px; height: 200px; bottom: -22px; }
+.sx-slot { height: 150px; }
+.sx-mon { width: auto; height: auto; bottom: 20px; max-width: 150px; }
