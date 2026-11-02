@@ -1,4 +1,4 @@
-// Clima + ciclo día/noche en tiempo real
+// Clima interno del juego + ciclo día/noche
 
 /** Semilla estable por hora local */
 function hourSeed(d = new Date()) {
@@ -28,10 +28,7 @@ export function isDusk(d = new Date()) {
   return h === 19 || h === 6;
 }
 
-/**
- * Clima de la hora actual (estable hasta la próxima hora).
- * Si hay fetch de Open-Meteo se puede mezclar después.
- */
+/** Clima de juego estable durante la hora local actual. */
 export function weatherForNow(d = new Date()) {
   const seed = hourSeed(d);
   const rnd = mulberry32(seed);
@@ -91,6 +88,6 @@ export function formatClock(d = new Date()) {
  * Se mantiene estable durante cada hora y no depende del tiempo meteorológico real
  * ni de las coordenadas del jugador.
  */
-export async function fetchWeather() {
+export function getGameWeather() {
   return { ...weatherForNow(), source: "game" };
 }

@@ -21,7 +21,7 @@ import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v
 import { Sfx } from "./engine/sfx.js?v=1";
 import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=1";
 import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=1";
-import { weatherForNow, fetchWeather, formatClock, formatHour } from "./data/weather.js?v=1";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=1";
 import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=1";
 import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=1";
 import { SCENES } from "./data/scenes.js?v=1";
@@ -664,7 +664,7 @@ async function startRoute() {
   state.busy = false;
   ensureRoute();
   try {
-    state.weatherInfo = await fetchWeather();
+    state.weatherInfo = await getGameWeather();
     state.weather = state.weatherInfo.key;
   } catch (_) { state.weatherInfo = weatherForNow(); state.weather = state.weatherInfo.key; }
   renderRoute();
@@ -2044,7 +2044,7 @@ async function doEncounter() {
     // Actualizar clima si cambió la hora
     const nowW = weatherForNow();
     if (!state.weatherInfo || state.weatherInfo.hour !== nowW.hour) {
-      state.weatherInfo = await fetchWeather().catch(() => nowW);
+      state.weatherInfo = await getGameWeather().catch(() => nowW);
       state.weather = state.weatherInfo.key;
     }
     await pauseGate();
