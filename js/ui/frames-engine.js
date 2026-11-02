@@ -1,3 +1,5 @@
+import { evaluateAchievements, FRAME_REWARD_MAP } from "../data/achievements.js?v=94";
+
 /**
  * Marcos estilo Poke'Catch original (pixel→SVG→CSS).
  * Aspectos: assets/trainers/still/*.png del original.
@@ -147,12 +149,29 @@ export const STILL_ASPECTS = [
   "gentleman","blackbelt","giovanni","pokemaniac","silver",
 ];
 export function stillSrc(id) { return `assets/trainers/still/${id}.png`; }
+function completedAchievements(state) {
+  const done = new Set(state.unlockedAchievements || []);
+  for (const a of evaluateAchievements(state)) if (a.done) done.add(a.id);
+  return done;
+}
+function unlockedAspectIds(state) {
+  const done = completedAchievements(state), out = new Set(["red", "leaf"]);
+  for (const a of evaluateAchievements(state)) if (a.kind === "aspect" && done.has(a.id)) out.add(a.reward);
+  return out;
+}
+function unlockedFrameIds(state) {
+  const done = completedAchievements(state), out = new Set(["base"]);
+  for (const a of evaluateAchievements(state)) if (a.kind === "frame" && done.has(a.id)) out.add(FRAME_REWARD_MAP[a.reward] || a.reward);
+  return out;
+}
 export function getAspect(state) {
-  return state.player?.aspect || (state.player?.gender === "f" ? "leaf" : "red");
+  const fallback = state.player?.gender === "f" ? "leaf" : "red";
+  const selected = state.player?.aspect || fallback;
+  return unlockedAspectIds(state).has(selected) ? selected : fallback;
 }
 export function getFrame(state) {
-  const f = state.player?.frame || "base";
-  return { std: "base", ball: "pokeball" }[f] || f;
+  const selected = { std: "base", ball: "pokeball" }[state.player?.frame] || state.player?.frame || "base";
+  return unlockedFrameIds(state).has(selected) ? selected : "base";
 }
 export function frameClass() { return ""; }
 export function aspectSrc(state) { return stillSrc(getAspect(state)); }
@@ -173,6 +192,8 @@ export function avatarHtml(state, { button = false, cls = "", frameId = null, as
 
 export function openPlayerEditor(state, { onSave, onClose } = {}) {
   injectFrameStyles();
+  const availableAspects = unlockedAspectIds(state);
+  const availableFrames = unlockedFrameIds(state);
   let curAsp = getAspect(state);
   let curFr = getFrame(state);
   const ov = document.createElement("div");
@@ -198,17 +219,18 @@ export function openPlayerEditor(state, { onSave, onClose } = {}) {
         </label>
       </div>
       <div class="me-grid" data-pane="aspect">
-        ${STILL_ASPECTS.map((a) => `
-          <button type="button" class="me-item ${a === curAsp ? "on" : ""}" data-aspect="${a}">
+        ${STILL_ASPECTS.map((a) => { const ok = availableAspects.has(a); return `
+          <button type="button" class="me-item ${a === curAsp ? "on" : ""} ${ok ? "" : "locked"}" ${ok ? `data-aspect="${a}"` : "disabled"}>
             <img src="${stillSrc(a)}" alt="${a}" onerror="this.style.opacity=.3" />
-          </button>`).join("")}
+            ${ok ? "" : `<small class="me-lock" style="position:absolute;right:5px;top:4px;background:#111c;padding:2px 4px;border-radius:6px">🔒</small>`}
+          </button>`; }).join("")}`
       </div>
       <div class="me-grid me-frames" data-pane="frame" hidden>
-        ${FRAMES.map((f) => `
-          <button type="button" class="me-item frame ${f.id === curFr ? "on" : ""}" data-frame="${f.id}">
-            ${avatarHtml(state, { aspectId: curAsp, frameId: f.id, size: 52 })}
-            <small>${f.label}</small>
-          </button>`).join("")}
+        ${FRAMES.map((fr) => { const ok = availableFrames.has(fr.id); return `
+          <button type="button" class="me-item frame ${fr.id === curFr ? "on" : ""} ${ok ? "" : "locked"}" ${ok ? `data-frame="${fr.id}"` : "disabled"}>
+            ${avatarHtml(state, { aspectId: curAsp, frameId: fr.id, size: 52 })}
+            <small>${fr.label}</small>${ok ? "" : `<small class="me-lock">🔒</small>`}
+          </button>`; }).join("")}`
       </div>
       <footer class="me-foot">
         <button type="button" class="me-cancel" data-act="close">CANCELAR</button>
