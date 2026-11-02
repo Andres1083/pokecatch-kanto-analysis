@@ -95,7 +95,8 @@ export function renderProgress(state) {
   rows.push(leagueRow);
 
   // Zonas legendarias (postjuego): Liga superada + un Pokémon del tipo pedido
-  const mine = [...state.playerTeam, ...(state.box || [])];
+  // Los requisitos de tipo se comprueban sobre el equipo activo, no sobre la caja.
+  const mine = [...state.playerTeam];
   const open = state.badges.includes("Maestro");
   const BIRDS = [
     { key: "zapdos", name: "Central Eléctrica", who: "Zapdos", type: "electric", typeEs: "Eléctrico", ico: "⚡", c: "#f7d02c" },

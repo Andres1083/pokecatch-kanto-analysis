@@ -1742,6 +1742,14 @@ async function nodeWild() {
 /** Legendario del postjuego (Mewtwo): intro, combate y hasta 5 Poké Balls con poca probabilidad. */
 async function nodeLegend() {
   const lg = curSeg().legend;
+  // Los legendarios con needType solo se pueden desafiar si el equipo activo
+  // contiene al menos un Pokémon de ese tipo (el mismo criterio que Progreso).
+  if (lg.needType && !state.playerTeam.some(m => (m.types || []).includes(lg.needType))) {
+    const typeNames = { electric: "Eléctrico", ice: "Hielo", fire: "Fuego" };
+    setMsg(`Para encontrar a ${lg.name}, necesitas un Pokémon de tipo ${typeNames[lg.needType] || lg.needType} en tu equipo.`);
+    await delay(1100);
+    return false;
+  }
   const LEGEND_BALL_CHANCE = lg.ball ?? 0.22, LEGEND_BALLS = lg.balls ?? 5;
   // Zapdos: la Central se llena de tormenta mientras dura el encuentro
   const prevWeather = state.weather;
