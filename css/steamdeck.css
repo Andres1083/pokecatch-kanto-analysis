@@ -1,6 +1,6 @@
 /* PokéCatch Kanto — Steam Deck / pantallas grandes
    Se activa solo en viewports >= 700px. El diseño móvil de iPhone queda intacto. */
-@media (min-width: 700px) {
+@media (min-width: 900px) {
   :root { --deck-gutter: clamp(18px, 2.5vw, 42px); }
 
   html, body { width: 100%; min-height: 100%; }
