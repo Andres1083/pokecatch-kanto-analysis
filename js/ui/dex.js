@@ -1,6 +1,6 @@
 import { DEX_NAMES } from "../data/dex-names.js?v=65";
 import { iconSprite, frontSprite } from "../data/sprites.js?v=65";
-import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=65";
+import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=94";
 import { pixelIcon } from "./pixel.js?v=65";
 import { badgeHtml } from "./badge.js?v=65";
 import { NATURES, natureLabel } from "../data/natures.js?v=65";
