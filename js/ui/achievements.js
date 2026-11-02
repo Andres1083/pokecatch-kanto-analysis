@@ -112,7 +112,7 @@ function row(a, unlocked) {
   return `
   <article class="ach-row ${a.done ? "done" : "locked"}">
     <div class="ach-ico">${a.done
-      ? `<img src="assets/trainers/${a.reward || "youngster"}.png" alt="" onerror="this.style.display='none'" />`
+      ? `<img src="assets/trainers/still/${a.reward || "youngster"}.png" alt="" onerror="this.style.display='none'" />`
       : `<span class="ach-lock">🔒</span>`}</div>
     <div class="ach-meta">
       <small>${KIND_LBL[a.kind] || ""}</small>
