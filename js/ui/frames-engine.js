@@ -145,7 +145,7 @@ export function injectFrameStyles() {
 export const FRAMES = CATALOG.map(({ id, name }) => ({ id, label: name, cls: `fr-${id}` }));
 export const STILL_ASPECTS = [
   "red","leaf","blue","ethan","lyra","youngster","lass","hiker","fisherman","biker","swimmer-f","psychic-f","pokefan-f","rocket",
-  "beauty","birdkeeper","bugcatcher","camper","picnicker","supernerd","oak","scientist",
+  "beauty","birdkeeper","bugcatcher","camper","picnicker","supernerd","cooltrainer-m","oak","scientist",
   "gentleman","blackbelt","giovanni","pokemaniac","silver",
 ];
 export function stillSrc(id) { return `assets/trainers/still/${id}.png`; }
