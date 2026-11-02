@@ -223,14 +223,14 @@ export function openPlayerEditor(state, { onSave, onClose } = {}) {
           <button type="button" class="me-item ${a === curAsp ? "on" : ""} ${ok ? "" : "locked"}" ${ok ? `data-aspect="${a}"` : "disabled"}>
             <img src="${stillSrc(a)}" alt="${a}" onerror="this.style.opacity=.3" />
             ${ok ? "" : `<small class="me-lock" style="position:absolute;right:5px;top:4px;background:#111c;padding:2px 4px;border-radius:6px">🔒</small>`}
-          </button>`; }).join("")}`
+          </button>`; }).join("")}
       </div>
       <div class="me-grid me-frames" data-pane="frame" hidden>
         ${FRAMES.map((fr) => { const ok = availableFrames.has(fr.id); return `
           <button type="button" class="me-item frame ${fr.id === curFr ? "on" : ""} ${ok ? "" : "locked"}" ${ok ? `data-frame="${fr.id}"` : "disabled"}>
             ${avatarHtml(state, { aspectId: curAsp, frameId: fr.id, size: 52 })}
             <small>${fr.label}</small>${ok ? "" : `<small class="me-lock">🔒</small>`}
-          </button>`; }).join("")}`
+          </button>`; }).join("")}
       </div>
       <footer class="me-foot">
         <button type="button" class="me-cancel" data-act="close">CANCELAR</button>
