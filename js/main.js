@@ -473,6 +473,7 @@ async function processOffline(elapsedMs) {
   const result = simulateOffline({
     state,
     elapsedMs,
+    weatherForTime: (timestamp) => weatherForNow(new Date(timestamp)),
     enemyFor: (id, level, power) => {
       const c = enemyCache.get(`${id}:${level}`);
       return scaleEnemy(c ? cloneEnemy(c) : fallbackEnemy(id, level), power);
@@ -655,7 +656,7 @@ async function startRoute() {
   state.busy = false;
   ensureRoute();
   try {
-    state.weatherInfo = await fetchWeather(4.71, -74.07);
+    state.weatherInfo = await fetchWeather();
     state.weather = state.weatherInfo.key;
   } catch (_) { state.weatherInfo = weatherForNow(); state.weather = state.weatherInfo.key; }
   renderRoute();
@@ -2035,7 +2036,7 @@ async function doEncounter() {
     // Actualizar clima si cambió la hora
     const nowW = weatherForNow();
     if (!state.weatherInfo || state.weatherInfo.hour !== nowW.hour) {
-      state.weatherInfo = await fetchWeather(4.71, -74.07).catch(() => nowW);
+      state.weatherInfo = await fetchWeather().catch(() => nowW);
       state.weather = state.weatherInfo.key;
     }
     await pauseGate();

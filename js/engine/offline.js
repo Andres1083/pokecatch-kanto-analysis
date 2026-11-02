@@ -71,7 +71,15 @@ export function simulateOffline(ctx) {
     out.itemsCount += qty;
   };
 
+  const offlineStart = Date.now() - ms;
+  const realMsPerStep = OFFLINE.STEP_MS / OFFLINE.MULT;
+
   for (let s = 0; s < steps; s++) {
+    // El clima avanza con el tiempo que habría transcurrido mientras el jugador estaba ausente.
+    if (ctx.weatherForTime) {
+      const weather = ctx.weatherForTime(offlineStart + (s + 1) * realMsPerStep);
+      if (weather?.key) state.weather = weather.key;
+    }
     out.steps++;
     const node = state.routeNodes[state.routeProgress];
     if (!node) break;
