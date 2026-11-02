@@ -233,19 +233,24 @@ function applyXp(mon, amount) {
   return levels;
 }
 
-async function processTeamEvolutions() {
+async function processTeamEvolutions({ animate = true } = {}) {
   const msgs = [];
-  for (const mon of state.playerTeam) {
+  const process = async (mon, inTeam) => {
     const evos = await checkLevelEvolutions(mon);
     for (const e of evos) {
-      try { Sfx.evolve(); } catch (_) {}
-      await showEvolveFx(mon, e);
-      msgs.push(`¡${e.from} evolucionó a ${e.to}!`);
+      // Las evoluciones automáticas también deben quedar registradas en el Pokédex.
+      dexAdd("seen", e.toId);
+      dexAdd("caught", e.toId);
+      const message = `¡${e.from} evolucionó a ${e.to}!`;
+      msgs.push(message);
+      if (animate && inTeam) {
+        try { Sfx.evolve(); } catch (_) {}
+        await showEvolveFx(mon, e);
+      }
     }
-  }
-  for (const mon of (state.box || [])) {
-    await checkLevelEvolutions(mon);
-  }
+  };
+  for (const mon of state.playerTeam) await process(mon, true);
+  for (const mon of (state.box || [])) await process(mon, false);
   if (msgs.length) saveGame();
   return msgs;
 }
@@ -489,6 +494,9 @@ async function processOffline(elapsedMs) {
     captureWild: captureWildOffline,
   });
   if (!result.steps) return null;
+  // Las subidas de nivel durante el progreso offline también deben evolucionar
+  // y registrar las nuevas especies, aunque no haya animación en segundo plano.
+  await processTeamEvolutions({ animate: false });
   state.routeTotal = state.routeNodes.length;
 
   const team = state.playerTeam.map((m, i) => ({
