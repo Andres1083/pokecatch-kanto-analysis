@@ -80,7 +80,7 @@ export const ACHIEVEMENTS = [
     title: "10 capturas",
     desc: "Captura 10 Pokémon.",
     max: 10,
-    progress: (s) => ({ cur: Math.min(10, s.stats?.caught || 0), max: 10 }),
+    progress: (s) => ({ cur: Math.min(10, totalCaptures(s)), max: 10 }),
   },
   {
     id: "brock-outfit",
@@ -134,7 +134,7 @@ export const ACHIEVEMENTS = [
     title: "Evoluciones",
     desc: "Haz evolucionar 30 Pokémon.",
     max: 30,
-    progress: (s) => ({ cur: Math.min(30, s.stats?.evolved || 0), max: 30 }),
+    progress: (s) => ({ cur: Math.min(30, s.stats?.evolutions || s.stats?.evolved || 0), max: 30 }),
   },
   {
     id: "blue",
@@ -152,7 +152,7 @@ export const ACHIEVEMENTS = [
     title: "Pokémaníaco",
     desc: "Captura 500 Pokémon, duplicados incluidos.",
     max: 500,
-    progress: (s) => ({ cur: Math.min(500, s.stats?.caught || 0), max: 500 }),
+    progress: (s) => ({ cur: Math.min(500, totalCaptures(s)), max: 500 }),
   },
   {
     id: "gentleman",
@@ -170,7 +170,15 @@ export const ACHIEVEMENTS = [
     title: "Giovanni",
     desc: "Derrota a Giovanni en Ciudad Verde sin que ninguno de tus Pokémon se debilite.",
     max: 1,
-    progress: (s) => ({ cur: s.feats?.giovanni ? 1 : 0, max: 1 }),
+    progress: (s) => ({ cur: s.feats?.giovanni || s.stats?.feats?.giovanni ? 1 : 0, max: 1 }),
+  },
+
+  {
+    id: "blackbelt", kind: "aspect", reward: "blackbelt",
+    title: "Maestro de incursiones",
+    desc: "Gana 25 incursiones variocolor.",
+    max: 25,
+    progress: (s) => ({ cur: Math.min(25, Number(s.raids?.clears || s.stats?.raidClears || 0)), max: 25 }),
   },
 
   // ── Marcos (frames) ──
@@ -226,7 +234,7 @@ export const ACHIEVEMENTS = [
     title: "Casino",
     desc: "Desbloquea el Casino de Ciudad Azulona.",
     max: 1,
-    progress: (s) => ({ cur: hasBadge(s, "Cascada") || s.casinoUnlocked ? 1 : 0, max: 1 }),
+    progress: (s) => ({ cur: casinoProgress(s) ? 1 : 0, max: 1 }),
   },
 
   // ── Escenas (cinemáticas Kanto) ──
@@ -293,7 +301,7 @@ export const ACHIEVEMENTS = [
 ];
 
 function dexSet(s) {
-  const set = new Set();
+  const set = new Set((Array.isArray(s.stats?.caught) ? s.stats.caught : []).map(Number));
   for (const m of [...(s.playerTeam || []), ...(s.box || [])]) if (m?.id) set.add(m.id);
   if (s.dex) for (const k of Object.keys(s.dex)) set.add(+k);
   return set;
@@ -314,6 +322,17 @@ function countDex(s, from, to) {
 function countShiny(s) {
   return [...(s.playerTeam || []), ...(s.box || [])].filter((m) => m?.shiny).length;
 }
+function totalCaptures(s) {
+  return Number(s.stats?.captures ?? (Array.isArray(s.stats?.caught) ? s.stats.caught.length : 0)) || 0;
+}
+function casinoProgress(s) {
+  return !!s.casinoUnlocked || Math.max(s.badges?.length || 0, Math.min(8, s.chapter || 0)) >= 3;
+}
+
+export const FRAME_REWARD_MAP = {
+  trade: "pokeball", dex: "league", nursery: "pokeball",
+  shiny: "league", raid: "rocket", casino: "casino",
+};
 function hasBadge(s, name) {
   return (s.badges || []).some((b) => String(b).toLowerCase().includes(String(name).toLowerCase()));
 }
