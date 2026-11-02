@@ -2,7 +2,7 @@
 // Usa el mismo motor de combate que el juego (runIdleBattle) y recorre los
 // nodos de la ruta igual que en directo: arbustos, entrenadores, "?" y centro.
 
-import { runIdleBattle } from "./idle-battle.js?v=65";
+import { runIdleBattle } from "./idle-battle.js?v=1";
 
 export const OFFLINE = {
   MAX_MS: 8 * 3600 * 1000,   // máximo de tiempo que cuenta
