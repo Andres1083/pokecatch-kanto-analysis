@@ -16,7 +16,7 @@ import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v
 import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=91";
 import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=65";
 import { openRaidsLobby } from "./ui/raids-lobby.js?v=65";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=65";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=94";
 import { Sfx } from "./engine/sfx.js?v=65";
 import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=65";
 import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=65";
@@ -27,7 +27,7 @@ import { SCENES } from "./data/scenes.js?v=80";
 import { BG_DATA } from "./data/backgrounds.js?v=65";
 import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=65";
 import { evosOf } from "./data/evolutions.js?v=65";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=65";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=94";
 import { showBriefing, showLeague } from "./ui/briefing.js?v=65";
 import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=65";
 import { renderRouteBar } from "./ui/route-bar.js?v=65";
@@ -81,6 +81,7 @@ const state = {
   stats: { battles: 0, wins: 0, balls: 0, captures: 0, playMs: 0, startedAt: Date.now(), seen: [], caught: [], caughtOrder: [], shiny: [] },
   captureFilter: {},
   unlockedAchievements: [],
+  feats: {},
   fichas: 0,
   nursery: { parents: [null, null], eggs: [], incubators: [null, null], lastEggAt: null },
 };
@@ -152,6 +153,7 @@ function saveGame() {
       stats: state.stats,
       captureFilter: state.captureFilter || {},
       unlockedAchievements: state.unlockedAchievements || [],
+      feats: state.feats || {},
       nursery: state.nursery,
       fichas: state.fichas || 0,
       savedAt: Date.now(),
@@ -1899,6 +1901,7 @@ async function nodeGym() {
   const gym = curSeg().gym;
   await showBoss(gym);
   let totalXp = 0;
+  const giovanniPerfectStart = gym.leaderEs === "Giovanni" && state.playerTeam.every(m => m.currentHp > 0);
   let firstG = true, gDone = 0;
   foeTeam(gym.leaderEs, gym.team.length, 0);
   for (const [id, level] of gym.team) {
@@ -1921,6 +1924,10 @@ async function nodeGym() {
     await delay(300);
   }
   clearFoeTeam();
+  if (giovanniPerfectStart && state.playerTeam.every(m => m.currentHp > 0)) {
+    state.feats = state.feats || {};
+    state.feats.giovanni = true;
+  }
   await showBanner(`¡Has derrotado a ${gym.leaderEs}!`);
   setMsg(gym.badgeEs === "Maestro" ? `¡Eres el Campeón de la Liga! +${fmtMoney(gym.reward)} ₽`
     : gym.badgeEs ? `¡Ganaste la Medalla ${gym.badgeEs}! +${fmtMoney(gym.reward)} ₽`
@@ -2082,6 +2089,7 @@ async function bootGame() {
     player: existing.player,
     playerTeam: existing.playerTeam,
     unlockedAchievements: existing.unlockedAchievements || [],
+    feats: existing.feats || {},
     box: existing.box || [],
     badges: existing.badges || [],
     money: existing.money ?? 3000,
