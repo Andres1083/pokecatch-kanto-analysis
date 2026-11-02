@@ -2,7 +2,7 @@ import { startIntro } from "./ui/intro.js?v=65";
 import { showTitle } from "./ui/title.js?v=65";
 import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=94";
 import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=65";
-import { LEGENDS } from "./data/legends.js?v=65";
+import { LEGENDS } from "./data/legends.js?v=95";
 import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=65";
 installSpriteFit();
 import { showPokedexCard } from "./ui/pokedex-card.js?v=65";
@@ -22,7 +22,7 @@ import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.
 import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=65";
 import { weatherForNow, fetchWeather, formatClock, formatHour } from "./data/weather.js?v=65";
 import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=65";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=65";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=95";
 import { SCENES } from "./data/scenes.js?v=80";
 import { BG_DATA } from "./data/backgrounds.js?v=65";
 import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=65";
@@ -30,7 +30,7 @@ import { evosOf } from "./data/evolutions.js?v=65";
 import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=94";
 import { showBriefing, showLeague } from "./ui/briefing.js?v=65";
 import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=65";
-import { renderRouteBar } from "./ui/route-bar.js?v=65";
+import { renderRouteBar } from "./ui/route-bar.js?v=95";
 import { renderBag, bindBag } from "./ui/bag.js?v=65";
 import { showWelcomeBack } from "./ui/welcome-back.js?v=65";
 import { simulateOffline, OFFLINE } from "./engine/offline.js?v=65";
@@ -82,6 +82,8 @@ const state = {
   captureFilter: {},
   unlockedAchievements: [],
   feats: {},
+  storyFlags: [],
+  legendaryEncounters: [],
   fichas: 0,
   nursery: { parents: [null, null], eggs: [], incubators: [null, null], lastEggAt: null },
 };
@@ -154,6 +156,8 @@ function saveGame() {
       captureFilter: state.captureFilter || {},
       unlockedAchievements: state.unlockedAchievements || [],
       feats: state.feats || {},
+      storyFlags: state.storyFlags || [],
+      legendaryEncounters: state.legendaryEncounters || [],
       nursery: state.nursery,
       fichas: state.fichas || 0,
       savedAt: Date.now(),
@@ -1649,7 +1653,7 @@ function advanceRoute() {
 }
 
 /** Aplica una captura exitosa: naturaleza, variocolor, filtro y almacenamiento. Sin mensajes. */
-function resolveCapture(enemy) {
+function resolveCapture(enemy, { ignoreFilter = false } = {}) {
   state.stats.captures++;
   dexAdd("caught", enemy.id);
   const natureIndex = randomNature();
@@ -1668,7 +1672,7 @@ function resolveCapture(enemy) {
   };
   if (caught.shiny) dexAdd("shiny", enemy.id);
   const want = state.captureFilter?.[enemy.id];
-  if (!caught.shiny && want && want.length && !want.includes(natureIndex)) {
+  if (!ignoreFilter && !caught.shiny && want && want.length && !want.includes(natureIndex)) {
     state.stats.autoReleased = (state.stats.autoReleased || 0) + 1;
     return { status: "filtered", natureIndex };
   }
@@ -1738,6 +1742,71 @@ async function nodeWild() {
   }
   saveGame();
   await delay(900);
+  return true;
+}
+
+async function nodeUnlock() {
+  const node = curNode();
+  state.storyFlags = [...new Set([...(state.storyFlags || []), node.key].filter(Boolean))];
+  advanceRoute();
+  setMsg(node.text || "¡Has desbloqueado un nuevo acceso!");
+  saveGame();
+  await delay(900);
+  return true;
+}
+
+async function nodeLegend() {
+  const node = curNode();
+  state.legendaryEncounters = state.legendaryEncounters || [];
+  if (state.legendaryEncounters.includes(node.id) || state.stats.caught?.includes(node.id)) {
+    if (!state.legendaryEncounters.includes(node.id)) state.legendaryEncounters.push(node.id);
+    setMsg(`${LEGENDS[node.id]?.name || "Este Pokémon legendario"} ya está registrado en tu Pokédex.`);
+    advanceRoute();
+    saveGame();
+    await delay(650);
+    return true;
+  }
+
+  const enemy = await loadEnemy(node.id, node.level);
+  dexAdd("seen", enemy.id);
+  await playLegendIntro(node.id, $("#scene"));
+  showEnemy(enemy);
+  setMsg(`¡${enemy.nameEs} ha aparecido!`);
+  await delay(700);
+
+  state.keepEnemyOnFaint = true;
+  let won;
+  try { won = await runFight(enemy); }
+  finally { state.keepEnemyOnFaint = false; }
+  if (!won) {
+    const im = $("#enemy-img");
+    if (im) im.style.filter = "";
+    return false;
+  }
+
+  const xp = Math.round(calcXpGain(enemy) * 2);
+  const leveled = giveTeamXp(xp);
+  const evoMsgs = await processTeamEvolutions();
+  await showBanner(`¡Has vencido a ${enemy.nameEs}!`);
+
+  // Los encuentros legendarios son únicos: al ganar se capturan sin depender
+  // del filtro de naturalezas ni de una tirada aleatoria de captura.
+  state.stats.balls++;
+  try {
+    Sfx.ball();
+    await playCaptureFx({ success: true, speed: state.speed });
+    Sfx.capture();
+  } catch (_) {}
+  const result = resolveCapture(enemy, { ignoreFilter: true });
+  if (!state.legendaryEncounters.includes(node.id)) state.legendaryEncounters.push(node.id);
+  advanceRoute();
+  const reward = result.status === "team" ? "se unió a tu equipo"
+    : result.status === "box" ? "fue enviado a la caja"
+    : result.status === "family" ? "ya estaba registrado; su familia recibió PE"
+    : "quedó registrado";
+  setMsg(`¡${enemy.nameEs} ${reward}! +${xp} XP${leveled.length || evoMsgs.length ? " · ¡Tu equipo progresó!" : ""}`);
+  saveGame();
+  await delay(1100);
   return true;
 }
 
@@ -2007,10 +2076,12 @@ async function doEncounter() {
     else if (node.t === "find") await nodeFind();
     else if (node.t === "item") await nodeItem();
     else if (node.t === "center") await nodeCenter();
+    else if (node.t === "unlock") await nodeUnlock();
+    else if (node.t === "legend") ok = await nodeLegend();
     else ok = await nodeWild();
 
     hideEnemy();
-    if (ok && (node.t === "wild" || node.t === "trainer" || node.t === "gym") && state.playerTeam[state.activeIndex]?.currentHp > 0) {
+    if (ok && (node.t === "wild" || node.t === "trainer" || node.t === "gym" || node.t === "legend") && state.playerTeam[state.activeIndex]?.currentHp > 0) {
       try { await showTrainerSendOut("out"); } catch (_) {}
     }
     state.busy = false;
@@ -2090,6 +2161,8 @@ async function bootGame() {
     playerTeam: existing.playerTeam,
     unlockedAchievements: existing.unlockedAchievements || [],
     feats: existing.feats || {},
+    storyFlags: existing.storyFlags || [],
+    legendaryEncounters: existing.legendaryEncounters || [],
     box: existing.box || [],
     badges: existing.badges || [],
     money: existing.money ?? 3000,
@@ -2104,6 +2177,14 @@ async function bootGame() {
     busy: false,
   });
   state.captureFilter = existing.captureFilter || {};
+  state.storyFlags = Array.isArray(existing.storyFlags) ? existing.storyFlags : [];
+  state.legendaryEncounters = Array.isArray(existing.legendaryEncounters) ? existing.legendaryEncounters : [];
+  // Partidas antiguas: reintroducir la Guarida Rocket antes de la Torre si Koga
+  // todavía no fue derrotado y el Scope Silph aún no figura como conseguido.
+  if (state.chapter === 4 && !state.badges.includes("Alma") && !state.storyFlags.includes("silph-scope")) {
+    state.routeNodes = [];
+    state.routeProgress = 0;
+  }
   state.nursery = existing.nursery || state.nursery;
   state.fichas = Number(existing.fichas) || 0;
   ensureNursery(state);
