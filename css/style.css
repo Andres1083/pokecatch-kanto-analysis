@@ -5756,3 +5756,9 @@ button.rail-slot.active,
   position: absolute; inset: 12px; background: #0a0e18; border-radius: 8px;
   opacity: .9;
 }
+
+
+/* Aspectos y marcos bloqueados hasta cumplir su logro */
+.me-item.locked { opacity: .48; filter: grayscale(.8); cursor: not-allowed; }
+.me-item.locked img { opacity: .55; }
+.me-item.frame.locked { border-style: dashed; }
