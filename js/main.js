@@ -1,6 +1,6 @@
 import { startIntro } from "./ui/intro.js?v=65";
 import { showTitle } from "./ui/title.js?v=65";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=80";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=94";
 import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=65";
 import { LEGENDS } from "./data/legends.js?v=65";
 import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=65";
@@ -42,7 +42,8 @@ import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=65"
 import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=65";
 import { EGG_LEVEL } from "./data/breeding.js?v=65";
 import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=65";
-import { openAchievements } from "./ui/achievements.js?v=93";
+import { openAchievements } from "./ui/achievements.js?v=94";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=94";
 import { casinoUnlocked } from "./data/casino.js?v=65";
 import { sceneWipe } from "./ui/transition.js?v=65";
 import { dissolve, imgReady } from "./ui/sendout.js?v=65";
@@ -79,6 +80,7 @@ const state = {
   epoch: 0,
   stats: { battles: 0, wins: 0, balls: 0, captures: 0, playMs: 0, startedAt: Date.now(), seen: [], caught: [], caughtOrder: [], shiny: [] },
   captureFilter: {},
+  unlockedAchievements: [],
   fichas: 0,
   nursery: { parents: [null, null], eggs: [], incubators: [null, null], lastEggAt: null },
 };
@@ -125,8 +127,15 @@ window.__pokeEvolve = async (mon, to) => {
   return { ok: true };
 };
 
+function syncAchievementUnlocks() {
+  const unlocked = new Set(state.unlockedAchievements || []);
+  for (const a of evaluateAchievements(state)) if (a.done) unlocked.add(a.id);
+  state.unlockedAchievements = [...unlocked];
+}
+
 function saveGame() {
   try {
+    syncAchievementUnlocks();
     const data = {
       player: state.player,
       playerTeam: state.playerTeam,
@@ -142,6 +151,7 @@ function saveGame() {
       weather: state.weather,
       stats: state.stats,
       captureFilter: state.captureFilter || {},
+      unlockedAchievements: state.unlockedAchievements || [],
       nursery: state.nursery,
       fichas: state.fichas || 0,
       savedAt: Date.now(),
@@ -838,11 +848,41 @@ function ensureNav() {
 }
 
 function closeActMenu() { document.getElementById("act-menu")?.remove(); }
+
+function openAchievementsScreen() {
+  closeActMenu();
+  syncAchievementUnlocks();
+  return openAchievements(state, { onEquip: equipAchievement, onPlayScene: playAchievementScene });
+}
+
+function equipAchievement(id) {
+  syncAchievementUnlocks();
+  const a = ACHIEVEMENTS.find(x => x.id === id);
+  if (!a || !evaluateAchievements(state).some(x => x.id === id && x.done)) return false;
+  state.player = state.player || {};
+  if (a.kind === "aspect") state.player.aspect = a.reward;
+  else if (a.kind === "frame") state.player.frame = FRAME_REWARD_MAP[a.reward] || "base";
+  saveGame();
+  try { renderRoute(); } catch (_) {}
+  return true;
+}
+
+async function playAchievementScene(id) {
+  const root = $("#scene") || $("#main") || document.body;
+  const mons = { "scene-zapdos": 145, "scene-articuno": 144, "scene-moltres": 146, "scene-mewtwo": 150, "scene-mew": 151 };
+  const monId = mons[id];
+  if (monId) {
+    const info = LEGENDS[monId] || {};
+    await playLegendAnnounce({ root, name: info.name || "Pokémon legendario", text: info.text || "Una presencia legendaria aparece…", color: info.color || "#c9a0ff", sprite: `assets/pokemon/${monId}.png`, holdMs: 1700 });
+    return;
+  }
+  if (id === "scene-blue") await playBossIntro({ root, trainer: "Azul", title: "Campeón de Kanto", subtitle: "Liga Pokémon", type: "normal", color: "#e8c050", sprite: "assets/trainers/blue.png", holdMs: 1300 });
+}
 function toggleActMenu() {
   if (document.getElementById("act-menu")) return closeActMenu();
   const unlocked = casinoUnlocked(state);
   const items = [
-    { id: "ach", label: "Logros", lock: true },
+    { id: "ach", label: "Logros", ic: "🏅" },
     { id: "nursery", label: "Guardería", ic: "🥚" },
     { id: "casino", label: "Casino", ic: "🎰", lock: !unlocked, hint: "Medalla Trueno" },
     { id: "raids", label: "Incursiones", ic: "💜" },
@@ -855,6 +895,7 @@ function toggleActMenu() {
     const b = e.target.closest("[data-act]");
     if (!b || b.classList.contains("lock")) return;
     closeActMenu();
+    if (b.dataset.act === "ach") { openAchievementsScreen(); return; }
     if (b.dataset.act === "raids") {
       if (!state.playerTeam.length) { setMsg("Necesitas un equipo"); return; }
       openRaidsScreen();
@@ -2040,6 +2081,7 @@ async function bootGame() {
   Object.assign(state, {
     player: existing.player,
     playerTeam: existing.playerTeam,
+    unlockedAchievements: existing.unlockedAchievements || [],
     box: existing.box || [],
     badges: existing.badges || [],
     money: existing.money ?? 3000,
@@ -2114,4 +2156,4 @@ async function bootGame() {
 
 
 // Logros (UI)
-try { window.openLogros = () => openAchievements(state); } catch (_) {}
+try { window.openLogros = () => openAchievementsScreen(); } catch (_) {}
