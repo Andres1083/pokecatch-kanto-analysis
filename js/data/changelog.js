@@ -2,6 +2,7 @@
 export const CHANGELOG = [
   { v: "1.8", date: "2 nov 2026", title: "Logros + restauración", items: [
     "Fusionados los Logros, recompensas, marcos y el nuevo orden de gimnasios/encuentros legendarios con los cambios anteriores.",
+    "Legendarios como el original: Mewtwo, Zapdos, Articuno y Moltres a nivel 100 con su vida/poder, 40 Poké Balls al 1,176 % y requisito de tipo para las aves.",
     "Recuperados: botón Changelogs, animación del inicial, iconos de la barra inferior y arreglo del recuadro vacío del rival.",
   ] },
   { v: "1.7", date: "2 nov 2026", title: "Menú, título y Cueva Celeste", items: [

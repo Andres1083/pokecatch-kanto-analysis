@@ -469,6 +469,18 @@ function makeTrainer(seg) {
   return { ...randomTrainer(seg), mons: makeTrainerTeam(seg, encCtx()) };
 }
 
+function scaleLegend(e, lg) {
+  e.stats.hp = Math.round(e.stats.hp * (lg.hp || 1));
+  for (const k of ["atk", "spa"]) e.stats[k] = Math.round(e.stats[k] * (lg.power || 1));
+  e.maxHp = e.stats.hp; e.currentHp = e.maxHp;
+  return e;
+}
+const ORIGINAL_LEGENDS = {
+  150: { level: 100, hp: 3.29, power: 0.55, ball: 0.01176, balls: 40 },
+  145: { level: 100, hp: 5.97, power: 0.99, ball: 0.01176, balls: 40, needType: "electric", weather: "storm" },
+  144: { level: 100, hp: 5.83, power: 0.77, ball: 0.01176, balls: 40, needType: "ice" },
+  146: { level: 100, hp: 6.14, power: 0.76, ball: 0.01176, balls: 40, needType: "fire" },
+};
 function scaleEnemy(e, power) {
   if (!power || power === 1) return e;
   for (const k of Object.keys(e.stats)) e.stats[k] = Math.round(e.stats[k] * power);
@@ -1787,7 +1799,22 @@ async function nodeLegend() {
     return true;
   }
 
-  const enemy = await loadEnemy(node.id, node.level);
+  // Valores del original: nivel 100, vida/poder escalados, 40 Poké Balls con 1,176 % cada una
+  const lg = { ...(ORIGINAL_LEGENDS[node.id] || {}), id: node.id };
+  const level = lg.level || node.level;
+  if (lg.needType && !state.playerTeam.some(m => (m.types || []).includes(lg.needType))) {
+    const typeNames = { electric: "Eléctrico", ice: "Hielo", fire: "Fuego" };
+    setMsg(`Para encontrar a ${LEGENDS[node.id]?.name || "este legendario"}, necesitas un Pokémon de tipo ${typeNames[lg.needType] || lg.needType} en tu equipo.`);
+    await delay(1100);
+    return false;
+  }
+  const prevWeather = state.weather;
+  const restoreWeather = () => { if (state.weather !== prevWeather) { state.weather = prevWeather; try { initWeatherParticles(); } catch (_) {} } };
+  if (lg.weather === "storm") { state.weather = "storm"; try { initWeatherParticles(); } catch (_) {} }
+  try { return await legendBody(node, lg, level); } finally { restoreWeather(); }
+}
+async function legendBody(node, lg, level) {
+  const enemy = scaleLegend(await loadEnemy(node.id, level), lg);
   dexAdd("seen", enemy.id);
   await playLegendIntro(node.id, $("#scene"));
   showEnemy(enemy);
@@ -1809,14 +1836,24 @@ async function nodeLegend() {
   const evoMsgs = await processTeamEvolutions();
   await showBanner(`¡Has vencido a ${enemy.nameEs}!`);
 
-  // Los encuentros legendarios son únicos: al ganar se capturan sin depender
-  // del filtro de naturalezas ni de una tirada aleatoria de captura.
-  state.stats.balls++;
-  try {
-    Sfx.ball();
-    await playCaptureFx({ success: true, speed: state.speed });
-    Sfx.capture();
-  } catch (_) {}
+  const BALLS = lg.balls ?? 1, CHANCE = lg.ball ?? 1;
+  let caught = false;
+  for (let n = 1; n <= BALLS && !caught; n++) {
+    setMsg(`¡Poké Ball ${n}/${BALLS} a ${enemy.nameEs}!`);
+    state.stats.balls++;
+    const ok = Math.random() < CHANCE;
+    if (n <= 3 || ok) {
+      try { Sfx.ball(); await playCaptureFx({ success: ok, speed: state.speed }); if (ok) Sfx.capture(); else Sfx.escape(); } catch (_) { await delay(900); }
+    } else await delay(90);
+    caught = ok;
+  }
+  if (!caught) {
+    setMsg(`${enemy.nameEs} huyó… volverá a aparecer`);
+    const im = $("#enemy-img"); if (im) { im.style.filter = ""; im.classList.add("anim-faint"); }
+    saveGame();
+    await delay(1100);
+    return false;
+  }
   const result = resolveCapture(enemy, { ignoreFilter: true });
   if (!state.legendaryEncounters.includes(node.id)) state.legendaryEncounters.push(node.id);
   advanceRoute();
