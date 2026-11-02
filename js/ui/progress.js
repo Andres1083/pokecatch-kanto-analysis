@@ -5,6 +5,7 @@ import { badgeHtml } from "./badge.js?v=1";
 import { rainTable } from "./briefing.js?v=1";
 import { pixelIcon } from "./pixel.js?v=1";
 import { BG_DATA } from "../data/backgrounds.js?v=1";
+import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=1";
 
 const bgOf = (key) => BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);
 
@@ -86,30 +87,32 @@ export function renderProgress(state) {
   for (let i = 0; i < LEAGUE_FIRST; i++) {
     rows.push(row(i));
     if (i === 1) {
-      const open = state.badges.includes("Maestro");
-      rows.push(open
+      const unlocked = state.badges.includes("Maestro");
+      rows.push(unlocked
         ? `<div class="pg-secret open" data-cave="mewtwo"><span>🌀</span><div><b>Cueva Celeste</b><small>Desbloqueada · ¡Mewtwo te espera!</small></div><i>›</i></div>`
         : `<div class="pg-secret"><span>🔒</span><div><b>Cueva Celeste</b><small>Vence a la Liga Pokémon</small></div></div>`);
     }
   }
   rows.push(leagueRow);
-
-  // Zonas legendarias (postjuego): Liga superada + un Pokémon del tipo pedido
-  // Los requisitos de tipo se comprueban sobre el equipo activo, no sobre la caja.
-  const mine = [...state.playerTeam];
-  const open = state.badges.includes("Maestro");
+  const leagueWon = state.badges.includes("Maestro");
+  rows.push(leagueWon
+    ? `<div class="pg-secret open" data-cave="mew" style="border-left-color:#ff9ad5"><span>🌸</span><div><b>Mew</b><small>Desbloqueado · ¡Mew aparece tras vencer la Liga!</small></div><i>›</i></div>`
+    : `<div class="pg-secret"><span>🔒</span><div><b>Mew</b><small>Vence a la Liga Pokémon</small></div></div>`);
+  const caught = new Set([...(state.stats?.caught || []), ...state.playerTeam.map(x => x.id), ...(state.box || []).map(x => x.id)].map(Number));
   const BIRDS = [
     { key: "zapdos", name: "Central Eléctrica", who: "Zapdos", type: "electric", typeEs: "Eléctrico", ico: "⚡", c: "#f7d02c" },
-    { key: "articuno", name: "Islas Espuma", who: "Articuno", type: "ice", typeEs: "Hielo", ico: "❄️", c: "#96d9d6" },
-    { key: "moltres", name: "Cueva Ardiente", who: "Moltres", type: "fire", typeEs: "Fuego", ico: "🔥", c: "#ee8130" },
+    { key: "articuno", name: "Isla Espuma", who: "Articuno", type: "ice", typeEs: "Hielo", ico: "❄️", c: "#96d9d6" },
+    { key: "moltres", name: "Gruta Ardiente", who: "Moltres", type: "fire", typeEs: "Fuego", ico: "🔥", c: "#ee8130" },
   ];
   rows.push(`<div class="pg-sub">ZONAS LEGENDARIAS</div>`);
-  for (const b of BIRDS) {
-    const hasType = mine.some(m => (m.types || []).includes(b.type));
-    const ok = open && hasType;
-    rows.push(ok
-      ? `<div class="pg-secret open" data-cave="${b.key}" style="border-left-color:${b.c}"><span>${b.ico}</span><div><b>${b.name}</b><small style="color:${b.c}">Desbloqueada · ¡${b.who} te espera!</small></div><i>›</i></div>`
-      : `<div class="pg-secret"><span>🔒</span><div><b>${b.name}</b><small>${open ? `Necesitas un Pokémon de tipo ${b.typeEs}` : "Vence a la Liga Pokémon"}</small></div></div>`);
+  for (const bird of BIRDS) {
+    const required = TYPE_DEX_IDS[bird.type] || [];
+    const count = required.filter(id => caught.has(id)).length;
+    const unlocked = count === required.length;
+    const detail = unlocked ? `Desbloqueada · ¡${bird.who} te espera!` : `Captura todos los Pokémon de tipo ${bird.typeEs} (${count}/${required.length})`;
+    rows.push(unlocked
+      ? `<div class="pg-secret open" data-cave="${bird.key}" style="border-left-color:${bird.c}"><span>${bird.ico}</span><div><b>${bird.name}</b><small style="color:${bird.c}">${detail}</small></div><i>›</i></div>`
+      : `<div class="pg-secret"><span>🔒</span><div><b>${bird.name}</b><small>${detail}</small></div></div>`);
   }
 
   return `
