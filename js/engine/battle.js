@@ -1,0 +1,138 @@
+// Motor de combates simple pero sólido (Gen 1 style)
+
+import { getTypeEffectiveness } from "../data/pokeapi.js?v=3";
+
+/**
+ * Calcula el daño usando la fórmula clásica de Pokémon
+ */
+export function calculateDamage(attacker, defender, move) {
+  if (move.category === "status" || move.power <= 0) {
+    return { damage: 0, effectiveness: 1, critical: false, missed: false };
+  }
+
+  // Precisión
+  const accuracy = move.accuracy ?? 100;
+  if (Math.random() * 100 > accuracy) {
+    return { damage: 0, effectiveness: 1, critical: false, missed: true };
+  }
+
+  const level = attacker.level;
+  const power = move.power;
+  const isPhysical = move.category === "physical";
+
+  const attackStat = isPhysical ? attacker.stats.atk : attacker.stats.spa;
+  const defenseStat = isPhysical ? defender.stats.def : defender.stats.spd;
+
+  // Fórmula base (igual que el original de Poke'Catch / juegos clásicos)
+  let base = ((2 * level / 5 + 2) * power * attackStat / defenseStat / 50) + 2;
+
+  // STAB
+  const stab = attacker.types.includes(move.type) ? 1.5 : 1;
+
+  // Efectividad de tipos
+  const effectiveness = getTypeEffectiveness(move.type, defender.types);
+
+  // Crítico (1/16 chance como Gen 1 aprox)
+  const critical = Math.random() < 1 / 16;
+  const critMult = critical ? 1.5 : 1;
+
+  // Random 0.85 - 1.00
+  const random = 0.85 + Math.random() * 0.15;
+
+  const damage = Math.max(1, Math.floor(base * stab * effectiveness * critMult * random));
+
+  return { damage, effectiveness, critical, missed: false };
+}
+
+/**
+ * Aplica daño a un Pokémon
+ */
+export function applyDamage(pokemon, damage) {
+  pokemon.currentHp = Math.max(0, pokemon.currentHp - damage);
+  return pokemon.currentHp <= 0;
+}
+
+/**
+ * Elige el mejor movimiento del enemigo (IA muy simple)
+ */
+export function chooseEnemyMove(enemy, player) {
+  // Prioriza movimientos con daño efectivo
+  let best = enemy.moves[0];
+  let bestScore = -1;
+
+  for (const move of enemy.moves) {
+    if (move.category === "status") continue;
+    const eff = getTypeEffectiveness(move.type, player.types);
+    const score = (move.power || 0) * eff;
+    if (score > bestScore) {
+      bestScore = score;
+      best = move;
+    }
+  }
+  return best || enemy.moves[0];
+}
+
+/**
+ * Resuelve un turno completo (jugador elige movimiento)
+ */
+export function resolveTurn(player, enemy, playerMove) {
+  const log = [];
+  const events = [];
+
+  // Orden por velocidad (simplificado)
+  const playerFirst = player.stats.spe >= enemy.stats.spe;
+
+  const order = playerFirst
+    ? [{ mon: player, move: playerMove, isPlayer: true }, { mon: enemy, move: chooseEnemyMove(enemy, player), isPlayer: false }]
+    : [{ mon: enemy, move: chooseEnemyMove(enemy, player), isPlayer: false }, { mon: player, move: playerMove, isPlayer: true }];
+
+  for (const { mon, move, isPlayer } of order) {
+    if (mon.currentHp <= 0) continue;
+
+    const target = isPlayer ? enemy : player;
+    const result = calculateDamage(mon, target, move);
+
+    const name = mon.nameEs || mon.name;
+    const moveName = move.nameEs || move.name;
+
+    if (result.missed) {
+      log.push(`${name} usó ${moveName}... ¡pero falló!`);
+      events.push({ type: "miss", attacker: mon, move });
+      continue;
+    }
+
+    if (result.damage === 0) {
+      log.push(`${name} usó ${moveName}.`);
+      events.push({ type: "status-move", attacker: mon, move });
+      continue;
+    }
+
+    const fainted = applyDamage(target, result.damage);
+
+    let msg = `${name} usó ${moveName}.`;
+    if (result.critical) msg += " ¡Golpe crítico!";
+    if (result.effectiveness > 1) msg += " ¡Es muy efectivo!";
+    if (result.effectiveness < 1 && result.effectiveness > 0) msg += " No es muy efectivo...";
+    if (result.effectiveness === 0) msg += " No afecta al Pokémon enemigo...";
+
+    log.push(msg);
+    events.push({
+      type: "damage",
+      attacker: mon,
+      target,
+      move,
+      damage: result.damage,
+      critical: result.critical,
+      effectiveness: result.effectiveness,
+    });
+
+    if (fainted) {
+      const targetName = target.nameEs || target.name;
+      log.push(`¡${targetName} se debilitó!`);
+      events.push({ type: "faint", pokemon: target });
+      break; // Fin del combate si uno cae
+    }
+  }
+
+  return { log, events, playerFainted: player.currentHp <= 0, enemyFainted: enemy.currentHp <= 0 };
+}
