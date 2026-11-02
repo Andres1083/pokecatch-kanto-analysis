@@ -5685,3 +5685,36 @@ button.rail-slot.active,
 #enemy-img[data-loading="1"] { opacity: 0 !important; }
 /* sin dibujo (src vacío) no se pinta nada: evita el recuadro transparente antes de que salga el rival */
 #enemy-img:not([src]), #enemy-img[src=""], #ally-img:not([src]), #ally-img[src=""] { visibility: hidden !important; }
+
+/* v99: elección del inicial animada (plataformas, balls, silueta) */
+.starter-select { background: #080b18 !important; overflow: hidden; justify-content: flex-start; padding-top: 18vh; gap: 0; }
+.sx-stars { position: absolute; inset: 0; pointer-events: none; opacity: .8;
+  background:
+    radial-gradient(1px 1px at 12% 18%, #9fb4ff 50%, transparent 51%), radial-gradient(1px 1px at 78% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 33% 72%, #8aa0e8 50%, transparent 51%), radial-gradient(1px 1px at 90% 66%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 55% 30%, #9fb4ff 50%, transparent 51%), radial-gradient(1px 1px at 7% 55%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 66% 84%, #8aa0e8 50%, transparent 51%), radial-gradient(1px 1px at 44% 8%, #fff 50%, transparent 51%); }
+.starter-select .starter-title { font-size: .9rem; color: #dbe4ff; margin: 0 0 14vh; position: relative; z-index: 2; }
+.starters.sx { display: flex; justify-content: space-around; width: 100%; max-width: 460px; gap: 0; margin: 0; position: relative; z-index: 2; }
+.sx-slot { position: relative; width: 31%; height: 150px; padding: 0; min-width: 0; background: transparent !important; border: 0 !important; box-shadow: none !important; cursor: pointer; }
+.sx-slot:disabled { cursor: default; }
+.sx-pad { position: absolute; left: 50%; bottom: 6px; width: 92px; height: 24px; transform: translateX(-50%) scale(.5); opacity: 0; border-radius: 50%;
+  background: radial-gradient(#7fb0ff 1px, transparent 1.6px) 0 0 / 4px 4px, #1b3a86; border: 2px solid #4f8dff; transition: opacity .35s, transform .35s; image-rendering: pixelated; }
+.sx-slot.pad-on .sx-pad { opacity: 1; transform: translateX(-50%) scale(1); }
+.sx-ball { position: absolute; left: 50%; bottom: 14px; width: 28px; height: 28px; display: none; image-rendering: pixelated; z-index: 3; transform: translate(-50%, -520px); }
+.sx-mon { position: absolute; left: 50%; bottom: 14px; width: 100px; height: 100px; transform: translateX(-50%); object-fit: contain; image-rendering: pixelated; visibility: hidden; z-index: 2; }
+.sx-mon.sil { filter: brightness(0) invert(1); }
+.sx-mon:not(.sil) { transition: filter .4s; }
+.sx-mon.idle { animation: sxBob 1.2s ease-in-out infinite; }
+.sx-slot:nth-child(2) .sx-mon.idle { animation-delay: .25s; } .sx-slot:nth-child(3) .sx-mon.idle { animation-delay: .5s; }
+@keyframes sxBob { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+.sx-slot.ready:hover .sx-pad, .sx-slot.selected .sx-pad { border-color: #ffd54a; box-shadow: 0 0 14px #ffd54a88; }
+.sx-slot.selected .sx-mon { filter: drop-shadow(0 0 6px #ffd54a); }
+.sx-fx { position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden; }
+.sx-dialog { position: relative; z-index: 3; width: min(90vw, 460px); min-height: 58px; margin-top: 22px; padding: 16px 18px; border: 2px solid #3a4160; border-radius: 12px; background: #23263a; color: #fff; font-size: 1.2rem; text-align: left; }
+.sx-dialog em { position: absolute; right: 12px; bottom: 6px; font-style: normal; font-size: .7rem; color: #9aa3bb; }
+.sx-go { position: relative; z-index: 3; margin-top: 18px; }
+.sx-skip { position: absolute; left: 50%; bottom: 7vh; transform: translateX(-50%); z-index: 5; }
+.sx-mon { width: 132px; height: 132px; bottom: 12px; }
+.sx-ball { width: 32px; height: 32px; }
+.sx-skip { width: auto !important; padding: .5rem 1.1rem !important; }

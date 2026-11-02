@@ -1,11 +1,11 @@
 // Pestaña «Progreso»: lista de gimnasios/capítulos con nivel recomendado, clima y medallas.
 
-import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=2";
-import { badgeHtml } from "./badge.js?v=2";
-import { rainTable } from "./briefing.js?v=2";
-import { pixelIcon } from "./pixel.js?v=2";
-import { BG_DATA } from "../data/backgrounds.js?v=2";
-import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=2";
+import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=3";
+import { badgeHtml } from "./badge.js?v=3";
+import { rainTable } from "./briefing.js?v=3";
+import { pixelIcon } from "./pixel.js?v=3";
+import { BG_DATA } from "../data/backgrounds.js?v=3";
+import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=3";
 
 const bgOf = (key) => BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);
 

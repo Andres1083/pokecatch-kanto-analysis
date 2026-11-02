@@ -1,6 +1,6 @@
 // Barra superior de progreso del capítulo: arbustos, entrenadores, "?", centro y gimnasio.
 
-import { pixelIcon } from "./pixel.js?v=2";
+import { pixelIcon } from "./pixel.js?v=3";
 
 const WINDOW = 7;
 const px = (shape, pal) => `<img src="${pixelIcon(shape, pal)}" alt="" width="24" height="24" style="width:24px;height:24px" />`;

@@ -1,7 +1,7 @@
 // Pantalla de título: sprites con movimiento, Continuar/Nueva partida, Cómo jugar, Invitado / Google.
-import { frontSprite } from "../data/sprites.js?v=2";
-import { CHANGELOG, LATEST } from "../data/changelog.js?v=2";
-import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=2";
+import { frontSprite } from "../data/sprites.js?v=3";
+import { CHANGELOG, LATEST } from "../data/changelog.js?v=3";
+import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=3";
 
 const BALLS = ["poke-ball", "great-ball", "ultra-ball"];
 const HOWTO = [

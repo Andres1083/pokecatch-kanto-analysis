@@ -1,7 +1,7 @@
 // Motor de combate IDLE (automático en la ruta)
 
-import { calculateDamage, chooseEnemyMove } from "./battle.js?v=2";
-import { effectOf, canGet, applyStatus } from "../data/status.js?v=2";
+import { calculateDamage, chooseEnemyMove } from "./battle.js?v=3";
+import { effectOf, canGet, applyStatus } from "../data/status.js?v=3";
 
 
 // ── Estados alterados (tabla en data/status.js) ──
