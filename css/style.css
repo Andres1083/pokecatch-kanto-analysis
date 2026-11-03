@@ -674,11 +674,15 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
 /* ===== Polish: route / idle closer to original ===== */
-.top-status {
-  padding: 0.4rem 1rem;
-  font-size: 0.8rem;
-  color: var(--muted);
+.top-status { display: none !important; }
+.top-status:not(:empty):not([hidden]) {
+  display: block !important;
+  padding: 0.3rem 1rem;
+  font-size: 0.7rem;
+  color: #9aa3c0;
+  text-align: center;
 }
+
 
 .route-screen {
   min-height: 100vh;
@@ -1688,15 +1692,18 @@ button.rail-slot,
   display: none !important;
 }
 
-/* Mapa cuadrado */
-.battle-scene {
-  aspect-ratio: 1 / 1 !important;
-  width: calc(100% - 20px) !important;
-  max-width: 420px;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  min-height: 0 !important;
+/* Mapa paisaje (base; desktop lo amplía) */
+.battle-scene,
+#scene {
+  aspect-ratio: 16 / 10 !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
   height: auto !important;
+  border-radius: 14px;
+  overflow: hidden !important;
+  background-size: cover !important;
+  background-position: center bottom !important;
 }
 
 /* Barra clima/hora estilo original */
@@ -2126,6 +2133,23 @@ button.rail-slot,
 .dx-cell.none img { filter: brightness(0) opacity(.45); } .dx-cell.seen img { filter: brightness(.25) contrast(1.2); }
 .dx-cell small { font-size: .55rem; color: #94a3b8; font-weight: 700; }
 .dx-ball { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(#e04b3a 50%, #fff 50%); }
+.dx-name {
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  color: #c5cbe0 !important;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.15;
+}
+.dx-cell.got .dx-name { color: #f1f5f9 !important; }
+.dx-cell small {
+  font-size: 0.62rem !important;
+  color: #8b93b0 !important;
+  font-weight: 700 !important;
+}
 .dx-empty { grid-column: 1/-1; text-align: center; color: #94a3b8; }
 
 /* Ficha de entrenador */
@@ -5878,3 +5902,829 @@ button.rail-slot.active,
   text-shadow: 0 0 7px #f4c542, 0 0 14px #e8a91c;
 }
 .rnode.legend.done .rnode-legend { color: #72d6a1; text-shadow: 0 0 7px #36b87b; }
+
+
+}
+}
+
+}
+
+}
+
+/* === ORIGINAL-LIKE desktop v108 (referencia captura gym/Misty) === */
+
+body {
+  background-color: #0e111a !important;
+  background-image: none !important;
+}
+body::before { content: none !important; display: none !important; }
+
+/* —— Móvil: sin cambios de flujo —— */
+@media (max-width: 799px) {
+  #app {
+    max-width: 430px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+  #bottom-nav {
+    position: fixed !important;
+    left: 8px; right: 8px;
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    top: auto !important;
+    flex-direction: row !important;
+    height: auto !important;
+    max-width: 460px;
+    margin: 0 auto;
+    border-radius: 20px !important;
+    z-index: 60;
+  }
+  #main { padding-bottom: 96px !important; }
+}
+
+/* —— PC / Steam Deck: layout tipo original —— */
+@media (min-width: 800px) {
+  body {
+    background-color: #0e111a !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23aeb6d4' stroke-opacity='0.07' stroke-width='3'%3E%3Ccircle cx='60' cy='60' r='32'/%3E%3Cpath d='M28 60h64'/%3E%3Ccircle cx='60' cy='60' r='10'/%3E%3C/g%3E%3C/svg%3E") !important;
+    background-size: 120px 120px !important;
+    background-repeat: repeat !important;
+  }
+
+  #app {
+    display: grid !important;
+    grid-template-columns: 176px 1fr !important;
+    grid-template-rows: auto 1fr !important;
+    width: 100% !important;
+    max-width: 1280px !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    margin: 0 auto !important;
+    background: #12151f !important;
+  }
+
+  /* Sidebar izquierda compacta */
+  #bottom-nav {
+    grid-column: 1 !important;
+    grid-row: 1 / -1 !important;
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 176px !important;
+    max-width: 176px !important;
+    min-width: 176px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 12px 10px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    border-right: 1px solid #22283a !important;
+    background: #161a27 !important;
+    z-index: 50 !important;
+  }
+  #bottom-nav button {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+    background: transparent !important;
+    color: #b8c0da !important;
+    border: 0 !important;
+    box-shadow: none !important;
+  }
+  #bottom-nav button em {
+    display: block !important;
+    font-size: 0.8rem !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em !important;
+    text-transform: none !important;
+  }
+  #bottom-nav .nav-ico {
+    width: 24px !important;
+    height: 24px !important;
+    max-width: 24px !important;
+    object-fit: contain !important;
+  }
+  /* Activo: rojo suave como original */
+  #bottom-nav button.active {
+    background: #2a3148 !important;
+    color: #fff !important;
+    box-shadow: inset 3px 0 0 #e5534f !important;
+    border-radius: 10px !important;
+  }
+  /* Aventura destacada un poco más */
+  #bottom-nav button[data-nav="adventure"].active {
+    background: #e5534f !important;
+    box-shadow: inset 0 -3px 0 #a8262e !important;
+  }
+
+  #status-bar { grid-column: 2; grid-row: 1; }
+
+  #main {
+    grid-column: 2 !important;
+    grid-row: 1 / -1 !important;
+    min-width: 0 !important;
+    padding: 0 12px 16px !important;
+    background: #12151f !important;
+    overflow-x: hidden !important;
+  }
+
+  /* HUD superior más limpio */
+  .route-header.hud {
+    background: transparent !important;
+    padding: 10px 4px 6px !important;
+  }
+
+  .route-screen {
+    background: transparent !important;
+    min-height: 0 !important;
+    padding-bottom: 8px !important;
+  }
+
+  /* Mapa grande: ocupa el ancho del contenido */
+  .battle-scene,
+  #scene {
+    aspect-ratio: 16 / 9 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 340px !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    margin: 0 0 8px !important;
+  }
+  .battle-field {
+    min-height: 200px !important;
+    padding-bottom: 48px !important;
+  }
+  .scene-msg,
+  .route-screen .battle-msg {
+    position: relative !important;
+    margin: 6px 0 0 !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  #app { max-width: 1360px !important; }
+  #bottom-nav,
+  #bottom-nav {
+    width: 188px !important;
+    min-width: 188px !important;
+    max-width: 188px !important;
+  }
+  #app {
+    grid-template-columns: 188px 1fr !important;
+  }
+  .battle-scene,
+  #scene {
+    min-height: 380px !important;
+  }
+}
+
+
+/* === POKEDEX CRISP v110 === */
+/* Texto nítido: no usar pixel font borrosa en la dex */
+.dx-page,
+.dx-page * {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
+}
+.dx-page {
+  padding: 8px 12px 24px;
+  color: #e8ecf8;
+}
+.dx-page img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.dx-card {
+  margin: 0 0 12px !important;
+  background: #1a1524 !important;
+  border: 2px solid #c0392b !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+}
+
+/* Banner rojo superior: título izq + stats der (como original) */
+.dx-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 12px 14px;
+  background: linear-gradient(90deg, #c0392b 0%, #8b2a2a 55%, #5a2230 100%);
+}
+.dx-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dx-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+.dx-gem { font-size: 1.2rem; line-height: 1; }
+.dx-help {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.55);
+  background: transparent;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.dx-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 0.82rem;
+  color: #ffd9d3;
+  font-weight: 600;
+}
+.dx-stats b {
+  color: #fff;
+  font-weight: 800;
+}
+
+/* Resumen: anillo + barras de región en fila */
+.dx-summary {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 16px 14px 8px;
+}
+@media (max-width: 520px) {
+  .dx-summary {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .dx-regions { width: 100%; }
+}
+
+.dx-ring {
+  --p: 0;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: conic-gradient(#f0a93a calc(var(--p) * 1%), #2a2f45 0);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.dx-ring-inner {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #14111c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.dx-ring-inner b {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+}
+.dx-ring-inner small {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.dx-regions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 0 !important;
+}
+.dx-reg {
+  display: grid;
+  grid-template-columns: 64px 1fr 64px;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #e8ecf8;
+}
+.dx-reg.lock { opacity: 0.45; }
+.dx-reg em {
+  font-style: normal;
+  text-align: right;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  font-weight: 700;
+}
+.dx-bar {
+  height: 10px !important;
+  border-radius: 6px !important;
+  background: #2a2f45 !important;
+  overflow: hidden !important;
+}
+.dx-bar i {
+  display: block !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, #e04b3a, #f0a93a) !important;
+  border-radius: 6px;
+}
+
+.dx-sub {
+  padding: 10px 14px 4px !important;
+  color: #94a3b8 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08em !important;
+  font-size: 0.7rem !important;
+}
+.dx-last {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  padding: 4px 14px 14px !important;
+  min-height: 48px;
+  align-items: center;
+}
+.dx-last img {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain !important;
+}
+.dx-muted {
+  color: #6b728a;
+  font-size: 0.8rem;
+}
+
+.dx-tools {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin: 0 0 12px !important;
+  align-items: center;
+}
+.dx-tools input,
+.dx-tools select {
+  background: #1c2030 !important;
+  border: 2px solid #323a5a !important;
+  color: #e8ecf8 !important;
+  border-radius: 12px !important;
+  padding: 0.65rem 0.85rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  min-width: 0;
+}
+.dx-tools input { flex: 1 1 180px !important; }
+.dx-tools select { flex: 0 0 auto; }
+.dx-shbtn {
+  border: 2px solid #4a5568 !important;
+  background: #1c2030 !important;
+  color: #e8ecf8 !important;
+  border-radius: 12px !important;
+  padding: 0.55rem 0.8rem !important;
+  font-weight: 800 !important;
+  font-size: 0.78rem !important;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dx-shbtn.on {
+  border-color: #f0a93a !important;
+  color: #f0a93a !important;
+  background: #2a2418 !important;
+}
+
+.dx-region-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px 8px;
+  border: 0;
+  background: linear-gradient(90deg, #c0392b, #5a2230);
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+.dx-rh-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dx-rh-left h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.dx-shchip {
+  font-style: normal;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(0,0,0,.25);
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #ffe08a;
+}
+.dx-rh-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: #ffd9d3;
+}
+.dx-caret { font-style: normal; opacity: 0.8; }
+.dx-kanto.closed .dx-grid,
+.dx-kanto.closed .dx-regbar { display: none; }
+.dx-kanto.closed .dx-caret { transform: rotate(-90deg); display: inline-block; }
+.dx-regbar {
+  padding: 0 14px 8px;
+  background: linear-gradient(90deg, #c0392b, #5a2230);
+}
+.dx-regbar .dx-bar { background: rgba(0,0,0,.35) !important; }
+.dx-regbar .dx-bar i { background: #f0a93a !important; }
+
+.dx-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)) !important;
+  gap: 8px !important;
+  padding: 12px !important;
+  background: #14111c;
+}
+.dx-cell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 12px !important;
+  background: #1a1f30 !important;
+  border: 2px solid #2a2f45 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  padding: 6px 4px 4px !important;
+}
+.dx-cell.got {
+  border-color: #7a3040 !important;
+  background: #231826 !important;
+}
+.dx-cell.seen { opacity: 0.85; }
+.dx-cell.none { opacity: 0.4; filter: grayscale(1); }
+.dx-cell img {
+  width: 72% !important;
+  height: 58% !important;
+  object-fit: contain !important;
+  image-rendering: pixelated !important;
+}
+.dx-cell span {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  color: #c5cbe0 !important;
+  text-align: center;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dx-cell.got span { color: #f1f5f9 !important; }
+.dx-name {
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  color: #c5cbe0 !important;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.15;
+}
+.dx-cell.got .dx-name { color: #f1f5f9 !important; }
+.dx-cell small {
+  font-size: 0.62rem !important;
+  color: #8b93b0 !important;
+  font-weight: 700 !important;
+}
+.dx-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #94a3b8;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+@media (min-width: 800px) {
+  .dx-page { padding: 10px 16px 28px; }
+  .dx-grid {
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)) !important;
+  }
+  .dx-title h2 { font-size: 1.35rem; }
+}
+
+/* === v111: iPhone + Steam Deck === */
+/* El botón ✦ VARIOCOLOR heredaba width:44px y se salía de la barra */
+.dx-tools .dx-shbtn { width: auto !important; flex: 0 0 auto; min-height: 44px; }
+.dx-tools input, .dx-tools select { min-height: 44px; }
+/* Pantalla ancha (Steam Deck 1280×800, escritorio): columna algo más ancha y cuadrícula de 5-6 */
+@media (min-width: 900px) {
+  #app { max-width: 720px; }
+  .dx-grid { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)) !important; }
+}
+/* Pantalla baja en horizontal (Deck 800 px de alto): que el contenido no quede tapado por la barra inferior */
+@media (max-height: 820px) and (min-width: 900px) {
+  .dx-page, .detail-body { padding-bottom: 120px; }
+}
+/* Teclado/mando (Steam Input): anillo de foco visible; hover solo con ratón */
+button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 3px solid #ffd54a; outline-offset: 2px; }
+/* iPhone: sin recuadro gris al tocar y sin zoom por doble toque */
+button, .dx-cell { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+
+/* Equipo/PC: overlay solo sobre #main → el menú lateral permanece */
+#main {
+  position: relative;
+}
+.team-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 100% !important;
+  z-index: 45 !important;
+  background: rgba(8, 10, 18, 0.72) !important;
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  /* no cubrir el viewport entero */
+  margin: 0 !important;
+}
+.team-panel {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+/* Móvil: si no hay sidebar, puede seguir a pantalla completa */
+@media (max-width: 799px) {
+  .team-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 80 !important;
+  }
+  .team-panel {
+    max-width: 480px !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* v112: en pantalla ancha el mensaje de combate va dentro de la escena, abajo y sin salirse */
+@media (min-width: 800px) {
+  #scene .scene-msg, .scene-msg { position: absolute !important; left: 16px !important; right: 16px !important; bottom: 14px !important; margin: 0 !important; width: auto !important; max-width: none !important; }
+}
+
+/* ===== v113: cabecera a todo el ancho, equipo sin parpadeo, rail del equipo ajustado ===== */
+:root { --hud-h: 76px; --sbw: 176px; --appw: 1280px; }
+@media (min-width: 1200px) { :root { --sbw: 188px; --appw: 1360px; } }
+
+@media (min-width: 800px) {
+  /* Perfil/monedas/ajustes de esquina a esquina (como el original); el menú queda debajo */
+  .route-header.hud {
+    position: fixed !important; top: 0; left: 0; right: 0; z-index: 70;
+    height: var(--hud-h); box-sizing: border-box;
+    padding: 8px 18px !important; margin: 0 !important;
+    background: #12151f !important; border-bottom: 1px solid #22283a;
+    display: flex; align-items: center;
+  }
+  #main { padding-top: calc(var(--hud-h) + 8px) !important; }
+  #bottom-nav { padding-top: calc(var(--hud-h) + 12px) !important; overflow-y: auto; }
+
+  /* Equipo/PC: sobre el área central, debajo de la cabecera, sin tapar el menú */
+  .team-overlay {
+    position: fixed !important; inset: auto !important;
+    top: var(--hud-h) !important; bottom: 0 !important;
+    left: calc(max(0px, (100vw - var(--appw)) / 2) + var(--sbw)) !important;
+    right: max(0px, (100vw - var(--appw)) / 2) !important;
+    width: auto !important; height: auto !important; min-height: 0 !important;
+    background: #0f172a !important; z-index: 45 !important; margin: 0 !important;
+  }
+  /* El mensaje de combate no pisa la fila de Pokémon del equipo */
+  #scene .scene-msg, .scene-msg { left: 84px !important; right: 14px !important; }
+}
+
+/* Pantallas bajas en horizontal (iPhone apaisado): menú y cabecera más compactos */
+@media (min-width: 800px) and (max-height: 560px) {
+  :root { --hud-h: 56px; --sbw: 150px; }
+  #app { grid-template-columns: var(--sbw) 1fr !important; }
+  #bottom-nav { width: var(--sbw) !important; min-width: var(--sbw) !important; max-width: var(--sbw) !important; gap: 2px !important; padding-left: 6px !important; padding-right: 6px !important; }
+  #bottom-nav button { min-height: 34px !important; padding: 5px 8px !important; }
+  #bottom-nav .nav-ico { width: 20px !important; height: 20px !important; max-width: 20px !important; }
+  #bottom-nav button em { font-size: .72rem !important; }
+  .route-header.hud { padding: 4px 14px !important; }
+}
+
+/* Fila de Pokémon del equipo: se encoge para caber siempre dentro del mapa */
+.team-rail { bottom: 8px !important; top: 34px !important; }
+button.rail-slot, .rail-slot {
+  flex: 1 1 0 !important; min-height: 0 !important; max-height: 56px !important; height: auto !important;
+  display: flex !important; flex-direction: column !important; align-items: center; justify-content: center; overflow: hidden;
+}
+.rail-slot img { flex: 1 1 auto; min-height: 0; width: auto !important; height: auto !important; max-height: 34px !important; max-width: 38px !important; }
+
+/* ===== v114: logros (cierre siempre alcanzable), menú Actividades, equipo ===== */
+.ach-screen { height: 100vh; height: 100dvh; box-sizing: border-box; }
+.ach-panel { max-height: calc(100dvh - 12px) !important; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-top: 0 !important; }
+/* La cabecera con el botón ✕ se queda fija arriba mientras se desplaza la lista */
+.ach-head { position: sticky; top: 0; z-index: 5; background: #1c1b14; margin: 0 -12px; padding: 12px 52px 8px 16px !important; border-bottom: 1px solid #2c3558; }
+.ach-x { top: 8px !important; right: 8px !important; width: 40px; height: 40px; border-radius: 50% !important; background: #2a3148 !important; font-size: 1.1rem !important; display: grid; place-items: center; }
+
+/* Actividades: tarjeta compacta (antes ocupaba todo el ancho en horizontal) */
+@media (min-width: 800px) {
+  #act-menu {
+    left: calc(max(0px, (100vw - var(--appw, 1280px)) / 2) + var(--sbw, 176px) + 12px) !important;
+    right: auto !important; bottom: 14px !important;
+    width: min(340px, 60vw); max-height: calc(100dvh - var(--hud-h, 76px) - 24px); overflow-y: auto;
+  }
+  #act-menu button { padding: 10px 12px !important; font-size: .95rem !important; }
+  .ach-panel { max-width: 560px; }
+  .ach-screen { align-items: center !important; }
+  .ach-panel { border-radius: 18px !important; max-height: calc(100dvh - 24px) !important; }
+}
+
+/* ===== v116: 5 equipos, barra fija del equipo, filtro de Pokédex como el original ===== */
+/* Flecha de Kanto: oculta toda la región (el display:grid!important de v110 ganaba) */
+.dx-kanto.closed .dx-grid, .dx-kanto.closed .dx-regbar { display: none !important; }
+.dx-kanto .dx-region-head { cursor: pointer; }
+
+/* Filtros de la Pokédex en una sola fila, dentro de la interfaz */
+.dx-tools { flex-wrap: nowrap !important; align-items: stretch; position: relative; z-index: 6; }
+.dx-tools input[type="search"] { flex: 1 1 0 !important; min-width: 0; }
+.dx-dd { position: relative; flex: 0 0 auto; }
+.dx-ddbtn, .dx-shicon {
+  height: 100%; min-height: 44px; box-sizing: border-box; cursor: pointer;
+  background: #1c2030 !important; color: #e8ecf8 !important; border: 2px solid #323a5a !important; border-radius: 12px !important;
+  font-weight: 800; font-size: .85rem; letter-spacing: .03em; text-transform: uppercase;
+  box-shadow: 0 3px 0 #0b0e18; white-space: nowrap;
+}
+.dx-ddbtn { padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; }
+.dx-ddbtn i { font-style: normal; font-size: .8rem; opacity: .85; }
+.dx-shicon { width: 46px !important; padding: 0 !important; display: grid; place-items: center; flex: 0 0 auto; }
+.dx-shicon.on { color: #ffd54a !important; border-color: #ffd54a !important; background: #2b2a14 !important; }
+.dx-ddmenu {
+  position: absolute; top: calc(100% + 8px); right: 0; min-width: 190px; z-index: 30;
+  background: #161a2b; border: 2px solid #323a5a; border-radius: 16px; padding: 8px; display: flex; flex-direction: column; gap: 2px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.6);
+}
+.dx-ddmenu[hidden] { display: none; }
+.dx-ddmenu button { text-align: left; background: transparent; border: 0; color: #e8ecf8; padding: 12px 14px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+.dx-ddmenu button.on { color: #ffd54a; background: #26253d; }
+.dx-ddmenu button:hover { background: #20243a; }
+
+/* PC: icono ✦ en vez de "Variocolores" */
+.coll-shicon { width: 44px; min-height: 40px; padding: 0 !important; display: inline-grid; place-items: center; }
+.coll-shbtn.active { color: #ffd54a; }
+
+/* Selector de 5 equipos */
+.team-presets { display: flex; gap: 8px; margin: 0 0 10px; padding: 8px; background: #0b1020; border: 2px solid #26305a; border-radius: 16px; }
+.tp-btn {
+  position: relative; flex: 1 1 0; min-width: 0; height: 52px; border: 0; border-radius: 12px; cursor: pointer;
+  background: #151b30; color: #8d97bd; display: flex; align-items: center; justify-content: center; gap: 4px; font-weight: 800;
+}
+.tp-btn img { width: 40px; height: 40px; object-fit: contain; image-rendering: pixelated; }
+.tp-btn b { font-size: .8rem; }
+.tp-btn small { position: absolute; right: 5px; bottom: 3px; font-size: .62rem; color: #aab3d6; }
+.tp-btn.empty span { font-size: 1.3rem; }
+.tp-btn.on { background: #e5534f; color: #fff; box-shadow: inset 0 -4px 0 #a8262e; }
+.tp-btn:focus-visible { outline: 3px solid #ffd54a; }
+
+/* Barra fija con los 6 del equipo al bajar por la lista */
+.team-sticky {
+  position: sticky; top: 0; z-index: 4; display: flex; gap: 6px; padding: 6px 4px;
+  background: rgba(13,17,32,.96); backdrop-filter: blur(6px); border-bottom: 1px solid #26305a; margin: 0 -4px 8px;
+}
+.team-sticky[hidden] { display: none; }
+.ts-slot {
+  flex: 1 1 0; min-width: 0; height: 56px; border-radius: 12px; border: 2px solid #323a5a; background: #1a2038; color: #e8ecf8;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 0;
+}
+.ts-slot img { width: 34px; height: 34px; object-fit: contain; image-rendering: pixelated; }
+.ts-slot span { font-size: .62rem; font-weight: 800; line-height: 1; }
+.ts-slot.empty { border-style: dashed; color: #5d678c; cursor: default; }
+.ts-slot.empty i { font-style: normal; font-size: 1.1rem; }
+.dx-tools { box-sizing: border-box; max-width: 100%; width: 100%; gap: 8px !important; }
+.dx-tools input[type="search"] { width: 0; }
+.dx-ddbtn { padding: 0 10px; font-size: .78rem; }
+.dx-tools .dx-shicon { width: 46px !important; min-width: 46px; flex: 0 0 46px; }
+
+/* ===== v117: filtros alineados y en fuente pixel, PC en 4 columnas, detalle con cierre alcanzable ===== */
+/* Fuente pixel del juego en los filtros/menús (la Pokédex forzaba la del sistema) */
+.dx-tools, .dx-tools *, .dx-dd, .dx-dd *, .dx-ddmenu, .dx-ddmenu *, .coll-row, .coll-row * {
+  font-family: "Jersey 10", "Pixelify Sans", system-ui, sans-serif !important;
+  -webkit-font-smoothing: auto; text-rendering: auto;
+}
+.dx-ddbtn { font-size: 1.05rem !important; letter-spacing: .03em; }
+.dx-ddmenu button { font-size: 1.15rem !important; letter-spacing: .02em; }
+.dx-tools input[type="search"] { font-size: 1.05rem !important; }
+
+/* Misma altura y alineación vertical: buscador, Estado y ✦ */
+.dx-tools { align-items: center !important; }
+.dx-tools input[type="search"], .dx-ddbtn, .dx-shicon, .dx-tools .dx-shicon { height: 46px !important; min-height: 46px !important; box-sizing: border-box; margin: 0 !important; }
+.dx-tools .dx-dd { align-self: center; }
+
+/* PC: fila única Orden · Naturaleza · ✦ */
+.coll-row { display: flex; gap: 8px; align-items: center; margin: 0 0 10px; }
+.coll-row .dx-dd { flex: 1 1 0; min-width: 0; }
+.coll-row .dx-dd.dd-nat { flex: 0 0 38%; }
+.coll-row .dx-ddbtn { width: 100%; justify-content: space-between; height: 46px; overflow: hidden; }
+.coll-row .dx-ddbtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.coll-row .dx-shicon { flex: 0 0 46px; width: 46px !important; }
+.coll-row .dx-ddmenu { left: 0; right: auto; max-height: 52vh; overflow-y: auto; min-width: 220px; }
+.coll-row .dd-nat .dx-ddmenu { left: auto; right: 0; }
+
+/* Caja del PC: 4 por fila, sprite recortado que llena su casilla sin desbordarla */
+#box-grid.box-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; }
+#box-grid .coll-card { padding: 22px 3px 4px !important; border-radius: 12px; min-width: 0; }
+#box-grid .coll-art { display: grid; place-items: center; width: 100%; aspect-ratio: 1; padding: 2px; box-sizing: border-box; overflow: hidden; }
+#box-grid .coll-card img { width: 100% !important; height: 100% !important; max-width: none !important; aspect-ratio: auto !important; object-fit: contain; background: none !important; }
+#box-grid .coll-lv { top: 3px; left: 3px; font-size: .6rem; padding: 0 5px; }
+#box-grid .coll-types { top: 3px; right: 3px; }
+#box-grid .coll-type { width: 15px; height: 15px; font-size: .55rem; }
+#box-grid .coll-name { font-size: .78rem; line-height: 1.05; }
+#box-grid .mon-shiny { position: absolute; left: 4px; top: 20px; margin: 0; font-size: .8rem; }
+#box-grid .mon-lock { position: absolute; right: 4px; bottom: 16px; font-size: .7rem; }
+#box-grid .coll-dex { display: none; }
+
+/* Detalle del Pokémon: el panel cabe en la pantalla visible (iOS) y la cabecera con ✕ siempre se ve */
+.detail-overlay { height: 100vh; height: 100dvh; box-sizing: border-box; }
+.detail-panel { max-height: calc(100dvh - 24px) !important; }
+.detail-top { position: sticky; top: 0; z-index: 3; }
+.detail-x { width: 40px; height: 40px; }
+.dx-ddmenu.up { top: auto !important; bottom: calc(100% + 8px); }
+
+/* ===== v118: sprites con la misma escala + Progreso más compacto (como el original) ===== */
+#box-grid .coll-art { position: relative; }
+#box-grid .coll-card img { width: auto; height: auto; max-width: 100% !important; max-height: 100% !important; object-fit: contain; }
+#box-grid .coll-art img { position: absolute; left: 50%; bottom: 3px; transform: translateX(-50%); }
+
+.pg-card { margin: .3rem 8px .8rem; border-radius: 16px; }
+.pg-head { padding: .55rem .8rem !important; }
+.pg-head h2 { font-size: 1.15rem; }
+.pg-mapic { font-size: 1.25rem; }
+.pg-help { width: 28px; height: 28px; font-size: .8rem; }
+.pg-regions { padding: 8px 10px; gap: 8px; }
+.pg-regions .pg-region { width: 46%; max-width: 190px; padding: 8px 10px; gap: 2px; border-width: 2px; border-radius: 14px; }
+.pg-region b { font-size: .95rem; } .pg-region small { font-size: .72rem; }
+.pg-sub { margin: .35rem 12px .25rem; font-size: .7rem; }
+.pg-row { margin: 6px 10px !important; min-height: 62px !important; gap: 8px; padding: 4px 8px 4px 6px; border-radius: 12px; }
+.pg-num { font-size: .75rem; min-width: 1.1rem; }
+.pg-leader, .pg-lf { width: 44px !important; height: 50px !important; }
+.pg-leader .pg-lf img { max-width: 100%; max-height: 100%; }
+.pg-row .pg-info b { font-size: 1.02rem !important; margin-bottom: 3px; }
+.pg-chip { font-size: .62rem !important; padding: 2px 7px; }
+.pg-chips { gap: 4px; }
+.pg-replay { width: 34px; height: 34px; font-size: 1rem; border-radius: 10px; }
+.pg-secret { margin: 6px 10px; padding: 10px 12px; }
+
+/* v119: la tarjeta de la región elegida se ajusta a todas sus medallas */
+.pg-regions .pg-region.sel { width: max-content !important; max-width: none !important; flex: none; }
+.pg-region.sel .pg-medals { flex-wrap: nowrap !important; gap: 4px; }
+.pg-region.sel .pg-medals > * { flex: none; }
+
+/* v119: el Pokémon queda centrado y no lo tapan el nivel ni las barras de vida/XP */
+button.rail-slot, .rail-slot { padding: 3px 3px 10px !important; gap: 1px; justify-content: flex-start !important; }
+.rail-slot img { flex: 1 1 0 !important; min-height: 0 !important; max-height: none !important; max-width: 100% !important; width: auto !important; height: auto !important; object-fit: contain; margin: 0 auto !important; align-self: center; }
+.rail-slot span { position: static !important; flex: none; line-height: 1 !important; margin: 1px 0 0 !important; padding: 0 !important; transform: none !important; }
+.rail-slot .rail-hp { left: 6px !important; right: 6px !important; bottom: 5px !important; height: 3px !important; }
+.rail-slot .rail-xp { left: 6px !important; right: 6px !important; bottom: 2px !important; height: 2px !important; }
+
+/* Pokédex: 4 por fila */
+.dx-grid, .dx-page .dx-grid { grid-template-columns: repeat(4, 1fr) !important; gap: 6px !important; padding: 10px !important; }
+@media (min-width: 900px) { .dx-grid, .dx-page .dx-grid { grid-template-columns: repeat(4, 1fr) !important; } }

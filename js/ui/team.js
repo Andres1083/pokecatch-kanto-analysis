@@ -1,9 +1,12 @@
 // Pantalla de equipo + detalle (estilo original)
 
-import { frontSprite } from "../data/sprites.js?v=100";
-import { showPokemonDetail } from "./pokemon-detail.js?v=100";
-import { TYPE_INFO } from "./collection.js?v=100";
-import { NATURES, natureLabel } from "../data/natures.js?v=100";
+import { frontSprite, iconSprite } from "../data/sprites.js?v=120";
+import { DEX_NAMES } from "../data/dex-names.js?v=120";
+import { pixelDropdown } from "./dropdown.js?v=120";
+import { cropSprite } from "./sprite-fit.js?v=120";
+import { showPokemonDetail } from "./pokemon-detail.js?v=120";
+import { TYPE_INFO } from "./collection.js?v=120";
+import { NATURES, natureLabel } from "../data/natures.js?v=120";
 
 const filters = { nature: "", types: new Set(), sort: "recent", shiny: false };
 const power = (m) => ["hp", "atk", "def", "spa", "spd", "spe"].reduce((a, k) => a + (m.stats?.[k] || 0), 0);
@@ -24,6 +27,14 @@ const TYPE_COLORS = {
   steel: "#b8b8d0", fairy: "#ee99ac",
 };
 
+/** Nombre para mostrar: nunca "#25" ni vacío (cae al nombre de la Pokédex). */
+function dispName(m) {
+  const n = m.nameEs || m.name;
+  return (!n || /^#?\d+$/.test(String(n))) ? (DEX_NAMES[m.id - 1] || `N.º ${m.id}`) : n;
+}
+
+const REF_ART = 48; // lado (px nativos) del dibujo más grande de los sprites locales
+
 function xpForNext(level) {
   return Math.floor(level * level * 8 + level * 20);
 }
@@ -35,7 +46,7 @@ function xpForNext(level) {
  * @param {function} [opts.onChange] se llama tras cambiar el orden del equipo/caja
  * @param {function} opts.onClose
  */
-export function showTeamScreen({ team, box = [], onChange, onClose }) {
+export function showTeamScreen({ team, box = [], presets = null, onChange, onClose }) {
   const overlay = document.createElement("div");
   overlay.className = "team-overlay";
   overlay.innerHTML = `
@@ -46,30 +57,95 @@ export function showTeamScreen({ team, box = [], onChange, onClose }) {
         <span class="team-avg"></span>
         <button class="team-close" type="button" aria-label="Cerrar">✕</button>
       </div>
+      <div class="team-presets" id="team-presets" role="tablist" aria-label="Equipos"></div>
+      <div class="team-sticky" id="team-sticky" hidden></div>
       <p class="team-hint">Mantén pulsado un Pokémon y arrástralo para cambiarlo de sitio.</p>
       <div class="team-grid" id="team-grid" data-zone="team-area"></div>
       <div class="box-section" data-zone="box-area">
         <div class="box-title">Mis Pokémon <small id="box-count"></small></div>
-        <select id="coll-sort" class="coll-select">
-          <option value="recent">Más recientes primero</option>
-          <option value="name">Orden alfabético (A-Z)</option>
-          <option value="dex">N° de Pokédex</option>
-          <option value="power">Más poderoso primero (suma de Stats)</option>
-        </select>
-        <div class="coll-chips"><select id="coll-nature" class="coll-nature" aria-label="Filtrar por naturaleza">
-          <option value="">Todas las naturalezas</option>
-          ${NATURES.map((_, i) => `<option value="${i}">${natureLabel(i)}</option>`).join("")}
-        </select><button type="button" id="coll-shiny" class="coll-shbtn" title="Mostrar solo variocolores">✦ Variocolores</button></div>
+        <div class="coll-row" id="coll-row"></div>
         <div class="coll-chips">${Object.entries(TYPE_INFO).map(([k, t]) =>
           `<button type="button" class="coll-chip" data-type="${k}" style="--c:${t.color}" title="${t.label}">${t.emoji}</button>`).join("")}</div>
         <div class="coll-grid box-grid" id="box-grid"></div>
       </div>
     </div>
   `;
-  document.body.appendChild(overlay);
+  const host = document.getElementById("app") || document.body; // fuera de #main: renderRoute() no lo borra
+  host.style.position = host.style.position || "relative";
+  host.appendChild(overlay);
 
   const grid = overlay.querySelector("#team-grid");
   const boxGrid = overlay.querySelector("#box-grid");
+
+
+  // ───────── 5 equipos configurables ─────────
+  const presetsEl = overlay.querySelector("#team-presets");
+  const stickyEl = overlay.querySelector("#team-sticky");
+  const pool = () => [...team, ...box];
+  function renderPresets() {
+    if (!presets) { presetsEl.hidden = true; return; }
+    const act = presets.active;
+    presets.teams[act] = team.map(m => m.uid);
+    presetsEl.innerHTML = presets.teams.map((ids, i) => {
+      const first = i === act ? team[0] : pool().find(m => m.uid === ids[0]);
+      const n = i === act ? team.length : ids.filter(u => pool().some(m => m.uid === u)).length;
+      return `<button type="button" class="tp-btn${i === act ? " on" : ""}${first ? "" : " empty"}" data-p="${i}" aria-label="Equipo ${i + 1}" role="tab" aria-selected="${i === act}">${
+        first ? `<img src="${iconSprite(first)}" alt="" draggable="false" /><b>${i + 1}</b>${n > 1 ? `<small>${n}</small>` : ""}` : `<span>+</span>`}</button>`;
+    }).join("");
+  }
+  presetsEl.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-p]");
+    if (!b) return;
+    const n = Number(b.dataset.p);
+    if (n === presets.active) return;
+    switchPreset(n);
+  });
+  function switchPreset(n) {
+    presets.teams[presets.active] = team.map(m => m.uid);
+    const all = pool();
+    let next = (presets.teams[n] || []).map(u => all.find(m => m.uid === u)).filter(Boolean);
+    next = next.filter((m, i) => next.indexOf(m) === i).slice(0, 6);
+    if (!next.length) {
+      // Un equipo vacío no puede combatir: se parte del Pokémon de mayor nivel disponible
+      const best = [...all].sort((a, b) => b.level - a.level)[0];
+      if (best) next = [best];
+    }
+    const rest = all.filter(m => !next.includes(m));
+    team.splice(0, team.length, ...next);
+    box.splice(0, box.length, ...rest);
+    presets.active = n;
+    presets.teams[n] = team.map(m => m.uid);
+    render();
+    onChange?.();
+  }
+
+  // ───────── Barra fija con los 6 del equipo al bajar ─────────
+  function renderSticky() {
+    stickyEl.innerHTML = Array.from({ length: 6 }, (_, i) => {
+      const m = team[i];
+      return m
+        ? `<button type="button" class="ts-slot" data-ts="${i}" data-zone="team" data-idx="${i}" title="Toca para quitar del equipo"><img src="${iconSprite(m)}" alt="" draggable="false" /><span>Nv. ${m.level}</span></button>`
+        : `<div class="ts-slot empty" data-zone="team-empty"><i>+</i></div>`;
+    }).join("");
+  }
+  stickyEl.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-ts]");
+    if (!b) return;
+    const i = Number(b.dataset.ts);
+    if (team.length <= 1) { flash("Debes tener al menos un Pokémon en el equipo"); return; }
+    const [m] = team.splice(i, 1);
+    box.push(m);
+    render(); onChange?.();
+  });
+  // Se muestra cuando la cuadrícula del equipo sale de la vista
+  const panelEl = overlay.querySelector(".team-panel");
+  const updateSticky = () => {
+    const g = grid.getBoundingClientRect(), pr = panelEl.getBoundingClientRect();
+    const hd = panelEl.querySelector(".team-panel-header");
+    stickyEl.style.top = (hd ? hd.offsetHeight : 0) + "px";
+    stickyEl.hidden = !(g.bottom < pr.top + (hd ? hd.offsetHeight : 0) + 8);
+  };
+  panelEl.addEventListener("scroll", updateSticky, { passive: true });
 
   function render() {
     const avg = team.length ? Math.round(team.reduce((s, m) => s + m.level, 0) / team.length) : 0;
@@ -84,6 +160,8 @@ export function showTeamScreen({ team, box = [], onChange, onClose }) {
       empty.innerHTML = `<span class="empty-slot">—</span>`;
       grid.appendChild(empty);
     }
+    renderPresets();
+    renderSticky();
     let list = box.map((m, idx) => ({ m, idx }));
     if (filters.shiny) list = list.filter(x => x.m.shiny);
     if (filters.nature !== "") list = list.filter(x => String(x.m.natureIndex ?? 0) === filters.nature);
@@ -107,19 +185,32 @@ export function showTeamScreen({ team, box = [], onChange, onClose }) {
     const icons = types.map(t => TYPE_INFO[t]
       ? `<span class="coll-type" style="background:${TYPE_INFO[t].color}">${TYPE_INFO[t].emoji}</span>` : "").join("");
     card.innerHTML = `<span class="coll-lv">Nv.${m.level}</span><span class="coll-types">${icons}</span>
-      <img src="${frontSprite(m)}" alt="" draggable="false" /><span class="coll-dex">#${m.id}</span>${m.shiny ? `<b class="mon-shiny">✦</b>` : ""}${m.locked ? `<i class="mon-lock">🔒</i>` : ""}
-      <span class="coll-name">${m.nameEs || m.name}</span>`;
+      <span class="coll-art"><img src="${frontSprite(m)}" alt="" draggable="false" /></span>${m.shiny ? `<b class="mon-shiny">✦</b>` : ""}${m.locked ? `<i class="mon-lock">🔒</i>` : ""}
+      <span class="coll-name">${dispName(m)}</span>`;
+    const im = card.querySelector("img");
+    // Misma escala para todos (como en el original): el píxel mide igual en un Jigglypuff que en un Muk
+    cropSprite(frontSprite(m)).then((c) => {
+      if (!c || !im.isConnected) return;
+      im.src = c.url;
+      const base = Math.max(REF_ART, c.w, c.h); // los dibujos más grandes (p. ej. variocolor remotos) se reducen para no desbordar
+      im.style.width = `${(c.w / base) * 100}%`;
+      im.style.height = `${(c.h / base) * 100}%`;
+    });
     card.addEventListener("click", () => { if (card.dataset.justDragged) return; showPokemonDetail(m, { inTeam: false, onClose: () => {} }); });
     attachDrag(card);
     return card;
   }
 
-  const sortSel = overlay.querySelector("#coll-sort"), natSel = overlay.querySelector("#coll-nature");
-  sortSel.value = filters.sort; natSel.value = filters.nature;
-  sortSel.onchange = () => { filters.sort = sortSel.value; render(); };
-  natSel.onchange = () => { filters.nature = natSel.value; render(); };
-  const shBtn = overlay.querySelector("#coll-shiny");
-  if (shBtn) { shBtn.classList.toggle("active", filters.shiny); shBtn.onclick = () => { filters.shiny = !filters.shiny; shBtn.classList.toggle("active", filters.shiny); render(); }; }
+  const SPARK = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 1.5l2.4 7.1 7.1 2.4-7.1 2.4L12 20.5l-2.4-7.1L2.5 11l7.1-2.4z" fill="currentColor"/><path d="M19 15l1 2.5 2.5 1-2.5 1L19 22l-1-2.5-2.5-1 2.5-1z" fill="currentColor"/></svg>`;
+  const row = overlay.querySelector("#coll-row");
+  const SORTS = [["recent", "Más recientes primero"], ["name", "Orden alfabético (A-Z)"], ["dex", "N° de Pokédex"], ["power", "Más poderoso primero"]];
+  row.appendChild(pixelDropdown({ options: SORTS, value: filters.sort, cls: "dd-sort", title: "Orden", onChange: (v) => { filters.sort = v; render(); } }));
+  row.appendChild(pixelDropdown({ options: [["", "Naturalezas"], ...NATURES.map((_, i) => [String(i), natureLabel(i)])], value: String(filters.nature), cls: "dd-nat", title: "Naturaleza", onChange: (v) => { filters.nature = v; render(); } }));
+  const shBtn = document.createElement("button");
+  shBtn.type = "button"; shBtn.id = "coll-shiny"; shBtn.className = "dx-shbtn dx-shicon" + (filters.shiny ? " on" : "");
+  shBtn.title = "Solo variocolor"; shBtn.setAttribute("aria-label", "Variocolor"); shBtn.innerHTML = SPARK;
+  shBtn.onclick = () => { filters.shiny = !filters.shiny; shBtn.classList.toggle("on", filters.shiny); render(); };
+  row.appendChild(shBtn);
   overlay.querySelectorAll(".coll-chip[data-type]").forEach(b => {
     b.classList.toggle("active", filters.types.has(b.dataset.type));
     b.onclick = () => { const t = b.dataset.type; filters.types.has(t) ? filters.types.delete(t) : filters.types.add(t); b.classList.toggle("active"); render(); };
@@ -141,7 +232,7 @@ export function showTeamScreen({ team, box = [], onChange, onClose }) {
     card.innerHTML = `
       <div class="team-card-types">${types}</div>
       <img src="${frontSprite(mon)}" alt="${mon.nameEs}" draggable="false" />
-      <div class="team-card-name">${mon.nameEs || mon.name}</div>
+      <div class="team-card-name">${dispName(mon)}</div>
       <div class="team-card-meta">Nv.${mon.level} · ${moveName}</div>
       <div class="team-card-hp"><div class="fill" style="width:${hpPct}%"></div></div>
     `;
@@ -303,4 +394,5 @@ export function showTeamScreen({ team, box = [], onChange, onClose }) {
     if (e.target === overlay) close();
   });
   render();
+  updateSticky();
 }

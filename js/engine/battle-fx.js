@@ -1,7 +1,7 @@
 // Efectos visuales de combate y captura
 
-import { fxFamilyForMove } from "../data/fx-moves.js?v=100";
-import { BattleFX } from "./battle-fx-canvas.js?v=100";
+import { fxFamilyForMove } from "../data/fx-moves.js?v=120";
+import { BattleFX } from "./battle-fx-canvas.js?v=120";
 
 const BALL_SRC = "assets/items/poke-ball.png";
 

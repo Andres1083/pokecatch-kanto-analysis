@@ -1,13 +1,14 @@
 // Pestaña «Progreso»: lista de gimnasios/capítulos con nivel recomendado, clima y medallas.
 
-import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=100";
-import { badgeHtml } from "./badge.js?v=100";
-import { rainTable } from "./briefing.js?v=100";
-import { pixelIcon } from "./pixel.js?v=100";
-import { BG_DATA } from "../data/backgrounds.js?v=100";
-import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=100";
+import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=120";
+import { badgeHtml } from "./badge.js?v=120";
+import { rainTable } from "./briefing.js?v=120";
+import { pixelIcon } from "./pixel.js?v=120";
+import { BG_DATA } from "../data/backgrounds.js?v=120";
+import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=120";
 
-const bgOf = (key) => BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);
+let resolveBg = null; // lo aporta main.js (mismos fondos que el combate)
+const bgOf = (key) => (resolveBg && resolveBg(key)) || BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);
 
 function gymOf(ci) {
   return CHAPTERS[ci].steps.find(s => s.kind === "gym");
@@ -34,7 +35,8 @@ export function leagueTrainers() {
 }
 export { LEAGUE_FIRST, LEAGUE_LAST };
 
-export function renderProgress(state) {
+export function renderProgress(state, bgResolver) {
+  if (bgResolver) resolveBg = bgResolver;
   const owned = new Set([...state.playerTeam, ...(state.box || [])].map(m => m.id));
   const medals = medalColors().slice(0, 8);
   const medalHtml = medals.map((m, i) => {

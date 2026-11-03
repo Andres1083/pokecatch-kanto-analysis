@@ -1,6 +1,6 @@
 // Motor de combate IDLE (automático en la ruta)
 
-import { calculateDamage, chooseEnemyMove } from "./battle.js?v=100";
+import { calculateDamage, chooseEnemyMove } from "./battle.js?v=120";
 
 
 // ── Estados alterados (envenenamiento / parálisis) ──

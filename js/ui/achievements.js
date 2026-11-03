@@ -1,4 +1,4 @@
-import { evaluateAchievements, achievementSummary } from "../data/achievements.js?v=100";
+import { evaluateAchievements, achievementSummary } from "../data/achievements.js?v=120";
 
 const KIND_LBL = { aspect: "ASPECTO", frame: "MARCO", scene: "ESCENA" };
 
@@ -8,7 +8,10 @@ export function openAchievements(state, { onEquip, onPlayScene } = {}) {
   root.innerHTML = render(state);
   document.getElementById("app")?.appendChild(root) || document.body.appendChild(root);
 
-  const close = () => root.remove();
+  const onKey = (e) => { if (e.key === "Escape") close(); };
+  const close = () => { document.removeEventListener("keydown", onKey); root.remove(); };
+  document.addEventListener("keydown", onKey);
+  root.addEventListener("click", (e) => { if (e.target === root) close(); }); // tocar fuera también cierra
   root.querySelector(".ach-x")?.addEventListener("click", close);
 
   let tab = "aspect";

@@ -1,8 +1,8 @@
 // "Mis Pokémon": lista en cuadrícula con filtros (adaptada de Pokemaniakos).
 
-import { frontSprite } from "../data/sprites.js?v=100";
-import { NATURES, natureLabel } from "../data/natures.js?v=100";
-import { showPokemonDetail } from "./pokemon-detail.js?v=100";
+import { frontSprite } from "../data/sprites.js?v=120";
+import { NATURES, natureLabel } from "../data/natures.js?v=120";
+import { showPokemonDetail } from "./pokemon-detail.js?v=120";
 
 export const TYPE_INFO = {
   normal:   { label: "Normal",    color: "#A8A878", emoji: "⚪" },

@@ -1,11 +1,12 @@
-import { DEX_NAMES } from "../data/dex-names.js?v=100";
-import { iconSprite, frontSprite } from "../data/sprites.js?v=100";
-import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=100";
-import { pixelIcon } from "./pixel.js?v=100";
-import { badgeHtml } from "./badge.js?v=100";
-import { NATURES, natureLabel } from "../data/natures.js?v=100";
-import { shinyOdds } from "../data/shiny.js?v=100";
-import { getPokemon } from "../data/pokeapi.js?v=100";
+import { DEX_NAMES } from "../data/dex-names.js?v=120";
+import { iconSprite, frontSprite } from "../data/sprites.js?v=120";
+import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=120";
+import { pixelIcon } from "./pixel.js?v=120";
+import { badgeHtml } from "./badge.js?v=120";
+import { NATURES, natureLabel } from "../data/natures.js?v=120";
+import { shinyOdds } from "../data/shiny.js?v=120";
+import { placeMenu } from "./dropdown.js?v=120";
+import { getPokemon } from "../data/pokeapi.js?v=120";
 
 /** Dos naturalezas recomendadas según las estadísticas base. */
 function recommendNatures(b) {
@@ -17,6 +18,10 @@ function recommendNatures(b) {
 }
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+const MODES = [["all", "Todos"], ["caught", "Capturados"], ["seen", "Solo vistos"], ["missing", "Faltan"]];
+const modeLabel = (m) => (m === "all" ? "ESTADO" : (MODES.find(x => x[0] === m)?.[1] || "ESTADO"));
+const SPARK = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 1.5l2.4 7.1 7.1 2.4-7.1 2.4L12 20.5l-2.4-7.1L2.5 11l7.1-2.4z" fill="currentColor"/><path d="M19 15l1 2.5 2.5 1-2.5 1L19 22l-1-2.5-2.5-1 2.5-1z" fill="currentColor"/></svg>`;
 
 export function dexSets(state) {
   const st = state.stats || {};
@@ -44,48 +49,104 @@ function gridHtml(state) {
     if (dexFilter.shiny && !shinies.has(id)) continue;
     if (dexFilter.mode === "seen" && !(s && !c)) continue;
     if (q && !(String(id).padStart(3, "0").includes(q) || String(id) === q || (s && norm(DEX_NAMES[id - 1]).includes(q)))) continue;
-    out += `<div class="dx-cell ${c ? "got" : s ? "seen" : "none"}${c ? " dx-pick" : ""}" data-id="${id}" title="${s ? DEX_NAMES[id - 1] : "???"}">
+    const label = s ? DEX_NAMES[id - 1] : "???";
+    out += `<div class="dx-cell ${c ? "got" : s ? "seen" : "none"}${c ? " dx-pick" : ""}" data-id="${id}" title="${label}">
       <img src="${iconSprite({ id, shiny: dexFilter.shiny && shinies.has(id) })}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
       ${c ? `<i class="dx-ball"></i>` : ""}${shinies.has(id) ? `<b class="dx-shiny">✦</b>` : ""}${filt[id]?.length ? `<b class="dx-filt" title="Filtro de naturaleza">⚙</b>` : ""}${c && fresh.has(id) ? `<span class="dx-new">NEW</span>` : ""}
-      <small>N.º ${String(id).padStart(3, "0")}</small></div>`;
+      <small>N.º ${String(id).padStart(3, "0")}</small>
+      <span class="dx-name">${label}</span></div>`;
   }
   return out || `<p class="dx-empty">Sin resultados</p>`;
 }
 
 export function renderDex(state) {
   const { caught, seen } = dexSets(state);
-  const n = caught.size, pct = Math.round(n / 151 * 100);
-  const last = [...(state.stats?.caughtOrder || [])].slice(-8).reverse();
+  const n = [...caught].filter(id => id >= 1 && id <= 151).length;
+  const pct = Math.round(n / 151 * 100);
+  const shinies = (state.stats?.shiny || []).length;
+  const order = state.stats?.caughtOrder || [];
+  const last = order.filter(id => id >= 1 && id <= 151).slice(-12).reverse();
+  const missShiny = Math.max(0, 151 - shinies);
   return `
-  <div class="dx-card dx-top">
-    <div class="dx-head"><div class="dx-title"><img src="${pixelIcon("gem", { a: "#e04b3a", b: "#7a1f1f", c: "#ffd0c8" })}" width="28" height="28" alt=""><h2>Pokédex</h2><button type="button" class="dx-help" id="dx-help" aria-label="Ayuda">?</button></div></div>
-    <div class="dx-stats"><span>Vistos <b>${seen.size}</b></span><span>Regiones completas <b>${n >= 151 ? 1 : 0}/3</b></span></div>
-    <div class="dx-ring-wrap">
-      <div class="dx-ring" style="--p:${pct}"><div><b>${pct} %</b><small>${n} / 151</small></div></div>
+  <div class="dx-page">
+    <section class="dx-card dx-top">
+      <header class="dx-banner">
+        <div class="dx-title">
+          <span class="dx-gem" aria-hidden="true">📕</span>
+          <h2>Pokédex</h2>
+          <button type="button" class="dx-help" id="dx-help" aria-label="Ayuda">?</button>
+        </div>
+        <div class="dx-stats">
+          <span>Vistos <b>${seen.size}</b></span>
+          <span>✦ Variocolor <b>${shinies}</b></span>
+          <span>Regiones completas <b>${n >= 151 ? 1 : 0}/4</b></span>
+        </div>
+      </header>
+
+      <div class="dx-summary">
+        <div class="dx-ring" style="--p:${pct}">
+          <div class="dx-ring-inner">
+            <b>${pct}&nbsp;%</b>
+            <small>${n}&nbsp;/&nbsp;151</small>
+          </div>
+        </div>
+        <div class="dx-regions">
+          <div class="dx-reg">
+            <span>Kanto</span>
+            <div class="dx-bar"><i style="width:${(n / 151) * 100}%"></i></div>
+            <em>${n}&nbsp;/&nbsp;151</em>
+          </div>
+          <div class="dx-reg lock">
+            <span>Johto</span>
+            <div class="dx-bar"></div>
+            <em>🔒</em>
+          </div>
+          <div class="dx-reg lock">
+            <span>Hoenn</span>
+            <div class="dx-bar"></div>
+            <em>🔒</em>
+          </div>
+          <div class="dx-reg lock">
+            <span>Sinnoh</span>
+            <div class="dx-bar"></div>
+            <em>🔒</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="dx-sub">ÚLTIMAS CAPTURAS</div>
+      <div class="dx-last">${
+        last.length
+          ? last.map(id => `<img src="${iconSprite(id)}" alt="" width="40" height="40" loading="lazy" onerror="this.style.visibility='hidden'">`).join("")
+          : `<span class="dx-muted">Aún no hay capturas recientes</span>`
+      }</div>
+    </section>
+
+    <div class="dx-tools">
+      <input id="dx-q" type="search" placeholder="Nombre o número…" value="${esc(dexFilter.q)}" autocomplete="off" />
+      <div class="dx-dd" id="dx-dd">
+        <button type="button" id="dx-mode-btn" class="dx-ddbtn" aria-haspopup="listbox" aria-expanded="false">${modeLabel(dexFilter.mode)} <i>▾</i></button>
+        <div class="dx-ddmenu" id="dx-mode-menu" role="listbox" hidden>
+          ${MODES.map(([v, l]) => `<button type="button" role="option" data-mode="${v}" class="${dexFilter.mode === v ? "on" : ""}">${l}</button>`).join("")}
+        </div>
+      </div>
+      <button type="button" id="dx-shiny" class="dx-shbtn dx-shicon${dexFilter.shiny ? " on" : ""}" aria-label="Variocolor" title="Solo variocolor">${SPARK}</button>
     </div>
-    <div class="dx-regions">
-      <div class="dx-reg"><span>Kanto</span><div class="dx-bar"><i style="width:${n / 151 * 100}%"></i></div><em>${n} / 151</em></div>
-      <div class="dx-reg lock"><span>Johto</span><div class="dx-bar"></div><em>🔒</em></div>
-      <div class="dx-reg lock"><span>Hoenn</span><div class="dx-bar"></div><em>🔒</em></div>
-    </div>
-    ${last.length ? `<div class="dx-sub">ÚLTIMAS CAPTURAS</div><div class="dx-last">${last.map(id => `<img src="${iconSprite(id)}" alt="" onerror="this.style.visibility='hidden'">`).join("")}</div>` : ""}
-  </div>
-  <div class="dx-tools">
-    <input id="dx-q" type="search" placeholder="Nombre o número…" value="${esc(dexFilter.q)}" />
-    <select id="dx-mode" aria-label="Estado">
-      <option value="all"${dexFilter.mode === "all" ? " selected" : ""}>ESTADO ▾</option>
-      <option value="caught"${dexFilter.mode === "caught" ? " selected" : ""}>Capturados</option>
-      <option value="seen"${dexFilter.mode === "seen" ? " selected" : ""}>Solo vistos</option>
-      <option value="missing"${dexFilter.mode === "missing" ? " selected" : ""}>Faltan</option>
-    </select>
-    <button type="button" id="dx-shiny" class="dx-shbtn${dexFilter.shiny ? " on" : ""}" aria-label="Variocolor">✦</button>
-  </div>
-  <div class="dx-card dx-kanto ${dexFilter.open ? "" : "closed"}">
-    <button type="button" class="dx-head dx-region-head" id="dx-toggle">
-      <h2>Kanto</h2><span><em class="dx-shchip" id="dx-shchip">✦ ×${(state.stats?.shiny || []).length} faltan ${151 - (state.stats?.shiny || []).length}</em>${n} / 151 <i class="dx-caret">▾</i></span>
-    </button>
-    <div class="dx-regbar"><div class="dx-bar"><i style="width:${n / 151 * 100}%"></i></div></div>
-    <div class="dx-grid" id="dx-grid">${gridHtml(state)}</div>
+
+    <section class="dx-card dx-kanto ${dexFilter.open ? "" : "closed"}">
+      <button type="button" class="dx-region-head" id="dx-toggle">
+        <div class="dx-rh-left">
+          <h2>Kanto</h2>
+          <em class="dx-shchip" id="dx-shchip">✦×${shinies} faltan ${missShiny}</em>
+        </div>
+        <div class="dx-rh-right">
+          <span>${n}&nbsp;/&nbsp;151</span>
+          <i class="dx-caret">▾</i>
+        </div>
+      </button>
+      <div class="dx-regbar"><div class="dx-bar"><i style="width:${(n / 151) * 100}%"></i></div></div>
+      <div class="dx-grid" id="dx-grid">${gridHtml(state)}</div>
+    </section>
   </div>`;
 }
 
@@ -135,11 +196,25 @@ function openNaturePicker(state, id, refresh) {
 }
 
 export function bindDex(state) {
-  const q = document.getElementById("dx-q"), m = document.getElementById("dx-mode");
+  const q = document.getElementById("dx-q");
   if (!q) return;
   const upd = () => { document.getElementById("dx-grid").innerHTML = gridHtml(state); };
   q.oninput = () => { dexFilter.q = q.value; upd(); };
-  m.onchange = () => { dexFilter.mode = m.value; upd(); };
+  const mb = document.getElementById("dx-mode-btn"), mm = document.getElementById("dx-mode-menu");
+  const closeMenu = () => { mm.hidden = true; mb.setAttribute("aria-expanded", "false"); };
+  mb.onclick = (e) => { e.stopPropagation(); mm.hidden = !mm.hidden; mb.setAttribute("aria-expanded", String(!mm.hidden)); if (!mm.hidden) placeMenu(document.getElementById("dx-dd"), mm); };
+  mm.onclick = (e) => {
+    const o = e.target.closest("[data-mode]");
+    if (!o) return;
+    dexFilter.mode = o.dataset.mode;
+    mb.innerHTML = `${modeLabel(dexFilter.mode)} <i>▾</i>`;
+    mm.querySelectorAll("[data-mode]").forEach(x => x.classList.toggle("on", x === o));
+    closeMenu(); upd();
+  };
+  document.addEventListener("click", function h(ev) {
+    if (!document.body.contains(mb)) return document.removeEventListener("click", h);
+    if (!ev.target.closest("#dx-dd")) closeMenu();
+  });
   const sb = document.getElementById("dx-shiny");
   if (sb) sb.onclick = () => { dexFilter.shiny = !dexFilter.shiny; sb.classList.toggle("on", dexFilter.shiny); upd(); };
   const chip = document.getElementById("dx-shchip");

@@ -1,52 +1,52 @@
-import { startIntro } from "./ui/intro.js?v=100";
-import { showTitle } from "./ui/title.js?v=100";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=100";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=100";
-import { LEGENDS } from "./data/legends.js?v=100";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=100";
+import { startIntro } from "./ui/intro.js?v=120";
+import { showTitle } from "./ui/title.js?v=120";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=120";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=120";
+import { LEGENDS } from "./data/legends.js?v=120";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=120";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=100";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=100";
-import { runIdleBattle } from "./engine/idle-battle.js?v=100";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=100";
-import { showTeamScreen } from "./ui/team.js?v=100";
-import { showCollection } from "./ui/collection.js?v=100";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=100";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=100";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=100";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=100";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=100";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=100";
-import { Sfx } from "./engine/sfx.js?v=100";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=100";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=100";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=100";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=100";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=100";
-import { SCENES } from "./data/scenes.js?v=100";
-import { BG_DATA } from "./data/backgrounds.js?v=100";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=100";
-import { evosOf } from "./data/evolutions.js?v=100";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=100";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=100";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=100";
-import { renderRouteBar } from "./ui/route-bar.js?v=100";
-import { renderBag, bindBag } from "./ui/bag.js?v=100";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=100";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=100";
-import { itemImg } from "./ui/item-icon.js?v=100";
-import { pixelIcon } from "./ui/pixel.js?v=100";
-import { SHINY_RATE } from "./data/shiny.js?v=100";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=100";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=100";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=100";
-import { EGG_LEVEL } from "./data/breeding.js?v=100";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=100";
-import { openAchievements } from "./ui/achievements.js?v=100";
-import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=100";
-import { casinoUnlocked } from "./data/casino.js?v=100";
-import { sceneWipe } from "./ui/transition.js?v=100";
-import { dissolve, imgReady } from "./ui/sendout.js?v=100";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=120";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=120";
+import { runIdleBattle } from "./engine/idle-battle.js?v=120";
+import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=120";
+import { showTeamScreen } from "./ui/team.js?v=120";
+import { showCollection } from "./ui/collection.js?v=120";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=120";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=120";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=120";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=120";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=120";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=120";
+import { Sfx } from "./engine/sfx.js?v=120";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=120";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=120";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=120";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=120";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=120";
+import { SCENES } from "./data/scenes.js?v=120";
+import { BG_DATA } from "./data/backgrounds.js?v=120";
+import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=120";
+import { evosOf } from "./data/evolutions.js?v=120";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=120";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=120";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=120";
+import { renderRouteBar } from "./ui/route-bar.js?v=120";
+import { renderBag, bindBag } from "./ui/bag.js?v=120";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=120";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=120";
+import { itemImg } from "./ui/item-icon.js?v=120";
+import { pixelIcon } from "./ui/pixel.js?v=120";
+import { SHINY_RATE } from "./data/shiny.js?v=120";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=120";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=120";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=120";
+import { EGG_LEVEL } from "./data/breeding.js?v=120";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=120";
+import { openAchievements } from "./ui/achievements.js?v=120";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=120";
+import { casinoUnlocked } from "./data/casino.js?v=120";
+import { sceneWipe } from "./ui/transition.js?v=120";
+import { dissolve, imgReady } from "./ui/sendout.js?v=120";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -154,6 +154,7 @@ function saveGame() {
       weather: state.weather,
       stats: state.stats,
       captureFilter: state.captureFilter || {},
+      teamPresets: (syncActivePreset(), teamPresets()),
       unlockedAchievements: state.unlockedAchievements || [],
       feats: state.feats || {},
       storyFlags: state.storyFlags || [],
@@ -829,17 +830,40 @@ const progressApi = {
   },
 };
 
+function teamPresets() {
+  const p = state.teamPresets;
+  if (!p || !Array.isArray(p.teams) || p.teams.length !== 5) state.teamPresets = { teams: [[], [], [], [], []], active: 0 };
+  return state.teamPresets;
+}
+/** Guarda en el equipo activo los uid de los Pokémon que lo forman ahora. */
+function syncActivePreset() {
+  if (state.playerTeam.some(m => String(m.uid).startsWith("raid-"))) return; // equipo temporal de incursión
+  const p = teamPresets();
+  p.teams[p.active] = state.playerTeam.map(m => m.uid).filter(Boolean);
+}
+
 function openTeam() {
+  state.view = "team";
+  try { ensureNav(); } catch (_) {}
+  syncActivePreset();
   showTeamScreen({
     team: state.playerTeam,
     box: state.box || (state.box = []),
+    presets: teamPresets(),
     onChange: () => {
       // El orden del equipo cambió: se descarta el combate en curso y se guarda
       state.epoch++;
       state.activeIndex = 0;
+      syncActivePreset();
       saveGame();
     },
-    onClose: () => { if (!state.busy) renderRoute(); },
+    onClose: () => {
+      // Al cerrar el PC se vuelve siempre al mapa de aventura (donde se está peleando)
+      state.view = "adventure";
+      try { setView("adventure"); } catch (_) {}
+      try { ensureNav(); } catch (_) {}
+      if (!$("#scene") || !state.busy) renderRoute();
+    },
   });
 }
 
@@ -862,15 +886,18 @@ function ensureNav() {
       const b = e.target.closest("[data-nav]");
       if (!b) return;
       const id = b.dataset.nav;
+      // Si el panel de Equipo/PC está abierto, se cierra antes de cambiar de pestaña
+      const openTeamPanel = document.querySelector(".team-overlay .team-close");
+      if (openTeamPanel) { openTeamPanel.click(); if (id === "team") return; }
       if (id === "team") return openTeam();
       if (id === "coll") return showCollection({ team: state.playerTeam, box: state.box || [] });
       if (id === "act") return toggleActMenu();
       closeActMenu();
       setView(id);
     });
-    document.body.appendChild(nav);
+    (document.getElementById("app") || document.body).appendChild(nav);
   }
-  const cur = (state.view === "nursery" || state.view === "casino") ? "act" : state.view;
+  const cur = (state.view === "nursery" || state.view === "casino") ? "act" : (state.view === "team" ? "team" : state.view);
   nav.querySelectorAll("[data-nav]").forEach(b => b.classList.toggle("active", b.dataset.nav === cur));
 }
 
@@ -1030,7 +1057,7 @@ function setView(id) {
   state.view = id;
   const main = $("#main");
   if (main) main.dataset.view = id;
-  if (id === "progress") { const el = $(".view-progress"); if (el) { el.innerHTML = renderProgress(state); bindProgress(progressApi); } }
+  if (id === "progress") { const el = $(".view-progress"); if (el) { el.innerHTML = renderProgress(state, sceneBg); bindProgress(progressApi); } }
   if (id === "dex") { const el = $(".view-dex"); if (el) { el.innerHTML = renderDex(state); bindDex(state); } }
   if (id === "nursery") refreshNursery();
   if (id === "casino" && !casinoBusy()) { const el = $(".view-casino"); if (el) { el.innerHTML = renderCasino(state); bindCasino(casinoApi); } }
@@ -1110,7 +1137,7 @@ function renderRoute() {
 
       </div>
 
-      <div class="view view-progress">${renderProgress(state)}</div>
+      <div class="view view-progress">${renderProgress(state, sceneBg)}</div>
       <div class="view view-dex">${renderDex(state)}</div>
       <div class="view view-bag">${renderBag(state)}</div>
       <div class="view view-nursery">${renderNursery(state)}</div>
@@ -2062,11 +2089,12 @@ async function nodeGym() {
   }
   await showBanner(`¡Has derrotado a ${gym.leaderEs}!`);
   setMsg(gym.badgeEs === "Maestro" ? `¡Eres el Campeón de la Liga! +${fmtMoney(gym.reward)} ₽`
-    : gym.badgeEs ? `¡Ganaste la Medalla ${gym.badgeEs}! +${fmtMoney(gym.reward)} ₽`
+    : gym.badgeEs ? (state.badges.includes(gym.badgeEs) ? `¡Gimnasio repetido! +${fmtMoney(gym.reward)} ₽` : `¡Ganaste la Medalla ${gym.badgeEs}! +${fmtMoney(gym.reward)} ₽`)
     : `¡Derrotaste a ${gym.leaderEs}! +${fmtMoney(gym.reward)} ₽`);
+  const repeat = !!gym.badgeEs && state.badges.includes(gym.badgeEs); // ya la tenías: sin felicitación
   finishChapter(gym);
   saveGame();
-  await showMedalWin(gym);
+  if (!repeat) await showMedalWin(gym);
   state.pendingBriefing = true;
   return true;
 }
@@ -2195,7 +2223,7 @@ async function doEncounter() {
       return;
     }
     console.error("encounter error", err);
-    setMsg("Error en combate. Reintentando...");
+    setMsg(`Error en combate (${String(err && err.message || err).slice(0, 70)}). Reintentando...`);
     setTimeout(() => doEncounter(), 1000);
   }
 }
@@ -2240,6 +2268,7 @@ async function bootGame() {
     busy: false,
   });
   state.captureFilter = existing.captureFilter || {};
+  state.teamPresets = existing.teamPresets || null;
   state.storyFlags = Array.isArray(existing.storyFlags) ? existing.storyFlags : [];
   state.legendaryEncounters = Array.isArray(existing.legendaryEncounters) ? existing.legendaryEncounters : [];
   // Partidas antiguas: reintroducir la Guarida Rocket antes de la Torre si Koga
