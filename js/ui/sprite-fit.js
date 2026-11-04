@@ -74,7 +74,9 @@ export function cropSprite(src) {
       try {
         const w = b.right - b.left, h = b.bottom - b.top;
         const c = document.createElement("canvas"); c.width = w; c.height = h;
-        c.getContext("2d").drawImage(im, b.left, b.top, w, h, 0, 0, w, h);
+        const ctx = c.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(im, b.left, b.top, w, h, 0, 0, w, h);
         res({ url: c.toDataURL("image/png"), w, h });
       } catch (_) { res(null); }
     };

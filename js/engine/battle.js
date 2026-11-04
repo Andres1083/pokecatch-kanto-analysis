@@ -1,6 +1,6 @@
 // Motor de combates simple pero sólido (Gen 1 style)
 
-import { getTypeEffectiveness } from "../data/pokeapi.js?v=120";
+import { getTypeEffectiveness } from "../data/pokeapi.js?v=123";
 
 /**
  * Calcula el daño usando la fórmula clásica de Pokémon
@@ -135,4 +135,59 @@ export function resolveTurn(player, enemy, playerMove) {
   }
 
   return { log, events, playerFainted: player.currentHp <= 0, enemyFainted: enemy.currentHp <= 0 };
+}
+
+/**
+ * Puntuación de un aliado frente a un rival (mayor = mejor cambio).
+ * Combina: resistencia a los tipos del rival + poder ofensivo efectivo + PS restantes.
+ */
+export function scoreAllyVsEnemy(ally, enemy) {
+  if (!ally || ally.currentHp <= 0) return -Infinity;
+  const eTypes = enemy.types || [];
+  const aTypes = ally.types || [];
+
+  // Resistencia: qué tan poco duele que el rival ataque con sus tipos
+  let resist = 0;
+  for (const t of eTypes) {
+    const mult = getTypeEffectiveness(t, aTypes);
+    if (mult === 0) resist += 3;
+    else if (mult < 1) resist += 2 / Math.max(mult, 0.25);
+    else if (mult > 1) resist -= mult;
+    else resist += 0.5;
+  }
+
+  // Ofensiva: mejor STAB del aliado contra el rival
+  let offense = 0;
+  for (const t of aTypes) {
+    const mult = getTypeEffectiveness(t, eTypes);
+    offense = Math.max(offense, mult);
+  }
+  // También mirar movimientos si hay
+  for (const mv of ally.moves || []) {
+    if (!(mv.power > 0)) continue;
+    const mult = getTypeEffectiveness(mv.type, eTypes);
+    const stab = aTypes.includes(mv.type) ? 1.5 : 1;
+    offense = Math.max(offense, mult * stab * (0.5 + (mv.power || 0) / 120));
+  }
+
+  const hpRatio = ally.currentHp / Math.max(1, ally.maxHp);
+  const levelBias = (ally.level || 1) * 0.02;
+
+  return resist * 2.2 + offense * 3.5 + hpRatio * 1.5 + levelBias;
+}
+
+/** Elige el mejor aliado vivo contra el enemigo. */
+export function pickBestAlly(allies, enemy) {
+  let best = -1;
+  let bestScore = -Infinity;
+  for (let i = 0; i < allies.length; i++) {
+    const a = allies[i];
+    if (!a || a.currentHp <= 0) continue;
+    const s = scoreAllyVsEnemy(a, enemy);
+    if (s > bestScore) {
+      bestScore = s;
+      best = i;
+    }
+  }
+  return best;
 }

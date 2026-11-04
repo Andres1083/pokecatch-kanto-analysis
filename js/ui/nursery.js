@@ -1,12 +1,13 @@
 // Pantalla de Crianza: guardería (2 parejas → huevos) + incubadoras.
-import { iconSprite } from "../data/sprites.js?v=120";
-import { ensureNursery, setParent, retrieveParent, startIncubation, compatible, nextEggMs, useBerry, freeIncubator, unlockIncubator, toggleHeld } from "../engine/nursery.js?v=120";
-import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=120";
-import { ITEMS } from "../data/items.js?v=120";
-import { itemImg } from "./item-icon.js?v=120";
-import { getNature } from "../data/natures.js?v=120";
-import { TYPE_INFO } from "./collection.js?v=120";
-import { frontSprite } from "../data/sprites.js?v=120";
+import { showTip } from "./tip.js?v=123";
+import { iconSprite } from "../data/sprites.js?v=123";
+import { ensureNursery, setParent, retrieveParent, startIncubation, compatible, nextEggMs, useBerry, freeIncubator, unlockIncubator, toggleHeld } from "../engine/nursery.js?v=123";
+import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=123";
+import { ITEMS } from "../data/items.js?v=123";
+import { itemImg } from "./item-icon.js?v=123";
+import { getNature } from "../data/natures.js?v=123";
+import { TYPE_INFO } from "./collection.js?v=123";
+import { frontSprite } from "../data/sprites.js?v=123";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (ms) => { const s = Math.ceil(ms / 1000); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? `${h} h ${String(m).padStart(2, "0")} min` : `${m}:${String(x).padStart(2, "0")}`; };
@@ -87,7 +88,7 @@ export function bindNursery(api) {
     el.querySelectorAll("[data-inc-bar]").forEach(x => { const left = Math.max(0, HATCH_MS - (now - Number(x.dataset.incBar))); x.style.width = `${Math.min(100, (1 - left / HATCH_MS) * 100)}%`; });
   }, 1000);
 
-  root.querySelector("#nu-help").onclick = () => alert(`Crianza: deja dos Pokémon de la misma familia (o un Ditto con cualquier otro) en la guardería. Cada ${Math.round(BREED_MS / 3600000)} h aparece un huevo de la forma básica (máx. ${EGG_CAP}); las bayas acortan ese tiempo. Pon el huevo en una incubadora: al eclosionar nace un Pokémon de Nv. 5 con naturaleza al azar (¡y con opción de variocolor!). Todo sigue corriendo aunque cierres el juego. Equipa una Piedra Eterna a un huésped y la cría heredará su naturaleza. Las incubadoras 2, 3 y 4 se compran; la 2.ª pareja se abre al completar Johto.`);
+  root.querySelector("#nu-help").onclick = () => showTip(root.querySelector("#nu-help"), "Crianza", `Deja dos Pokémon de la misma familia (o un Ditto con cualquier otro) en la guardería. Cada ${Math.round(BREED_MS / 3600000)} h aparece un huevo de la forma básica (máx. ${EGG_CAP}); las bayas acortan ese tiempo. Pon el huevo en una incubadora: al eclosionar nace un Pokémon de Nv. 5 con naturaleza al azar (¡y con opción de variocolor!). Todo sigue corriendo aunque cierres el juego. Equipa una Piedra Eterna a un huésped y la cría heredará su naturaleza. Las incubadoras 2, 3 y 4 se compran; la 2.ª pareja se abre al completar Johto.`);
   root.querySelectorAll("[data-held]").forEach(b => b.onclick = () => { const r = toggleHeld(state, Number(b.dataset.held)); if (!r.ok) return alert(r.reason); api.save(); api.refresh(); });
   root.querySelectorAll("[data-ret]").forEach(b => b.onclick = () => { retrieveParent(state, Number(b.dataset.ret)); api.save(); api.refresh(); });
   root.querySelectorAll("[data-inc]").forEach(b => b.onclick = () => {
@@ -119,7 +120,7 @@ function openPicker(api, slot) {
   const list = (state.box || []).filter(m => !other || compatible(other, m));
   const card = (m, i) => {
     const types = m.types || [];
-    const icons = types.map(t => TYPE_INFO[t] ? `<span class="coll-type" style="background:${TYPE_INFO[t].color}">${TYPE_INFO[t].emoji}</span>` : "").join("");
+    const icons = types.map(t => TYPE_INFO[t] ? `<span class="coll-type" title="${TYPE_INFO[t].label}"><img class="type-icon" src="${TYPE_INFO[t].icon}" alt="" draggable="false" /></span>` : "").join("");
     return `<button type="button" class="coll-card nu-opt" data-i="${i}" style="border-color:${TYPE_INFO[types[0]]?.color || "#cbd5e1"}"><span class="coll-lv">Nv.${m.level}</span><span class="coll-types">${icons}</span><img src="${frontSprite(m)}" alt="" draggable="false" /><span class="coll-dex">#${m.id}</span>${m.shiny ? `<b class="mon-shiny">✦</b>` : ""}<span class="coll-name">${esc(m.nameEs || m.name)}</span></button>`;
   };
   const ov = document.createElement("div");

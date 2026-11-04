@@ -1,12 +1,13 @@
 // Detalle de Pokémon (estilo ficha del original)
 
-import { frontSprite } from "../data/sprites.js?v=120";
-import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=120";
-import { ITEMS } from "../data/items.js?v=120";
-import { itemImg } from "./item-icon.js?v=120";
-import { pixelIcon } from "./pixel.js?v=120";
-import { countFamily, familySlots } from "../data/families.js?v=120";
-import { getNature, natureEffectHtml } from "../data/natures.js?v=120";
+import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=123";
+import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=123";
+import { ITEMS } from "../data/items.js?v=123";
+import { itemImg } from "./item-icon.js?v=123";
+import { pixelIcon } from "./pixel.js?v=123";
+import { countFamily, familySlots } from "../data/families.js?v=123";
+import { getNature, natureEffectHtml } from "../data/natures.js?v=123";
+import { showConfirm } from "./confirm.js?v=123";
 
 const TYPE_ES = {
   normal: "Normal", fire: "Fuego", water: "Agua", electric: "Eléctrico",
@@ -88,25 +89,40 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
       </div>
       <div class="detail-body">
 
-      <div class="detail-main">
-        <div class="detail-sprite-wrap">
-          <img src="${frontSprite(mon)}" alt="" />
-          ${inTeam ? `<span class="detail-badge">En el equipo</span>` : ""}
-          <button type="button" class="detail-trash" id="btn-release" aria-label="Liberar Pokémon">🗑</button>
-        </div>
+      <div class="detail-hero" style="background-image:url('${sceneForMon(mon)}')">
+        <div class="detail-hero-shade"></div>
+        <img class="detail-hero-art" src="${artSprite(mon)}" alt="" draggable="false" ${artFallback(mon)} />
+        ${mon.shiny ? `<span class="detail-hero-shiny">✦</span>` : ""}
+        ${inTeam ? `<span class="detail-badge">En el equipo</span>` : ""}
+        <button type="button" class="detail-btn-txt detail-lock-fab ${mon.locked ? "on" : ""}" id="btn-lock">${mon.locked ? "Bloqueado" : "Bloquear"}</button>
+        <button type="button" class="detail-btn-txt detail-trash" id="btn-release">Liberar</button>
+      </div>
+
+      <div class="detail-main detail-main-below">
         <div class="detail-info">
+          <div class="detail-name-row">
+            <div class="detail-name-left">
+              <span class="detail-name-big">${mon.nameEs || mon.name}</span>
+              <span class="detail-name-lv">Nv. ${mon.level}</span>
+            </div>
+            <div class="detail-types">${types}</div>
+          </div>
           <div class="detail-genus">${genus}</div>
-          <div class="detail-types">${types}<button type="button" class="detail-lock ${mon.locked ? "on" : ""}" id="btn-lock">${mon.locked ? "🔒 Bloqueado" : "🔓 Bloquear"}</button></div>
-          <div class="detail-boxes">
-            <div class="dbox"><span class="l">Nivel</span><span class="v">Nv. ${mon.level}</span></div>
-            <div class="dbox"><span class="l">PS</span><span class="v">${mon.currentHp}/${mon.maxHp}</span></div>
-            <button type="button" class="dbox dbox-nature" id="nature-box"><span class="l">Naturaleza ⓘ</span><span class="v">${(getNature(mon.natureIndex ?? 0).nameEs)}</span></button>
+          <div class="detail-meta-row">
+            <div class="detail-boxes">
+              <div class="dbox"><span class="l">PS</span><span class="v">${mon.currentHp}/${mon.maxHp}</span></div>
+              <button type="button" class="dbox dbox-nature" id="nature-box"><span class="l">Naturaleza ⓘ</span><span class="v">${(getNature(mon.natureIndex ?? 0).nameEs)}</span></button>
+            </div>
           </div>
           <div class="nature-effect" id="nature-effect" hidden>${natureEffectHtml(mon.natureIndex ?? 0)}</div>
         </div>
       </div>
 
-      <div class="detail-moves">
+      <button type="button" class="detail-moves-toggle" id="moves-toggle">
+        MOVIMIENTOS <span class="moves-count">(${(mon.moves||[]).length})</span>
+        <i class="st-caret" id="moves-caret">▾</i>
+      </button>
+      <div class="detail-moves" id="moves-body">
         ${movesHtml}
       </div>
 
@@ -145,8 +161,8 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
     const nat = getNature(mon.natureIndex ?? 0);
     const cls = nat.up === key ? "up" : nat.down === key ? "down" : "";
     const mark = cls === "up" ? ` <b class="nat-up">▲</b>` : cls === "down" ? ` <b class="nat-down">▼</b>` : "";
-    const col = pct < 35 ? "#f08a3c" : pct < 65 ? "#e6bd3a" : "#4cc26a";
-    return `<div class="stat-row"><span class="sr-l">${label}${mark}</span><span class="sr-v ${cls}">${v}</span><div class="stat-bar"><div style="width:${pct}%;background:${col}"></div></div></div>`;
+    // El color lo pone el CSS (gradiente naranja estilo original)
+    return `<div class="stat-row"><span class="sr-l">${label}${mark}</span><span class="sr-v ${cls}">${v}</span><div class="stat-bar"><div style="width:${pct}%"></div></div></div>`;
   }
 
   document.body.appendChild(overlay);
@@ -156,6 +172,21 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
     onClose?.();
   };
   overlay.querySelector(".detail-x").onclick = close;
+  const mvTg = overlay.querySelector("#moves-toggle");
+  const mvBody = overlay.querySelector("#moves-body");
+  const mvCaret = overlay.querySelector("#moves-caret");
+  if (mvTg && mvBody) {
+    // Si hay muchos movimientos, empezar colapsado
+    if ((mon.moves || []).length > 4) {
+      mvBody.hidden = true;
+      if (mvCaret) mvCaret.textContent = "▸";
+    }
+    mvTg.onclick = () => {
+      const open = mvBody.hidden;
+      mvBody.hidden = !open;
+      if (mvCaret) mvCaret.textContent = open ? "▾" : "▸";
+    };
+  }
   const stTg = overlay.querySelector("#stats-toggle");
   if (stTg) stTg.onclick = () => { const b = overlay.querySelector("#stats-body"); const h = b.classList.toggle("collapsed"); stTg.classList.toggle("closed", h); };
   overlay.addEventListener("click", (e) => {
@@ -167,7 +198,13 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
   overlay.querySelectorAll("[data-evo]").forEach(b => {
     b.onclick = async () => {
       const to = Number(b.dataset.evo);
-      if (!confirm(`¿Evolucionar a ${mon.nameEs || mon.name}?`)) return;
+      const okEvo = await showConfirm({
+        title: `¿Evolucionar a ${mon.nameEs || mon.name}?`,
+        confirmLabel: "Evolucionar",
+        cancelLabel: "Cancelar",
+        danger: false,
+      });
+      if (!okEvo) return;
       b.disabled = true; b.textContent = "…";
       const r = await window.__pokeEvolve?.(mon, to);
       if (!r?.ok) { alert(r?.reason || "No se pudo evolucionar"); b.disabled = false; b.textContent = "Evolucionar"; return; }
@@ -179,15 +216,22 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
   if (lk) lk.onclick = () => {
     mon.locked = !mon.locked;
     lk.classList.toggle("on", mon.locked);
-    lk.textContent = mon.locked ? "🔒 Bloqueado" : "🔓 Bloquear";
+    lk.textContent = mon.locked ? "Bloqueado" : "Bloquear";
+    lk.setAttribute("aria-label", mon.locked ? "Desbloquear" : "Bloquear");
     window.__pokeSave?.();
     document.dispatchEvent(new CustomEvent("poke:released"));
   };
   const rel = overlay.querySelector("#btn-release");
   if (rel) {
-    rel.onclick = () => {
+    rel.onclick = async () => {
       if (mon.locked) { alert("Este Pokémon está bloqueado. Desbloquéalo para poder liberarlo."); return; }
-      if (!confirm(`¿Liberar a ${mon.nameEs || mon.name}?`)) return;
+      const ok = await showConfirm({
+        title: `¿Liberar para siempre a ${mon.nameEs || mon.name}${mon.level != null ? ` Nv. ${mon.level}` : ""}?`,
+        confirmLabel: "Liberar",
+        cancelLabel: "Cancelar",
+        danger: true,
+      });
+      if (!ok) return;
       const fn = window.__pokeRelease;
       if (!fn) return;
       const r = fn(mon, inTeam);

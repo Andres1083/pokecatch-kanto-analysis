@@ -1,12 +1,12 @@
 // Pantalla de equipo + detalle (estilo original)
 
-import { frontSprite, iconSprite } from "../data/sprites.js?v=120";
-import { DEX_NAMES } from "../data/dex-names.js?v=120";
-import { pixelDropdown } from "./dropdown.js?v=120";
-import { cropSprite } from "./sprite-fit.js?v=120";
-import { showPokemonDetail } from "./pokemon-detail.js?v=120";
-import { TYPE_INFO } from "./collection.js?v=120";
-import { NATURES, natureLabel } from "../data/natures.js?v=120";
+import { frontSprite, iconSprite, spriteFallback } from "../data/sprites.js?v=123";
+import { DEX_NAMES } from "../data/dex-names.js?v=123";
+import { pixelDropdown } from "./dropdown.js?v=123";
+import { cropSprite } from "./sprite-fit.js?v=123";
+import { showPokemonDetail } from "./pokemon-detail.js?v=123";
+import { TYPE_INFO } from "./collection.js?v=123";
+import { NATURES, natureLabel } from "../data/natures.js?v=123";
 
 const filters = { nature: "", types: new Set(), sort: "recent", shiny: false };
 const power = (m) => ["hp", "atk", "def", "spa", "spd", "spe"].reduce((a, k) => a + (m.stats?.[k] || 0), 0);
@@ -33,7 +33,7 @@ function dispName(m) {
   return (!n || /^#?\d+$/.test(String(n))) ? (DEX_NAMES[m.id - 1] || `N.º ${m.id}`) : n;
 }
 
-const REF_ART = 48; // lado (px nativos) del dibujo más grande de los sprites locales
+const REF_ART = 64; // referencia de escala (sprites locales ahora 96×96)
 
 function xpForNext(level) {
   return Math.floor(level * level * 8 + level * 20);
@@ -65,7 +65,7 @@ export function showTeamScreen({ team, box = [], presets = null, onChange, onClo
         <div class="box-title">Mis Pokémon <small id="box-count"></small></div>
         <div class="coll-row" id="coll-row"></div>
         <div class="coll-chips">${Object.entries(TYPE_INFO).map(([k, t]) =>
-          `<button type="button" class="coll-chip" data-type="${k}" style="--c:${t.color}" title="${t.label}">${t.emoji}</button>`).join("")}</div>
+          `<button type="button" class="coll-chip" data-type="${k}" style="--c:${t.color}" title="${t.label}"><img class="type-icon" src="${t.icon}" alt="${t.label}" draggable="false" /></button>`).join("")}</div>
         <div class="coll-grid box-grid" id="box-grid"></div>
       </div>
     </div>
@@ -121,12 +121,12 @@ export function showTeamScreen({ team, box = [], presets = null, onChange, onClo
 
   // ───────── Barra fija con los 6 del equipo al bajar ─────────
   function renderSticky() {
-    stickyEl.innerHTML = Array.from({ length: 6 }, (_, i) => {
+    stickyEl.innerHTML = `<div class="ts-bar">` + Array.from({ length: 6 }, (_, i) => {
       const m = team[i];
       return m
         ? `<button type="button" class="ts-slot" data-ts="${i}" data-zone="team" data-idx="${i}" title="Toca para quitar del equipo"><img src="${iconSprite(m)}" alt="" draggable="false" /><span>Nv. ${m.level}</span></button>`
         : `<div class="ts-slot empty" data-zone="team-empty"><i>+</i></div>`;
-    }).join("");
+    }).join("") + `</div>`;
   }
   stickyEl.addEventListener("click", (e) => {
     const b = e.target.closest("[data-ts]");
@@ -137,15 +137,29 @@ export function showTeamScreen({ team, box = [], presets = null, onChange, onClo
     box.push(m);
     render(); onChange?.();
   });
-  // Se muestra cuando la cuadrícula del equipo sale de la vista
+  // Se muestra cuando la cuadrícula del equipo sale de la vista (throttled para evitar tildeo en iOS)
   const panelEl = overlay.querySelector(".team-panel");
-  const updateSticky = () => {
-    const g = grid.getBoundingClientRect(), pr = panelEl.getBoundingClientRect();
+  let stickyRaf = 0, stickyHeaderH = 0, stickyWasHidden = true;
+  const measureHeader = () => {
     const hd = panelEl.querySelector(".team-panel-header");
-    stickyEl.style.top = (hd ? hd.offsetHeight : 0) + "px";
-    stickyEl.hidden = !(g.bottom < pr.top + (hd ? hd.offsetHeight : 0) + 8);
+    stickyHeaderH = hd ? hd.offsetHeight : 0;
+    if (stickyEl.style.top !== stickyHeaderH + "px") stickyEl.style.top = stickyHeaderH + "px";
   };
+  const updateSticky = () => {
+    if (stickyRaf) return;
+    stickyRaf = requestAnimationFrame(() => {
+      stickyRaf = 0;
+      const g = grid.getBoundingClientRect(), pr = panelEl.getBoundingClientRect();
+      const shouldShow = g.bottom < pr.top + stickyHeaderH + 8;
+      if (shouldShow === !stickyWasHidden) return; // sin cambio → no tocar el DOM
+      stickyWasHidden = !shouldShow;
+      stickyEl.hidden = !shouldShow;
+    });
+  };
+  measureHeader();
   panelEl.addEventListener("scroll", updateSticky, { passive: true });
+  // Recalcular altura del header si cambia (presets, etc.)
+  new ResizeObserver(measureHeader).observe(panelEl.querySelector(".team-panel-header") || panelEl);
 
   function render() {
     const avg = team.length ? Math.round(team.reduce((s, m) => s + m.level, 0) / team.length) : 0;
@@ -183,18 +197,24 @@ export function showTeamScreen({ team, box = [], presets = null, onChange, onClo
     const types = m.types || [];
     card.style.borderColor = TYPE_INFO[types[0]]?.color || "#cbd5e1";
     const icons = types.map(t => TYPE_INFO[t]
-      ? `<span class="coll-type" style="background:${TYPE_INFO[t].color}">${TYPE_INFO[t].emoji}</span>` : "").join("");
+      ? `<span class="coll-type" title="${TYPE_INFO[t].label}"><img class="type-icon" src="${TYPE_INFO[t].icon}" alt="${TYPE_INFO[t].label}" draggable="false" /></span>` : "").join("");
     card.innerHTML = `<span class="coll-lv">Nv.${m.level}</span><span class="coll-types">${icons}</span>
-      <span class="coll-art"><img src="${frontSprite(m)}" alt="" draggable="false" /></span>${m.shiny ? `<b class="mon-shiny">✦</b>` : ""}${m.locked ? `<i class="mon-lock">🔒</i>` : ""}
+      <span class="coll-art"><img src="${frontSprite(m)}" alt="" draggable="false" ${spriteFallback(m)} /></span>${m.shiny ? `<b class="mon-shiny">✦</b>` : ""}${m.locked ? `<i class="mon-lock">🔒</i>` : ""}
       <span class="coll-name">${dispName(m)}</span>`;
     const im = card.querySelector("img");
     // Misma escala para todos (como en el original): el píxel mide igual en un Jigglypuff que en un Muk
     cropSprite(frontSprite(m)).then((c) => {
       if (!c || !im.isConnected) return;
       im.src = c.url;
-      const base = Math.max(REF_ART, c.w, c.h); // los dibujos más grandes (p. ej. variocolor remotos) se reducen para no desbordar
-      im.style.width = `${(c.w / base) * 100}%`;
-      im.style.height = `${(c.h / base) * 100}%`;
+      // Escala ENTERA (2×, 3×…) para nítidos; !important para ganar a cualquier CSS residual
+      const box = im.parentElement, side = Math.min(box.clientWidth || 96, box.clientHeight || 96);
+      const k = Math.max(1, Math.floor(side / Math.max(REF_ART, c.w, c.h)));
+      im.style.setProperty("width", `${c.w * k}px`, "important");
+      im.style.setProperty("height", `${c.h * k}px`, "important");
+      im.style.setProperty("max-width", "100%", "important");
+      im.style.setProperty("max-height", "100%", "important");
+      im.style.setProperty("image-rendering", "pixelated", "important");
+      im.style.setProperty("image-rendering", "-webkit-optimize-contrast", "important");
     });
     card.addEventListener("click", () => { if (card.dataset.justDragged) return; showPokemonDetail(m, { inTeam: false, onClose: () => {} }); });
     attachDrag(card);
@@ -205,7 +225,9 @@ export function showTeamScreen({ team, box = [], presets = null, onChange, onClo
   const row = overlay.querySelector("#coll-row");
   const SORTS = [["recent", "Más recientes primero"], ["name", "Orden alfabético (A-Z)"], ["dex", "N° de Pokédex"], ["power", "Más poderoso primero"]];
   row.appendChild(pixelDropdown({ options: SORTS, value: filters.sort, cls: "dd-sort", title: "Orden", onChange: (v) => { filters.sort = v; render(); } }));
+  /* Desplegable de naturalezas oculto por ahora (reservado para otro filtro)
   row.appendChild(pixelDropdown({ options: [["", "Naturalezas"], ...NATURES.map((_, i) => [String(i), natureLabel(i)])], value: String(filters.nature), cls: "dd-nat", title: "Naturaleza", onChange: (v) => { filters.nature = v; render(); } }));
+  */
   const shBtn = document.createElement("button");
   shBtn.type = "button"; shBtn.id = "coll-shiny"; shBtn.className = "dx-shbtn dx-shicon" + (filters.shiny ? " on" : "");
   shBtn.title = "Solo variocolor"; shBtn.setAttribute("aria-label", "Variocolor"); shBtn.innerHTML = SPARK;
@@ -231,7 +253,7 @@ export function showTeamScreen({ team, box = [], presets = null, onChange, onClo
 
     card.innerHTML = `
       <div class="team-card-types">${types}</div>
-      <img src="${frontSprite(mon)}" alt="${mon.nameEs}" draggable="false" />
+      <img src="${frontSprite(mon)}" alt="${mon.nameEs}" draggable="false" ${spriteFallback(mon)} />
       <div class="team-card-name">${dispName(mon)}</div>
       <div class="team-card-meta">Nv.${mon.level} · ${moveName}</div>
       <div class="team-card-hp"><div class="fill" style="width:${hpPct}%"></div></div>

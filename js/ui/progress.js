@@ -1,11 +1,12 @@
 // Pestaña «Progreso»: lista de gimnasios/capítulos con nivel recomendado, clima y medallas.
 
-import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=120";
-import { badgeHtml } from "./badge.js?v=120";
-import { rainTable } from "./briefing.js?v=120";
-import { pixelIcon } from "./pixel.js?v=120";
-import { BG_DATA } from "../data/backgrounds.js?v=120";
-import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=120";
+import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=123";
+import { badgeHtml } from "./badge.js?v=123";
+import { rainTable } from "./briefing.js?v=123";
+import { pixelIcon } from "./pixel.js?v=123";
+import { showTip } from "./tip.js?v=123";
+import { BG_DATA } from "../data/backgrounds.js?v=123";
+import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=123";
 
 let resolveBg = null; // lo aporta main.js (mismos fondos que el combate)
 const bgOf = (key) => (resolveBg && resolveBg(key)) || BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);
@@ -104,7 +105,7 @@ export function renderProgress(state, bgResolver) {
 /** api = { state, onOpen(i), onReplay(i) } */
 export function bindProgress(api) {
   const hp = document.getElementById("pg-help");
-  if (hp) hp.onclick = () => alert("Aventura: supera los gimnasios de cada región para avanzar. Toca un gimnasio para ver los Pokémon que aparecen (de día, de noche y con lluvia) y ↻ para volver a repetir ese capítulo.");
+  if (hp) hp.onclick = () => showTip(hp, "Aventura", "Aventura: supera los gimnasios de cada región para avanzar. Toca un gimnasio para ver los Pokémon que aparecen (de día, de noche y con lluvia) y ↻ para volver a repetir ese capítulo.");
   document.querySelectorAll("[data-league]").forEach(el => { el.onclick = () => api.onLeague?.(); });
   document.querySelectorAll("[data-open]").forEach(el => {
     el.onclick = (e) => {

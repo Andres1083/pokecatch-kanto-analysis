@@ -2,7 +2,7 @@
 // Usa el mismo motor de combate que el juego (runIdleBattle) y recorre los
 // nodos de la ruta igual que en directo: arbustos, entrenadores, "?" y centro.
 
-import { runIdleBattle } from "./idle-battle.js?v=120";
+import { runIdleBattle } from "./idle-battle.js?v=123";
 
 export const OFFLINE = {
   MAX_MS: 8 * 3600 * 1000,   // máximo de tiempo que cuenta
@@ -15,7 +15,7 @@ export const OFFLINE = {
 
 /** Combate síncrono. Aplica los PS al equipo real. Devuelve true si gana. */
 function simBattle(team, enemy) {
-  const gen = runIdleBattle(team, enemy);
+  const gen = runIdleBattle(team, enemy, { autoSwitch: true });
   let r = gen.next();
   let won = false;
   while (!r.done) {

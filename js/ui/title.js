@@ -1,7 +1,8 @@
 // Pantalla de título: sprites con movimiento, Continuar/Nueva partida, Cómo jugar, Invitado / Google.
-import { frontSprite } from "../data/sprites.js?v=120";
-import { CHANGELOG, LATEST } from "../data/changelog.js?v=120";
-import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=120";
+import { frontSprite } from "../data/sprites.js?v=123";
+import { CHANGELOG, LATEST } from "../data/changelog.js?v=123";
+import { renderChangelogList } from "./changelog-view.js?v=123";
+import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=123";
 
 const BALLS = ["poke-ball", "great-ball", "ultra-ball"];
 const HOWTO = [
@@ -73,8 +74,7 @@ export function showTitle({ hasSave, onContinue, onNew }) {
     const d = document.createElement("div");
     d.className = "ttl-modal";
     d.innerHTML = `<div class="ttl-card"><button class="ttl-x" aria-label="Cerrar">✕</button><h2>Changelogs</h2>
-      ${CHANGELOG.map((c) => `<div class="ttl-how ttl-log"><div><b>v${c.v} · ${esc(c.title)}</b><small>${esc(c.date)}</small>
-        <ul>${c.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div></div>`).join("")}
+      <div class="ttl-cl">${renderChangelogList(CHANGELOG)}</div>
       <button class="ttl-btn ttl-primary" style="margin-top:.6rem;width:100%">CERRAR</button></div>`;
     d.addEventListener("click", (e) => { if (e.target === d || e.target.closest(".ttl-x,.ttl-primary")) { d.remove(); const n = document.querySelector("#t-log .ttl-new"); if (n) n.remove(); } });
     app.querySelector("#ttl").appendChild(d);

@@ -1,20 +1,35 @@
-import { DEX_NAMES } from "../data/dex-names.js?v=120";
-import { iconSprite, frontSprite } from "../data/sprites.js?v=120";
-import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=120";
-import { pixelIcon } from "./pixel.js?v=120";
-import { badgeHtml } from "./badge.js?v=120";
-import { NATURES, natureLabel } from "../data/natures.js?v=120";
-import { shinyOdds } from "../data/shiny.js?v=120";
-import { placeMenu } from "./dropdown.js?v=120";
-import { getPokemon } from "../data/pokeapi.js?v=120";
+import { DEX_NAMES } from "../data/dex-names.js?v=123";
+import { iconSprite, frontSprite } from "../data/sprites.js?v=123";
+import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=123";
+import { pixelIcon } from "./pixel.js?v=123";
+import { badgeHtml } from "./badge.js?v=123";
+import { NATURES, natureLabel } from "../data/natures.js?v=123";
+import { shinyOdds } from "../data/shiny.js?v=123";
+import { placeMenu } from "./dropdown.js?v=123";
+import { showTip } from "./tip.js?v=123";
+import { getPokemon } from "../data/pokeapi.js?v=123";
 
 /** Dos naturalezas recomendadas según las estadísticas base. */
 function recommendNatures(b) {
-  const phys = b.atk >= b.spa;
-  const main = phys ? "atk" : "spa", off = phys ? "spa" : "atk";
+  const atk = Number(b.atk) || 0;
+  const spa = Number(b.spa) || 0;
   const find = (up, down) => NATURES.findIndex(n => n.up === up && n.down === down);
-  const first = find(main, off), second = find("spe", off);
-  return { phys, picks: [first, second], b };
+  // Empate Atk/SpA (p. ej. Mew 100/100): no inventar un lado "ganador"
+  if (atk === spa) {
+    return {
+      mode: "mixed",
+      picks: [find("atk", "spa"), find("spa", "atk")], // Firme y Modesta
+      b: { ...b, atk, spa },
+    };
+  }
+  const phys = atk > spa;
+  const main = phys ? "atk" : "spa";
+  const off = phys ? "spa" : "atk";
+  return {
+    mode: phys ? "phys" : "spec",
+    picks: [find(main, off), find("spe", off)], // ofensiva + velocidad
+    b: { ...b, atk, spa },
+  };
 }
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -179,7 +194,15 @@ function openNaturePicker(state, id, refresh) {
           p.stats.forEach(s => { b[({ attack: "atk", "special-attack": "spa", speed: "spe" })[s.stat.name] || s.stat.name] = s.base_stat; });
           const r = recommendNatures(b);
           const [n1, n2] = r.picks.map(i => natureLabel(i));
-          tip.innerHTML = `<b>Recomendadas:</b><br>1. ${n1}<br>2. ${n2}<br><small>${DEX_NAMES[id - 1]} pega más con ${r.phys ? "Ataque (físico)" : "At. Esp. (especial)"} (${b.atk} / ${b.spa} base). La 1.ª sube ese ataque; la 2.ª sube la Velocidad. Ambas bajan el ataque que no usa.</small>`;
+          let why;
+          if (r.mode === "mixed") {
+            why = `${DEX_NAMES[id - 1]} es equilibrado (Atk ${b.atk} = SpA ${b.spa}). Sirve tanto físico como especial: 1.ª sube Ataque y baja At. Esp.; 2.ª al revés. Elige según el set que quieras.`;
+          } else if (r.mode === "phys") {
+            why = `${DEX_NAMES[id - 1]} pega más de físico (Atk ${b.atk} > SpA ${b.spa}). 1.ª sube Ataque; 2.ª sube Velocidad. Ambas bajan At. Esp.`;
+          } else {
+            why = `${DEX_NAMES[id - 1]} pega más de especial (SpA ${b.spa} > Atk ${b.atk}). 1.ª sube At. Esp.; 2.ª sube Velocidad. Ambas bajan Ataque.`;
+          }
+          tip.innerHTML = `<b>Recomendadas:</b><br>1. ${n1}<br>2. ${n2}<br><small>${why}</small>`;
           tip.dataset.done = "1";
         }).catch(() => { tip.textContent = "No pude consultar las estadísticas ahora (sin conexión). Prueba de nuevo más tarde."; });
       }
@@ -218,7 +241,7 @@ export function bindDex(state) {
   const sb = document.getElementById("dx-shiny");
   if (sb) sb.onclick = () => { dexFilter.shiny = !dexFilter.shiny; sb.classList.toggle("on", dexFilter.shiny); upd(); };
   const chip = document.getElementById("dx-shchip");
-  if (chip) chip.onclick = (e) => { e.stopPropagation(); alert(`✦ Variocolores: cada encuentro salvaje tiene ${shinyOdds()} de probabilidad de ser variocolor. Los variocolor siempre se guardan, sin importar el filtro de naturaleza.`); };
+  if (chip) chip.onclick = (e) => { e.stopPropagation(); showTip(chip, "Variocolores", `Cada encuentro salvaje tiene ${shinyOdds()} de probabilidad de ser variocolor. Los variocolor siempre se guardan, sin importar el filtro de naturaleza.`); };
   document.getElementById("dx-grid").onclick = (e) => {
     const cell = e.target.closest(".dx-pick");
     if (cell) openNaturePicker(state, Number(cell.dataset.id), upd);
@@ -226,7 +249,7 @@ export function bindDex(state) {
   const tg = document.getElementById("dx-toggle");
   if (tg) tg.onclick = () => { dexFilter.open = !dexFilter.open; document.querySelector(".dx-kanto").classList.toggle("closed", !dexFilter.open); };
   const hp = document.getElementById("dx-help");
-  if (hp) hp.onclick = () => alert("Pokédex: los Pokémon capturados se ven en color, los vistos en sombra oscura y el resto como silueta. Busca por nombre o número.");
+  if (hp) hp.onclick = () => showTip(hp, "Pokédex", "Los Pokémon capturados se ven en color, los vistos en sombra oscura y el resto como silueta. Busca por nombre o número.");
 }
 
 // ───────── Ficha de entrenador ─────────

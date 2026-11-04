@@ -1,29 +1,35 @@
 // "Mis Pokémon": lista en cuadrícula con filtros (adaptada de Pokemaniakos).
 
-import { frontSprite } from "../data/sprites.js?v=120";
-import { NATURES, natureLabel } from "../data/natures.js?v=120";
-import { showPokemonDetail } from "./pokemon-detail.js?v=120";
+import { frontSprite } from "../data/sprites.js?v=123";
+import { NATURES, natureLabel } from "../data/natures.js?v=123";
+import { showPokemonDetail } from "./pokemon-detail.js?v=123";
 
 export const TYPE_INFO = {
-  normal:   { label: "Normal",    color: "#A8A878", emoji: "⚪" },
-  fire:     { label: "Fuego",     color: "#F08030", emoji: "🔥" },
-  water:    { label: "Agua",      color: "#6890F0", emoji: "💧" },
-  electric: { label: "Eléctrico", color: "#F8D030", emoji: "⚡" },
-  grass:    { label: "Planta",    color: "#78C850", emoji: "🌿" },
-  ice:      { label: "Hielo",     color: "#98D8D8", emoji: "❄️" },
-  fighting: { label: "Lucha",     color: "#C03028", emoji: "🥊" },
-  poison:   { label: "Veneno",    color: "#A040A0", emoji: "☠️" },
-  ground:   { label: "Tierra",    color: "#E0C068", emoji: "🌍" },
-  flying:   { label: "Volador",   color: "#A890F0", emoji: "🕊️" },
-  psychic:  { label: "Psíquico",  color: "#F85888", emoji: "🔮" },
-  bug:      { label: "Bicho",     color: "#A8B820", emoji: "🐛" },
-  rock:     { label: "Roca",      color: "#B8A038", emoji: "🪨" },
-  ghost:    { label: "Fantasma",  color: "#705898", emoji: "👻" },
-  dragon:   { label: "Dragón",    color: "#7038F8", emoji: "🐉" },
-  dark:     { label: "Siniestro", color: "#705848", emoji: "🌑" },
-  steel:    { label: "Acero",     color: "#B8B8D0", emoji: "⚙️" },
-  fairy:    { label: "Hada",      color: "#EE99AC", emoji: "✨" },
+  normal:   { label: "Normal",    color: "#A8A878", emoji: "⚪", icon: "assets/ui/icons/types/normal.svg" },
+  fire:     { label: "Fuego",     color: "#F08030", emoji: "🔥", icon: "assets/ui/icons/types/fire.svg" },
+  water:    { label: "Agua",      color: "#6890F0", emoji: "💧", icon: "assets/ui/icons/types/water.svg" },
+  electric: { label: "Eléctrico", color: "#F8D030", emoji: "⚡", icon: "assets/ui/icons/types/electric.svg" },
+  grass:    { label: "Planta",    color: "#78C850", emoji: "🌿", icon: "assets/ui/icons/types/grass.svg" },
+  ice:      { label: "Hielo",     color: "#98D8D8", emoji: "❄️", icon: "assets/ui/icons/types/ice.svg" },
+  fighting: { label: "Lucha",     color: "#C03028", emoji: "🥊", icon: "assets/ui/icons/types/fighting.svg" },
+  poison:   { label: "Veneno",    color: "#A040A0", emoji: "☠️", icon: "assets/ui/icons/types/poison.svg" },
+  ground:   { label: "Tierra",    color: "#E0C068", emoji: "🌍", icon: "assets/ui/icons/types/ground.svg" },
+  flying:   { label: "Volador",   color: "#A890F0", emoji: "🕊️", icon: "assets/ui/icons/types/flying.svg" },
+  psychic:  { label: "Psíquico",  color: "#F85888", emoji: "🔮", icon: "assets/ui/icons/types/psychic.svg" },
+  bug:      { label: "Bicho",     color: "#A8B820", emoji: "🐛", icon: "assets/ui/icons/types/bug.svg" },
+  rock:     { label: "Roca",      color: "#B8A038", emoji: "🪨", icon: "assets/ui/icons/types/rock.svg" },
+  ghost:    { label: "Fantasma",  color: "#705898", emoji: "👻", icon: "assets/ui/icons/types/ghost.svg" },
+  dragon:   { label: "Dragón",    color: "#7038F8", emoji: "🐉", icon: "assets/ui/icons/types/dragon.svg" },
+  dark:     { label: "Siniestro", color: "#705848", emoji: "🌑", icon: "assets/ui/icons/types/dark.svg" },
+  steel:    { label: "Acero",     color: "#B8B8D0", emoji: "⚙️", icon: "assets/ui/icons/types/steel.svg" },
+  fairy:    { label: "Hada",      color: "#EE99AC", emoji: "✨", icon: "assets/ui/icons/types/fairy.svg" },
 };
+
+export function typeIconHtml(key, { size = 28, className = "" } = {}) {
+  const t = TYPE_INFO[key];
+  if (!t) return "";
+  return `<img class="type-icon ${className}" src="${t.icon}" alt="${t.label}" title="${t.label}" width="${size}" height="${size}" draggable="false" />`;
+}
 
 const filters = { nature: "", types: new Set(), sort: "recent" };
 
@@ -60,7 +66,7 @@ export function showCollection({ team, box = [] }) {
       </div>
       <div class="coll-chips" id="coll-types">
         ${Object.entries(TYPE_INFO).map(([k, t]) =>
-          `<button type="button" class="coll-chip" data-type="${k}" style="--c:${t.color}" title="${t.label}">${t.emoji}</button>`).join("")}
+          `<button type="button" class="coll-chip" data-type="${k}" style="--c:${t.color}" title="${t.label}"><img class="type-icon" src="${t.icon}" alt="${t.label}" draggable="false" /></button>`).join("")}
       </div>
       <div class="coll-grid" id="coll-grid"></div>
     </div>`;
@@ -90,7 +96,7 @@ export function showCollection({ team, box = [] }) {
       const types = m.types || [];
       const border = TYPE_INFO[types[0]]?.color || "#cbd5e1";
       const icons = types.map(t => TYPE_INFO[t]
-        ? `<span class="coll-type" style="background:${TYPE_INFO[t].color}" title="${TYPE_INFO[t].label}">${TYPE_INFO[t].emoji}</span>` : "").join("");
+        ? `<span class="coll-type" title="${TYPE_INFO[t].label}"><img class="type-icon" src="${TYPE_INFO[t].icon}" alt="${TYPE_INFO[t].label}" draggable="false" /></span>` : "").join("");
       return `
         <button type="button" class="coll-card" data-i="${i}" style="border-color:${border}">
           <span class="coll-lv">Nv.${m.level}</span>

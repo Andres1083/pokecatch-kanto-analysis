@@ -1,6 +1,6 @@
 // Motor de combate IDLE (automático en la ruta)
 
-import { calculateDamage, chooseEnemyMove } from "./battle.js?v=120";
+import { calculateDamage, chooseEnemyMove, pickBestAlly } from "./battle.js?v=123";
 
 
 // ── Estados alterados (envenenamiento / parálisis) ──
@@ -15,7 +15,8 @@ function tryInflict(target, move) {
 /**
  * Combate idle. Los índices teamIndex corresponden a playerTeam original.
  */
-export function* runIdleBattle(playerTeam, enemy, { speed = 1 } = {}) {
+export function* runIdleBattle(playerTeam, enemy, opts = {}) {
+  const { speed = 1 } = opts;
   const allies = playerTeam.map((m, i) => ({
     ...m,
     currentHp: m.currentHp,
@@ -24,7 +25,8 @@ export function* runIdleBattle(playerTeam, enemy, { speed = 1 } = {}) {
   }));
   const foe = { ...enemy, currentHp: enemy.currentHp, maxHp: enemy.maxHp };
 
-  let allyIndex = allies.findIndex(a => a.currentHp > 0);
+  const autoSwitch = opts.autoSwitch !== false; // por defecto activo
+  let allyIndex = autoSwitch ? pickBestAlly(allies, foe) : allies.findIndex(a => a.currentHp > 0);
   if (allyIndex < 0) {
     yield { type: "defeat" };
     return { won: false, allies, foe };
@@ -43,7 +45,7 @@ export function* runIdleBattle(playerTeam, enemy, { speed = 1 } = {}) {
     turn++;
     const ally = allies[allyIndex];
     if (!ally || ally.currentHp <= 0) {
-      allyIndex = allies.findIndex(a => a.currentHp > 0);
+      allyIndex = autoSwitch ? pickBestAlly(allies, foe) : allies.findIndex(a => a.currentHp > 0);
       if (allyIndex < 0) break;
       continue;
     }
@@ -90,7 +92,7 @@ export function* runIdleBattle(playerTeam, enemy, { speed = 1 } = {}) {
       yield { type: "status-dmg", status: "psn", pokemon: ally, side: "ally", teamIndex: allyIndex, damage: dmg, hpAfter: ally.currentHp };
       if (ally.currentHp <= 0) {
         yield { type: "faint", pokemon: ally, side: "ally", teamIndex: allyIndex };
-        const next = allies.findIndex(a => a.currentHp > 0);
+        const next = autoSwitch ? pickBestAlly(allies, foe) : allies.findIndex(a => a.currentHp > 0);
         if (next < 0) break;
         allyIndex = next;
         yield { type: "switch", pokemon: allies[next], teamIndex: next };
@@ -134,7 +136,7 @@ export function* runIdleBattle(playerTeam, enemy, { speed = 1 } = {}) {
         };
         if (target.currentHp <= 0) {
           yield { type: "faint", pokemon: target, side: "ally", teamIndex: tIndex };
-          const next = allies.findIndex(a => a.currentHp > 0);
+          const next = autoSwitch ? pickBestAlly(allies, foe) : allies.findIndex(a => a.currentHp > 0);
           if (next < 0) break;
           allyIndex = next;
           yield {

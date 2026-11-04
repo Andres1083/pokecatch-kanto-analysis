@@ -1,10 +1,11 @@
 // Casino: tragaperras + tienda de premios (fichas)
-import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=120";
-import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=120";
-import { frontSprite } from "../data/sprites.js?v=120";
-import { DEX_NAMES } from "../data/dex-names.js?v=120";
-import { itemImg } from "./item-icon.js?v=120";
-import { dexSets } from "./dex.js?v=120";
+import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=123";
+import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=123";
+import { frontSprite } from "../data/sprites.js?v=123";
+import { DEX_NAMES } from "../data/dex-names.js?v=123";
+import { itemImg } from "./item-icon.js?v=123";
+import { dexSets } from "./dex.js?v=123";
+import { showTip } from "./tip.js?v=123";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const ui = { tab: "slots", mult: 1, spinning: false, auto: false, grid: null };
@@ -87,14 +88,16 @@ export function renderCasino(state) {
     return `<div class="cs-lockmsg"><div class="cs-lockic">🔒</div><h3>Casino de Ciudad Azulona</h3><p>Se abre al conseguir la medalla Trueno (${CASINO_BADGES}.ª) y poder viajar a Ciudad Azulona.</p></div>`;
   }
   return `
-  <div class="cs-wrap">
-    <div class="cs-top"><button type="button" class="cs-q" id="cs-help">?</button><span class="cs-fichas"><b id="cs-fichas">${fmt(state.fichas || 0)}</b> fichas</span></div>
+  <div class="cs-wrap"><div class="cs-frame">
+    <header class="cs-fhead"><img class="cs-fic" src="${COIN_CASE}" alt="" width="34" height="34"><div class="cs-ftit"><h2>Casino de Ciudad Azulona</h2><span><b id="cs-fichas">${fmt(state.fichas || 0)}</b> fichas</span></div><button type="button" class="cs-q" id="cs-help" aria-label="Ayuda">?</button></header>
+    <div class="cs-fbody">
     <div class="cs-tabs">
       <button type="button" data-cst="slots" class="${ui.tab === "slots" ? "on" : ""}">TRAGAPERRAS</button>
       <button type="button" class="lock" disabled>PACHINKO 🔒</button>
       <button type="button" data-cst="shop" class="${ui.tab === "shop" ? "on" : ""}">TIENDA</button>
     </div>
     ${ui.tab === "shop" ? shopHtml(state) : slotsHtml(state)}
+    </div></div>
   </div>`;
 }
 
@@ -108,7 +111,7 @@ export function bindCasino(api) {
   const rerender = () => { root.innerHTML = renderCasino(state); };
   root.addEventListener("click", async (e) => {
     const t = e.target;
-    if (t.closest("#cs-help, #cs-help2")) return alert(RULES);
+    { const hb = t.closest("#cs-help, #cs-help2"); if (hb) return showTip(hb, "Casino", RULES); }
     const tab = t.closest("[data-cst]");
     if (tab) { ui.tab = tab.dataset.cst; ui.auto = false; rerender(); return; }
     if (t.closest("#cs-mult")) {

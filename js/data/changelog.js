@@ -1,5 +1,21 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.1", date: "3 nov 2026", title: "PC sin tileteo", items: [
+    "PC: al bajar por la lista, la barra fija con tu equipo ya no mueve la pantalla (antes aparecía y desaparecía empujando el scroll).",
+  ] },
+  { v: "3.0", date: "3 nov 2026", title: "Deslizar entre pestañas y casino enmarcado", items: [
+    "Móvil en vertical: desliza a izquierda/derecha para pasar de Aventura → Progreso → PC → Pokédex → Mochila (y volver).",
+    "PC: se quita la ✕, queda solo el botón Volver.",
+    "Casino: ahora va dentro de un marco rosado con título, fichas y pestañas.",
+    "Los botones «?» abren un globo de ayuda en vez del aviso del navegador.",
+    "Detalle del Pokémon: barras de estadísticas gruesas y redondeadas como el original (PS amarillo, resto naranja).",
+  ] },
+  { v: "2.9", date: "3 nov 2026", title: "Opciones con pestañas", items: [
+    "Ajustes: nueva ventana con pestañas (General, Guardado, Novedades, Avanzado) en vez del cuadro de texto.",
+    "Changelogs: la última versión abierta y las anteriores plegadas con una flecha.",
+    "Fondo de Poké Balls en diagonal (sin movimiento) también dentro del juego.",
+    "PC: sprites con escala entera (más nítidos) y se oculta el desplegable de naturalezas.",
+  ] },
   { v: "2.8", date: "3 nov 2026", title: "Pokédex 4 por fila y ajustes", items: [
     "Pokédex: 4 Pokémon por fila.",
     "Repetir un gimnasio ya ganado ya no vuelve a mostrar la felicitación de medalla.",
