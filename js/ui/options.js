@@ -1,7 +1,8 @@
 // Ventana de Opciones con pestañas (como el original): General, Guardado, Novedades y Avanzado.
-import { CHANGELOG, LATEST } from "../data/changelog.js?v=126";
-import { getSession, signOut } from "../engine/auth.js?v=126";
-import { renderChangelogList } from "./changelog-view.js?v=126";
+import { CHANGELOG, LATEST } from "../data/changelog.js?v=128";
+import { showConfirm } from "./confirm.js?v=128";
+import { getSession, signOut } from "../engine/auth.js?v=128";
+import { renderChangelogList } from "./changelog-view.js?v=128";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const SEEN_KEY = "pokecatch-kanto-changelog";
@@ -85,7 +86,7 @@ export function showOptions(api) {
     if (act === "save") { api.saveGame(); a.querySelector("small").textContent = "¡Guardado!"; }
     else if (act === "home") { api.saveGame(); location.reload(); }
     else if (act === "out") { signOut(); api.saveGame(); location.reload(); }
-    else if (act === "wipe") { if (confirm("Se borrará tu partida guardada en este dispositivo. ¿Seguro?")) { api.clearSave(); location.reload(); } }
+    else if (act === "wipe") { showConfirm({ title: "Se borrará tu partida guardada en este dispositivo. ¿Seguro?", confirmLabel: "Borrar", danger: true }).then(ok => { if (ok) { api.clearSave(); location.reload(); } }); }
     else if (act === "log") {
       try { localStorage.setItem(SEEN_KEY, LATEST); } catch (_) {}
       const p = root.querySelector(".opt-panel");

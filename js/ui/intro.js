@@ -6,7 +6,7 @@ const DIALOGUES = [
   "Pero dime... ¿qué personaje te representa mejor?",
 ];
 
-import { starterMarkup, playStarterReveal } from "./starter-reveal.js?v=126";
+import { starterMarkup, playStarterReveal } from "./starter-reveal.js?v=128";
 
 export function startIntro({ onComplete }) {
   const app = document.getElementById("app");

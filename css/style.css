@@ -7464,3 +7464,9 @@ body { background-color: transparent !important; }
 .cr-bic { flex: none; width: 52px; height: 52px; border-radius: 50%; background: #20243a; display: grid; place-items: center; }
 .cr-hint { font-size: 1.05rem; }
 .cr-skip { font-size: 1.05rem; }
+
+/* v127: detalle de capítulo con objetos y secciones por hora/clima */
+.bf-items { display: flex; flex-wrap: wrap; gap: 8px; }
+.bf-item { width: 44px; height: 44px; border-radius: 12px; background: #151a30; border: 2px dashed #3a4268; display: grid; place-items: center; opacity: .75; }
+.bf-item.once { border-style: solid; border-color: #b58a1e; opacity: 1; }
+.bf-item.got { border-color: #3f7d4a; }

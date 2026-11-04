@@ -1,5 +1,12 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.6", date: "4 nov 2026", title: "Avisos con el estilo del juego", items: [
+    "Repetir capítulo, borrar partida, desbloquear incubadora y los avisos de liberar/evolucionar/guardería ya usan el modal del juego en lugar del cuadro del navegador.",
+  ] },
+  { v: "3.5", date: "4 nov 2026", title: "Detalle de capítulo por franja y objetos", items: [
+    "Progreso → detalle de un gimnasio: ahora muestra «Objetos que se encuentran» (el objeto único del capítulo y los que dan los «?»).",
+    "Los Pokémon se reparten sin repetirse: generales, y los que salen sobre todo de Noche, de Día, con Lluvia o con Tormenta.",
+  ] },
   { v: "3.4", date: "4 nov 2026", title: "Canje del casino más fiel", items: [
     "El Pokémon del canje ahora aparece como GIF animado y más grande.",
     "Plataforma azul pixelada y tipografía pixel más grande, como el original.",

@@ -1,4 +1,4 @@
-import { evaluateAchievements, FRAME_REWARD_MAP } from "../data/achievements.js?v=126";
+import { evaluateAchievements, FRAME_REWARD_MAP } from "../data/achievements.js?v=128";
 
 /**
  * Marcos estilo Poke'Catch original (pixel→SVG→CSS).

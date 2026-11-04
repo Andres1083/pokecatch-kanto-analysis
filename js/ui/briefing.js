@@ -1,8 +1,10 @@
 // Pantalla previa al gimnasio: nivel recomendado, premio y Pokémon que aparecen con su %.
 
-import { frontSprite } from "../data/sprites.js?v=126";
-import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=126";
-import { pixelIcon } from "./pixel.js?v=126";
+import { frontSprite } from "../data/sprites.js?v=128";
+import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=128";
+import { pixelIcon } from "./pixel.js?v=128";
+import { ITEMS } from "../data/items.js?v=128";
+import { itemImg } from "./item-icon.js?v=128";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const pctLabel = (p) => (p < 1 ? "<1 %" : `${p >= 10 ? Math.round(p) : p.toFixed(1).replace(".", ",")} %`);
@@ -17,30 +19,54 @@ function chapterTable(segs, ctx) {
   return [...acc.entries()].map(([id, pct]) => ({ id, pct })).sort((a, b) => b.pct - a.pct);
 }
 
-export function rainTable(segs) {
+export function rainTable(segs, weather = "rain") {
   const wildSegs = segs.filter(s => s.kind === "route" && s.areas.length);
   const out = new Map(), rainSegs = [];
   for (const seg of wildSegs) {
     const base = new Set(encounterTable(seg, { period: "day" }).map(e => e.id));
-    const extra = encounterTable(seg, { period: "day", weather: "rain" }).filter(e => !base.has(e.id));
+    const extra = encounterTable(seg, { period: "day", weather }).filter(e => !base.has(e.id));
     if (extra.length) rainSegs.push(seg.name);
     for (const e of extra) out.set(e.id, Math.max(out.get(e.id) || 0, e.pct));
   }
   return { list: [...out.entries()].map(([id, pct]) => ({ id, pct })), rainSegs };
 }
 
-/** Secciones de especies: general + exclusivas de noche / lluvia / día. */
+/** Secciones de especies: general + noche / día / lluvia / tormenta (como el original, sin repetir especies). */
 function sections(segs) {
   const day = chapterTable(segs, { period: "day" });
   const night = chapterTable(segs, { period: "night" });
   const { list: rain, rainSegs } = rainTable(segs);
-  const dayIds = new Set(day.map(e => e.id)), nightIds = new Set(night.map(e => e.id));
-  const general = day.filter(e => nightIds.has(e.id));
-  const dayOnly = day.filter(e => !nightIds.has(e.id));
-  const nightOnly = night.filter(e => !dayIds.has(e.id));
-  const rainOnly = rain.filter(e => !dayIds.has(e.id) && !nightIds.has(e.id));
-  const ids = new Set([...day, ...night, ...rain].map(e => e.id));
-  return { general, dayOnly, nightOnly, rainOnly, rainSegs, ids: [...ids] };
+  const dayMap = new Map(day.map(e => [e.id, e.pct])), nightMap = new Map(night.map(e => [e.id, e.pct]));
+  const all = new Set([...dayMap.keys(), ...nightMap.keys()]);
+  const nightOnly = [], dayOnly = [], general = [];
+  for (const id of all) {
+    const d = dayMap.get(id) || 0, n = nightMap.get(id) || 0;
+    const e = { id, pct: Math.max(d, n) };
+    if (n > d * 1.35 + 0.01) nightOnly.push(e);       // aparece sobre todo de noche
+    else if (d > n * 1.35 + 0.01) dayOnly.push(e);     // aparece sobre todo de día
+    else general.push(e);
+  }
+  const byPct = (a, b) => b.pct - a.pct;
+  nightOnly.sort(byPct); dayOnly.sort(byPct); general.sort(byPct);
+  const rainOnly = rain.filter(e => !all.has(e.id));
+  // Tormenta: especies que solo salen con tormenta (si el juego distingue lluvia de tormenta)
+  const stormList = rainTable(segs, "storm").list.filter(e => !all.has(e.id) && !rainOnly.some(r => r.id === e.id));
+  const ids = new Set([...all, ...rain.map(e => e.id), ...stormList.map(e => e.id)]);
+  return { general, dayOnly, nightOnly, rainOnly, stormOnly: stormList, rainSegs, ids: [...ids] };
+}
+
+/** Objetos del capítulo: el que se encuentra una sola vez (find) + los que dan los nodos «?». */
+function itemsOf(segs, have) {
+  const found = segs.map(s => s.find).filter(Boolean);
+  const hasQ = segs.some(s => s.kind === "route" && s.item);
+  const list = [];
+  for (const f of found) if (f.item && ITEMS[f.item]) list.push({ id: f.item, once: true, got: !!(have.bag && have.bag[f.item] > 0) || !!(have.flags && f.once && have.flags.includes(f.once)) });
+  if (hasQ) {
+    const pool = Object.entries(ITEMS).filter(([, v]) => v.cat !== "key").sort((a, b) => (b[1].weight || 1) - (a[1].weight || 1));
+    const pick = ["berry-oran", "candy-s", "candy-m", "berry-pecha", "candy-l", "rare-candy", "stone-fire", "vit-hp"].filter(id => ITEMS[id]);
+    for (const id of (pick.length ? pick : pool.slice(0, 6).map(([k]) => k)).slice(0, 6)) list.push({ id, once: false, got: !!(have.bag && have.bag[id] > 0) });
+  }
+  return list;
 }
 
 const tileHtml = (id, owned) => `<div class="bf-tile ${owned.has(id) ? "own" : ""}"><img src="${frontSprite(id)}" alt="#${id}" /><span class="bf-ball"></span></div>`;
@@ -57,7 +83,7 @@ function overlayShell(inner, color) {
  * Detalle de capítulo.
  * status: "done" | "current" | "todo" | null · onAction: acción del botón inferior (si actionLabel).
  */
-export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel = "CONTINUAR", status = null, actionLabel = null, onAction = null, badgeHtmlStr = null, color = null }) {
+export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel = "CONTINUAR", status = null, actionLabel = null, onAction = null, badgeHtmlStr = null, color = null, have = {} }) {
   return new Promise((resolve) => {
     const gym = segs.find(s => s.gym)?.gym;
     const now = periodOf();
@@ -69,7 +95,8 @@ export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel
 
     const blocks = [
       { key: "night", icon: "🌙", label: "NOCHE", list: sec.nightOnly, active: nowKey === "night" },
-      { key: "rain", icon: "🌧️", label: "LLUVIA", list: sec.rainOnly, active: rainNow },
+      { key: "rain", icon: "🌧️", label: "LLUVIA", list: sec.rainOnly, active: weather === "rain" },
+      { key: "storm", icon: "⛈️", label: "TORMENTA", list: sec.stormOnly, active: weather === "storm" },
       { key: "day", icon: "☀️", label: "DÍA", list: sec.dayOnly, active: nowKey === "day" },
     ].filter(b => b.list.length).sort((a, b) => Number(b.active) - Number(a.active));
     const blockHtml = (b) => `
@@ -77,6 +104,10 @@ export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel
         <div class="bf-sec-head"><span>${b.icon} ${b.label}</span>${b.active ? `<b class="bf-now">AHORA</b>` : ""}</div>
         <div class="bf-tiles">${b.list.map(e => tileHtml(e.id, owned)).join("")}</div>
       </div>`;
+    const its = itemsOf(segs, have);
+    const itemsHtml = its.length ? `
+          <div class="bf-head2"><span>OBJETOS QUE SE ENCUENTRAN</span><small>${its.some(i => i.once) ? `${its.filter(i => i.once && i.got).length}/${its.filter(i => i.once).length} encontrados` : ""}</small></div>
+          <div class="bf-items">${its.map(i => `<span class="bf-item ${i.once ? "once" : ""} ${i.got ? "got" : ""}" title="${ITEMS[i.id].name}">${itemImg(i.id, 30)}</span>`).join("")}</div>` : "";
     const periodChip = nowKey === "night" ? "🌙 Noche" : "☀️ Día";
 
     const overlay = overlayShell(`
@@ -95,8 +126,9 @@ export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel
             <span class="bf-chip blue2">${periodChip}</span>
           </div>` : ""}
           ${sec.rainSegs.length ? `<div class="bf-chip blue">🌧️ Lluvia : ${sec.rainSegs.join(", ")}</div>` : ""}
+          ${itemsHtml}
           <div class="bf-head2"><span>POKÉMON QUE SE ENCUENTRAN</span><small>${ownedCount}/${sec.ids.length} capturados</small></div>
-          <div class="bf-tiles bf-general">${sec.general.map(e => tileHtml(e.id, owned)).join("")}</div>
+          ${sec.general.length ? `<div class="bf-tiles bf-general">${sec.general.map(e => tileHtml(e.id, owned)).join("")}</div>` : ""}
           ${blocks.map(blockHtml).join("")}
           <div class="bf-gap"></div>
         </div>

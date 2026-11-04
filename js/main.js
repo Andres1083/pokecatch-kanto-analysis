@@ -1,53 +1,54 @@
-import { startIntro } from "./ui/intro.js?v=126";
-import { showTitle } from "./ui/title.js?v=126";
-import { showOptions } from "./ui/options.js?v=126";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=126";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=126";
-import { LEGENDS } from "./data/legends.js?v=126";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=126";
+import { startIntro } from "./ui/intro.js?v=128";
+import { showConfirm } from "./ui/confirm.js?v=128";
+import { showTitle } from "./ui/title.js?v=128";
+import { showOptions } from "./ui/options.js?v=128";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=128";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=128";
+import { LEGENDS } from "./data/legends.js?v=128";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=128";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=126";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=126";
-import { runIdleBattle } from "./engine/idle-battle.js?v=126";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=126";
-import { showTeamScreen } from "./ui/team.js?v=126";
-import { showCollection } from "./ui/collection.js?v=126";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=126";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=126";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=126";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=126";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=126";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=126";
-import { Sfx } from "./engine/sfx.js?v=126";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=126";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=126";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=126";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=126";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=126";
-import { SCENES } from "./data/scenes.js?v=126";
-import { BG_DATA } from "./data/backgrounds.js?v=126";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=126";
-import { evosOf } from "./data/evolutions.js?v=126";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=126";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=126";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=126";
-import { renderRouteBar } from "./ui/route-bar.js?v=126";
-import { renderBag, bindBag } from "./ui/bag.js?v=126";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=126";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=126";
-import { itemImg } from "./ui/item-icon.js?v=126";
-import { pixelIcon } from "./ui/pixel.js?v=126";
-import { SHINY_RATE } from "./data/shiny.js?v=126";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=126";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=126";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=126";
-import { EGG_LEVEL } from "./data/breeding.js?v=126";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=126";
-import { openAchievements } from "./ui/achievements.js?v=126";
-import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=126";
-import { casinoUnlocked } from "./data/casino.js?v=126";
-import { sceneWipe } from "./ui/transition.js?v=126";
-import { dissolve, imgReady } from "./ui/sendout.js?v=126";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=128";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=128";
+import { runIdleBattle } from "./engine/idle-battle.js?v=128";
+import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=128";
+import { showTeamScreen } from "./ui/team.js?v=128";
+import { showCollection } from "./ui/collection.js?v=128";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=128";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=128";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=128";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=128";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=128";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=128";
+import { Sfx } from "./engine/sfx.js?v=128";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=128";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=128";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=128";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=128";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=128";
+import { SCENES } from "./data/scenes.js?v=128";
+import { BG_DATA } from "./data/backgrounds.js?v=128";
+import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=128";
+import { evosOf } from "./data/evolutions.js?v=128";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=128";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=128";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=128";
+import { renderRouteBar } from "./ui/route-bar.js?v=128";
+import { renderBag, bindBag } from "./ui/bag.js?v=128";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=128";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=128";
+import { itemImg } from "./ui/item-icon.js?v=128";
+import { pixelIcon } from "./ui/pixel.js?v=128";
+import { SHINY_RATE } from "./data/shiny.js?v=128";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=128";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=128";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=128";
+import { EGG_LEVEL } from "./data/breeding.js?v=128";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=128";
+import { openAchievements } from "./ui/achievements.js?v=128";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=128";
+import { casinoUnlocked } from "./data/casino.js?v=128";
+import { sceneWipe } from "./ui/transition.js?v=128";
+import { dissolve, imgReady } from "./ui/sendout.js?v=128";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -695,7 +696,7 @@ function showChapterBriefing() {
   const owned = new Set([...state.playerTeam, ...(state.box || [])].map(m => m.id));
   const ch = CHAPTERS[state.chapter % CHAPTERS.length];
   const gymSeg = state.chapSegs.find(x => x.gym);
-  return showBriefing({ chapterName: ch.name, segs: state.chapSegs, owned, weather: state.weather, bg: sceneBg(gymSeg?.bg) });
+  return showBriefing({ chapterName: ch.name, segs: state.chapSegs, owned, weather: state.weather, bg: sceneBg(gymSeg?.bg), have: { bag: state.bag, flags: state.storyFlags } });
 }
 
 async function startRoute() {
@@ -820,6 +821,7 @@ const progressApi = {
     const bi = isBadge ? badgeIndex(gym.badgeEs) : -1;
     showBriefing({
       chapterName: CHAPTERS[i].name, segs: c.segs, owned, weather: state.weather, bg: sceneBg(c.segs.find(x => x.gym)?.bg), closeLabel: "CERRAR",
+      have: { bag: state.bag, flags: state.storyFlags },
       status, color: gym?.color,
       badgeHtmlStr: bi >= 0 ? badgeHtml(bi, true, 44) : null,
       actionLabel: status === "todo" ? null : "REPETIR EL CAPÍTULO",
@@ -835,8 +837,8 @@ const progressApi = {
       onAction: () => progressApi.onReplay(LEAGUE_FIRST, true),
     });
   },
-  onReplay(i, noConfirm) {
-    if (!noConfirm && !confirm(`¿Volver a «${CHAPTERS[i].name}»? Se reinicia el recorrido de ese capítulo.`)) return;
+  async onReplay(i, noConfirm) {
+    if (!noConfirm && !(await showConfirm({ title: `¿Volver a «${CHAPTERS[i].name}»? Se reinicia el recorrido de ese capítulo.`, confirmLabel: "Repetir" }))) return;
     state.chapter = i;
     loadChapter();
     state.epoch++;

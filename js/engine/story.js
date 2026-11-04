@@ -1,8 +1,8 @@
 // Historia de Kanto: capítulos → tramos → nodos, y tablas de aparición.
 // Datos tomados del Poke'Catch original (pesos, horarios, clima).
 
-import { CHAPTERS } from "../data/story.js?v=126";
-import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=126";
+import { CHAPTERS } from "../data/story.js?v=128";
+import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=128";
 
 export { CHAPTERS };
 
@@ -45,7 +45,7 @@ export function buildChapter(ci, rand = Math.random) {
   steps.forEach((st, si) => {
     if (st.kind === "route") {
       const segIdx = segs.length;
-      segs.push({ name: st.name, kind: "route", areas: st.areas || [], bg: st.bg, lv: st.lv || null, step: si });
+      segs.push({ name: st.name, kind: "route", areas: st.areas || [], bg: st.bg, lv: st.lv || null, step: si, item: !!st.item });
       for (const L of layoutFor(ci, si, st, rand)) nodes.push({ t: LETTER[L], seg: segIdx });
     } else if (st.kind === "heal") {
       let segIdx = segs.length - 1;
@@ -61,7 +61,7 @@ export function buildChapter(ci, rand = Math.random) {
       nodes.push({ t: "unlock", seg: segIdx, key: st.once, text: st.text });
     } else if (st.kind === "gym") {
       const segIdx = segs.length;
-      segs.push({ name: st.name, kind: "gym", areas: [], bg: st.bg, step: si, gym: st });
+      segs.push({ name: st.name, kind: "gym", areas: [], bg: st.bg, step: si, gym: st, find: pendingFind ? { item: pendingFind.item, once: pendingFind.once } : null });
       if (pendingFind) { nodes.push({ t: "find", seg: segIdx, item: pendingFind.item }); pendingFind = null; }
       nodes.push({ t: "gym", seg: segIdx });
     } else if (st.kind === "legend") {

@@ -1,13 +1,13 @@
 // Detalle de Pokémon (estilo ficha del original)
 
-import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=126";
-import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=126";
-import { ITEMS } from "../data/items.js?v=126";
-import { itemImg } from "./item-icon.js?v=126";
-import { pixelIcon } from "./pixel.js?v=126";
-import { countFamily, familySlots } from "../data/families.js?v=126";
-import { getNature, natureEffectHtml } from "../data/natures.js?v=126";
-import { showConfirm } from "./confirm.js?v=126";
+import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=128";
+import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=128";
+import { ITEMS } from "../data/items.js?v=128";
+import { itemImg } from "./item-icon.js?v=128";
+import { pixelIcon } from "./pixel.js?v=128";
+import { countFamily, familySlots } from "../data/families.js?v=128";
+import { getNature, natureEffectHtml } from "../data/natures.js?v=128";
+import { showConfirm, showAlert } from "./confirm.js?v=128";
 
 const TYPE_ES = {
   normal: "Normal", fire: "Fuego", water: "Agua", electric: "Eléctrico",
@@ -207,7 +207,7 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
       if (!okEvo) return;
       b.disabled = true; b.textContent = "…";
       const r = await window.__pokeEvolve?.(mon, to);
-      if (!r?.ok) { alert(r?.reason || "No se pudo evolucionar"); b.disabled = false; b.textContent = "Evolucionar"; return; }
+      if (!r?.ok) { showAlert(r?.reason || "No se pudo evolucionar"); b.disabled = false; b.textContent = "Evolucionar"; return; }
       overlay.remove();
       showPokemonDetail(mon, { inTeam, onClose });
     };
@@ -224,7 +224,7 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
   const rel = overlay.querySelector("#btn-release");
   if (rel) {
     rel.onclick = async () => {
-      if (mon.locked) { alert("Este Pokémon está bloqueado. Desbloquéalo para poder liberarlo."); return; }
+      if (mon.locked) { showAlert("Este Pokémon está bloqueado. Desbloquéalo para poder liberarlo."); return; }
       const ok = await showConfirm({
         title: `¿Liberar para siempre a ${mon.nameEs || mon.name}${mon.level != null ? ` Nv. ${mon.level}` : ""}?`,
         confirmLabel: "Liberar",
@@ -236,7 +236,7 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
       if (!fn) return;
       const r = fn(mon, inTeam);
       if (!r.ok) {
-        alert(r.reason || "No se pudo liberar");
+        showAlert(r.reason || "No se pudo liberar");
         return;
       }
       close();

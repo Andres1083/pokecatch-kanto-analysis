@@ -1,13 +1,14 @@
 // Pantalla de Crianza: guardería (2 parejas → huevos) + incubadoras.
-import { showTip } from "./tip.js?v=126";
-import { iconSprite } from "../data/sprites.js?v=126";
-import { ensureNursery, setParent, retrieveParent, startIncubation, compatible, nextEggMs, useBerry, freeIncubator, unlockIncubator, toggleHeld } from "../engine/nursery.js?v=126";
-import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=126";
-import { ITEMS } from "../data/items.js?v=126";
-import { itemImg } from "./item-icon.js?v=126";
-import { getNature } from "../data/natures.js?v=126";
-import { TYPE_INFO } from "./collection.js?v=126";
-import { frontSprite } from "../data/sprites.js?v=126";
+import { showTip } from "./tip.js?v=128";
+import { showConfirm, showAlert } from "./confirm.js?v=128";
+import { iconSprite } from "../data/sprites.js?v=128";
+import { ensureNursery, setParent, retrieveParent, startIncubation, compatible, nextEggMs, useBerry, freeIncubator, unlockIncubator, toggleHeld } from "../engine/nursery.js?v=128";
+import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=128";
+import { ITEMS } from "../data/items.js?v=128";
+import { itemImg } from "./item-icon.js?v=128";
+import { getNature } from "../data/natures.js?v=128";
+import { TYPE_INFO } from "./collection.js?v=128";
+import { frontSprite } from "../data/sprites.js?v=128";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (ms) => { const s = Math.ceil(ms / 1000); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? `${h} h ${String(m).padStart(2, "0")} min` : `${m}:${String(x).padStart(2, "0")}`; };
@@ -89,7 +90,7 @@ export function bindNursery(api) {
   }, 1000);
 
   root.querySelector("#nu-help").onclick = () => showTip(root.querySelector("#nu-help"), "Crianza", `Deja dos Pokémon de la misma familia (o un Ditto con cualquier otro) en la guardería. Cada ${Math.round(BREED_MS / 3600000)} h aparece un huevo de la forma básica (máx. ${EGG_CAP}); las bayas acortan ese tiempo. Pon el huevo en una incubadora: al eclosionar nace un Pokémon de Nv. 5 con naturaleza al azar (¡y con opción de variocolor!). Todo sigue corriendo aunque cierres el juego. Equipa una Piedra Eterna a un huésped y la cría heredará su naturaleza. Las incubadoras 2, 3 y 4 se compran; la 2.ª pareja se abre al completar Johto.`);
-  root.querySelectorAll("[data-held]").forEach(b => b.onclick = () => { const r = toggleHeld(state, Number(b.dataset.held)); if (!r.ok) return alert(r.reason); api.save(); api.refresh(); });
+  root.querySelectorAll("[data-held]").forEach(b => b.onclick = () => { const r = toggleHeld(state, Number(b.dataset.held)); if (!r.ok) return showAlert(r.reason); api.save(); api.refresh(); });
   root.querySelectorAll("[data-ret]").forEach(b => b.onclick = () => { retrieveParent(state, Number(b.dataset.ret)); api.save(); api.refresh(); });
   root.querySelectorAll("[data-inc]").forEach(b => b.onclick = () => {
     const slot = freeIncubator(n);
@@ -100,15 +101,15 @@ export function bindNursery(api) {
   root.querySelectorAll("[data-pick]").forEach(b => b.onclick = () => openPicker(api, Number(b.dataset.pick)));
   root.querySelectorAll("[data-berry]").forEach(b => b.onclick = () => {
     const r = useBerry(state, Number(b.dataset.pair), b.dataset.berry);
-    if (!r.ok) return alert(r.reason);
+    if (!r.ok) return showAlert(r.reason);
     api.save(); api.refresh(); api.tick?.();
   });
   const un = root.querySelector("[data-unlock]");
-  if (un) un.onclick = () => {
+  if (un) un.onclick = async () => {
     const price = INC_PRICES[n.incUnlocked];
-    if (!confirm(`¿Desbloquear la incubadora ${n.incUnlocked + 1} por ${money(price)} ₽?`)) return;
+    if (!(await showConfirm({ title: `¿Desbloquear la incubadora ${n.incUnlocked + 1} por ${money(price)} ₽?`, confirmLabel: "Desbloquear" }))) return;
     const r = unlockIncubator(state);
-    if (!r.ok) return alert(r.reason);
+    if (!r.ok) return showAlert(r.reason);
     api.save(); api.refresh(); api.money?.();
   };
 }
@@ -136,7 +137,7 @@ function openPicker(api, slot) {
     const b = e.target.closest(".nu-opt");
     if (!b) return;
     const r = setParent(state, slot, list[Number(b.dataset.i)]);
-    if (!r.ok) { alert(r.reason); return; }
+    if (!r.ok) { showAlert(r.reason); return; }
     ov.remove(); api.save(); api.refresh();
   };
 }

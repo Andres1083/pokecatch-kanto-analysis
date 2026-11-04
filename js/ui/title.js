@@ -1,8 +1,9 @@
 // Pantalla de título: sprites con movimiento, Continuar/Nueva partida, Cómo jugar, Invitado / Google.
-import { frontSprite } from "../data/sprites.js?v=126";
-import { CHANGELOG, LATEST } from "../data/changelog.js?v=126";
-import { renderChangelogList } from "./changelog-view.js?v=126";
-import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=126";
+import { frontSprite } from "../data/sprites.js?v=128";
+import { showConfirm } from "./confirm.js?v=128";
+import { CHANGELOG, LATEST } from "../data/changelog.js?v=128";
+import { renderChangelogList } from "./changelog-view.js?v=128";
+import { getSession, playAsGuest, signInWithGoogle, signOut, googleAvailable } from "../engine/auth.js?v=128";
 
 const BALLS = ["poke-ball", "great-ball", "ultra-ball"];
 const HOWTO = [
@@ -55,8 +56,8 @@ export function showTitle({ hasSave, onContinue, onNew }) {
   function bind() {
     const $ = (id) => document.getElementById(id);
     $("t-go").onclick = () => { if (!getSession()) playAsGuest(); go(); };
-    $("t-new")?.addEventListener("click", () => {
-      if (confirm("Se borrará tu partida guardada en este dispositivo. ¿Empezar de nuevo?")) { if (!getSession()) playAsGuest(); stopWander(); onNew(); }
+    $("t-new")?.addEventListener("click", async () => {
+      if (await showConfirm({ title: "Se borrará tu partida guardada en este dispositivo. ¿Empezar de nuevo?", confirmLabel: "Empezar", danger: true })) { if (!getSession()) playAsGuest(); stopWander(); onNew(); }
     });
     $("t-how").onclick = showHow;
     $("t-log").onclick = showLog;
