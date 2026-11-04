@@ -1,9 +1,9 @@
 // Evoluciones por nivel y por piedra
 
-import { EVOS, evosOf } from "../data/evolutions.js?v=123";
-import { getPokemonForBattle } from "../data/pokeapi.js?v=123";
-import { frontSprite, backSprite } from "../data/sprites.js?v=123";
-import { applyNatureToStats } from "../data/natures.js?v=123";
+import { EVOS, evosOf } from "../data/evolutions.js?v=124";
+import { getPokemonForBattle } from "../data/pokeapi.js?v=124";
+import { frontSprite, backSprite } from "../data/sprites.js?v=124";
+import { applyNatureToStats } from "../data/natures.js?v=124";
 
 /** Evolución por nivel disponible (la de menor nivel que cumpla). */
 export function levelEvoReady(mon) {

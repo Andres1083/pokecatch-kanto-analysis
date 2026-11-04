@@ -1,5 +1,8 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.2", date: "3 nov 2026", title: "Arreglo del clima en combate", items: [
+    "Corregido el «Error en combate (getGameWeather().catch is not a function)» que aparecía al cambiar la hora del juego.",
+  ] },
   { v: "3.1", date: "3 nov 2026", title: "PC sin tileteo", items: [
     "PC: al bajar por la lista, la barra fija con tu equipo ya no mueve la pantalla (antes aparecía y desaparecía empujando el scroll).",
   ] },

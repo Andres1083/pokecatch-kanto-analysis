@@ -1,12 +1,12 @@
 // Pestaña «Progreso»: lista de gimnasios/capítulos con nivel recomendado, clima y medallas.
 
-import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=123";
-import { badgeHtml } from "./badge.js?v=123";
-import { rainTable } from "./briefing.js?v=123";
-import { pixelIcon } from "./pixel.js?v=123";
-import { showTip } from "./tip.js?v=123";
-import { BG_DATA } from "../data/backgrounds.js?v=123";
-import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=123";
+import { CHAPTERS, buildChapter, recommendedLevels } from "../engine/story.js?v=124";
+import { badgeHtml } from "./badge.js?v=124";
+import { rainTable } from "./briefing.js?v=124";
+import { pixelIcon } from "./pixel.js?v=124";
+import { showTip } from "./tip.js?v=124";
+import { BG_DATA } from "../data/backgrounds.js?v=124";
+import { TYPE_DEX_IDS } from "../data/legend-unlocks.js?v=124";
 
 let resolveBg = null; // lo aporta main.js (mismos fondos que el combate)
 const bgOf = (key) => (resolveBg && resolveBg(key)) || BG_DATA[key] || (key && key.startsWith("gym") ? BG_DATA["gym-rock"] : BG_DATA.prairie);

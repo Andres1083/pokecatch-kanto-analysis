@@ -1,8 +1,8 @@
 // Pantalla previa al gimnasio: nivel recomendado, premio y Pokémon que aparecen con su %.
 
-import { frontSprite } from "../data/sprites.js?v=123";
-import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=123";
-import { pixelIcon } from "./pixel.js?v=123";
+import { frontSprite } from "../data/sprites.js?v=124";
+import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=124";
+import { pixelIcon } from "./pixel.js?v=124";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const pctLabel = (p) => (p < 1 ? "<1 %" : `${p >= 10 ? Math.round(p) : p.toFixed(1).replace(".", ",")} %`);
