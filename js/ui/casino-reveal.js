@@ -1,6 +1,6 @@
 // Escena de canje del Casino (como el original): moneda → plataforma → silueta → revelación → «¡Recibes a X Nv. N!»
-import { COIN_CASE } from "../data/casino-assets.js?v=125";
-import { frontSprite } from "../data/sprites.js?v=125";
+import { COIN_CASE } from "../data/casino-assets.js?v=126";
+import { frontSprite, artSprite } from "../data/sprites.js?v=126";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -9,23 +9,28 @@ export function playCasinoReveal({ price, mon, name, level, resultText }) {
   return new Promise((resolve) => {
     const root = document.createElement("div");
     root.className = "cr-overlay";
-    const src = (mon && mon.sprites && mon.sprites.front) || (mon ? frontSprite(mon) : "");
+    const src = mon ? artSprite({ id: mon.id, shiny: mon.shiny }) : "";
+    const fb = mon ? frontSprite({ id: mon.id, shiny: mon.shiny }) : "";
     root.innerHTML = `
       <i class="cr-stars"></i>
       <div class="cr-title">Casino de Ciudad Azulona</div>
       <div class="cr-stage">
-        <div class="cr-plat"><u></u><u></u><u></u></div>
+        <img class="cr-plat" src="assets/ui/cr-platform.png" alt="">
         <img class="cr-coin" src="assets/items/poke-ball.png" alt="" width="44" height="44">
-        <img class="cr-mon" src="${src}" alt="" draggable="false">
+        <img class="cr-mon" src="${src}" alt="" draggable="false" onerror="this.onerror=null;this.src='${fb}'">
         <span class="cr-spk s1"></span><span class="cr-spk s2"></span><span class="cr-spk s3"></span><span class="cr-spk s4"></span>
       </div>
-      <div class="cr-box"><img src="${COIN_CASE}" alt="" width="26" height="26"><p id="cr-text"></p><i class="cr-more">▾</i></div>
+      <div class="cr-box"><span class="cr-bic"><img src="${COIN_CASE}" alt="" width="30" height="30"></span><p id="cr-text"></p><i class="cr-more">▾</i></div>
       <div class="cr-hint" id="cr-hint"></div>
       <button type="button" class="cr-skip">SALTAR ⏭</button>`;
     document.body.appendChild(root);
 
-    let skipped = false, finished = false, tapResolve = null;
     const q = (s) => root.querySelector(s);
+    // El GIF animado se amplía con escala entera para conservar el píxel (≈3×)
+    const monEl = q(".cr-mon");
+    const fit = () => { const k = 3; const w = monEl.naturalWidth, h = monEl.naturalHeight; if (w && h) { const f = Math.min(k, Math.max(1, Math.floor(Math.min(260 / w, 220 / h)))); monEl.style.width = `${w * f}px`; monEl.style.height = `${h * f}px`; } };
+    monEl.addEventListener("load", fit); if (monEl.complete) fit();
+    let skipped = false, finished = false, tapResolve = null;
     const text = q("#cr-text");
     const wait = (ms) => (skipped ? Promise.resolve() : new Promise((r) => setTimeout(r, ms)));
     const done = () => { if (finished) return; finished = true; root.remove(); resolve(); };

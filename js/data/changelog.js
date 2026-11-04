@@ -1,5 +1,9 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.4", date: "4 nov 2026", title: "Canje del casino más fiel", items: [
+    "El Pokémon del canje ahora aparece como GIF animado y más grande.",
+    "Plataforma azul pixelada y tipografía pixel más grande, como el original.",
+  ] },
   { v: "3.3", date: "3 nov 2026", title: "Casino: canje animado", items: [
     "Tienda del Casino más compacta (filas más bajas, como el original).",
     "Al canjear fichas hay una escena a pantalla completa: una Poké Ball cae a la plataforma, aparece la silueta y se revela el Pokémon («¡Recibes a X Nv. N!»), con botón SALTAR.",
