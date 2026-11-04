@@ -1,5 +1,11 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.3", date: "3 nov 2026", title: "Casino: canje animado", items: [
+    "Tienda del Casino más compacta (filas más bajas, como el original).",
+    "Al canjear fichas hay una escena a pantalla completa: una Poké Ball cae a la plataforma, aparece la silueta y se revela el Pokémon («¡Recibes a X Nv. N!»), con botón SALTAR.",
+    "Después se muestra su ficha (NUEVO si es la primera vez).",
+    "La confirmación del canje ahora es un cuadro del juego en vez del del navegador.",
+  ] },
   { v: "3.2", date: "3 nov 2026", title: "Arreglo del clima en combate", items: [
     "Corregido el «Error en combate (getGameWeather().catch is not a function)» que aparecía al cambiar la hora del juego.",
   ] },

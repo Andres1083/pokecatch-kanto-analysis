@@ -10,4 +10,4 @@ export {
   aspectSrc,
   avatarHtml,
   openPlayerEditor,
-} from "./frames-engine.js?v=124";
+} from "./frames-engine.js?v=125";

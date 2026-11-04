@@ -1,5 +1,5 @@
 // Elección del inicial: plataformas, Poké Balls que caen, silueta blanca y Pokémon animados (como el original).
-import { pixelMask, spawnRing } from "../engine/presentations.js?v=124";
+import { pixelMask, spawnRing } from "../engine/presentations.js?v=125";
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms));
 const COLORS = { 1: "#7be08b", 4: "#ff9b4a", 7: "#7cc4ff" };

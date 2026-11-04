@@ -1,11 +1,14 @@
 // Casino: tragaperras + tienda de premios (fichas)
-import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=124";
-import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=124";
-import { frontSprite } from "../data/sprites.js?v=124";
-import { DEX_NAMES } from "../data/dex-names.js?v=124";
-import { itemImg } from "./item-icon.js?v=124";
-import { dexSets } from "./dex.js?v=124";
-import { showTip } from "./tip.js?v=124";
+import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=125";
+import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=125";
+import { frontSprite } from "../data/sprites.js?v=125";
+import { DEX_NAMES } from "../data/dex-names.js?v=125";
+import { itemImg } from "./item-icon.js?v=125";
+import { dexSets } from "./dex.js?v=125";
+import { showTip } from "./tip.js?v=125";
+import { showConfirm } from "./confirm.js?v=125";
+import { playCasinoReveal } from "./casino-reveal.js?v=125";
+import { showPokedexCard } from "./pokedex-card.js?v=125";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const ui = { tab: "slots", mult: 1, spinning: false, auto: false, grid: null };
@@ -130,10 +133,16 @@ export function bindCasino(api) {
       const p = SHOP_KANTO.find(x => x.id === Number(buy.dataset.buy));
       if (!p) return;
       if ((state.fichas || 0) < p.price) return api.toast(`Te faltan ${fmt(p.price - state.fichas)} fichas`);
-      if (!confirm(`¿Canjear ${fmt(p.price)} fichas por ${DEX_NAMES[p.id - 1]} Nv. ${p.level}?`)) return;
-      const msg = await api.buy(p);
-      api.toast(msg);
+      const name = DEX_NAMES[p.id - 1];
+      if (!(await showConfirm({ title: `¿Canjear ${fmt(p.price)} fichas por ${name} Nv. ${p.level}?`, confirmLabel: "Canjear" }))) return;
+      const wasCaught = dexSets(state).caught.has(p.id);
+      const r = await api.buy(p);
       rerender();
+      if (!r || !r.mon) { api.toast(r?.msg || "No se pudo canjear"); return; }
+      try { api.sfx?.(); } catch (_) {}
+      await playCasinoReveal({ price: fmt(p.price), mon: r.mon, name, level: p.level, resultText: r.repeated ? r.msg : "" });
+      if (!r.repeated) showPokedexCard(r.mon, { isNew: !wasCaught });
+      api.toast(r.msg);
     }
   });
 }
