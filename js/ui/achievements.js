@@ -1,4 +1,4 @@
-import { evaluateAchievements, achievementSummary } from "../data/achievements.js?v=128";
+import { evaluateAchievements, achievementSummary } from "../data/achievements.js?v=129";
 
 const KIND_LBL = { aspect: "ASPECTO", frame: "MARCO", scene: "ESCENA" };
 

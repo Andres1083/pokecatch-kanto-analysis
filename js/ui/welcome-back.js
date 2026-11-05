@@ -1,9 +1,9 @@
 // Modal "¡Bienvenido de nuevo!" con lo ganado mientras estabas ausente.
 
-import { frontSprite } from "../data/sprites.js?v=128";
-import { ITEMS } from "../data/items.js?v=128";
-import { itemImg } from "./item-icon.js?v=128";
-import { pixelIcon } from "./pixel.js?v=128";
+import { frontSprite } from "../data/sprites.js?v=129";
+import { ITEMS } from "../data/items.js?v=129";
+import { itemImg } from "./item-icon.js?v=129";
+import { pixelIcon } from "./pixel.js?v=129";
 
 export function formatAway(ms) {
   const totalMin = Math.floor(ms / 60000);

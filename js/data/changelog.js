@@ -1,5 +1,9 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.7", date: "4 nov 2026", title: "Captura con verificación de naturaleza", items: [
+    "Con filtro de naturaleza activo, tras capturar la Poké Ball vuelve a la mano del entrenador y se comprueba la naturaleza.",
+    "Si no coincide, la ball se abre, el Pokémon se libera con su mensaje y el juego sigue al siguiente combate.",
+  ] },
   { v: "3.6", date: "4 nov 2026", title: "Avisos con el estilo del juego", items: [
     "Repetir capítulo, borrar partida, desbloquear incubadora y los avisos de liberar/evolucionar/guardería ya usan el modal del juego en lugar del cuadro del navegador.",
   ] },

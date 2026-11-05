@@ -1,7 +1,7 @@
 // Efectos visuales de combate y captura
 
-import { fxFamilyForMove } from "../data/fx-moves.js?v=128";
-import { BattleFX } from "./battle-fx-canvas.js?v=128";
+import { fxFamilyForMove } from "../data/fx-moves.js?v=129";
+import { BattleFX } from "./battle-fx-canvas.js?v=129";
 
 const BALL_SRC = "assets/items/poke-ball.png";
 
@@ -432,7 +432,8 @@ const easeIn = (t) => t * t, easeOut = (t) => 1 - (1 - t) * (1 - t);
  * Captura: el entrenador entra, lanza la Poké Ball en arco hasta el Pokémon,
  * este es absorbido, la ball cae, se sacude 3 veces y se resuelve (éxito o escape).
  */
-export async function playCaptureFx({ success = true, speed = 1 } = {}) {
+export async function playCaptureFx({ success = true, speed = 1, verify = null } = {}) {
+  // verify = { ok, label, onVerdict() }: tras capturar, la ball vuelve a la mano del entrenador y se comprueba la naturaleza
   const scene = sceneEl();
   if (!scene) return;
   const sp = Math.max(0.5, speed || 1);
@@ -486,7 +487,7 @@ export async function playCaptureFx({ success = true, speed = 1 } = {}) {
       const y = (1 - t) * (1 - t) * start.y + 2 * (1 - t) * t * apex + t * t * hit.y;
       place(x, y, t * 720, 0.7 + 0.3 * t);
     });
-    trainer.classList.add("out");
+    if (!verify) trainer.classList.add("out");
 
     // 3) Impacto: destello y el Pokémon es absorbido
     const flash = document.createElement("div");
@@ -524,8 +525,9 @@ export async function playCaptureFx({ success = true, speed = 1 } = {}) {
     }
 
     if (success) {
-      if (enemySide) enemySide.style.visibility = "hidden";
+      if (enemySide) { enemySide.style.visibility = "hidden"; enemySide.style.opacity = "0"; } // showEnemy() lo restaura en el siguiente combate
       resetEnemy();
+      if (enemy) enemy.style.visibility = "hidden"; // el <img> tiene visibility propio y ganaba al del contenedor
       const stars = document.createElement("div");
       stars.style.cssText = `position:absolute;left:${ground.x + B / 2}px;top:${ground.y - 30}px;z-index:24;font-size:1.3rem;white-space:nowrap;`;
       stars.textContent = "✨ ✨ ✨";
@@ -533,6 +535,51 @@ export async function playCaptureFx({ success = true, speed = 1 } = {}) {
       tween(D(900), (t) => { stars.style.transform = `translate(-50%,${-6 - 26 * t}px) scale(${0.6 + 0.6 * Math.sin(Math.PI * Math.min(1, t * 1.6))})`; stars.style.opacity = String(Math.sin(Math.PI * t)); });
       await tween(D(600), (t) => { const k = 1 + 0.3 * Math.sin(Math.PI * t); place(ground.x, ground.y, 0, k); ball.style.filter = `brightness(${1 + Math.sin(Math.PI * t)}) drop-shadow(0 2px 3px rgba(0,0,0,.55))`; });
       await delay(D(500));
+      if (verify) {
+        // 6) La ball vuelve volando a la mano del entrenador
+        const hand = { x: start.x, y: start.y };
+        const apex2 = Math.min(ground.y, hand.y) - 70;
+        await tween(D(700), (t) => {
+          const x = ground.x + (hand.x - ground.x) * t;
+          const y = (1 - t) * (1 - t) * ground.y + 2 * (1 - t) * t * apex2 + t * t * hand.y;
+          place(x, y, -t * 540, 1 - 0.2 * t);
+        });
+        place(hand.x, hand.y, 0, 0.8);
+        // 7) Comprobación de naturaleza: burbuja sobre el entrenador
+        const bub = document.createElement("div");
+        bub.className = "cap-verify " + (verify.ok ? "ok" : "no");
+        bub.textContent = (verify.ok ? "✓ " : "✗ ") + (verify.label || "");
+        bub.style.left = (hand.x + B / 2) + "px";
+        bub.style.top = (hand.y - 30) + "px";
+        layer.appendChild(bub);
+        await tween(D(260), (t) => { bub.style.opacity = String(t); bub.style.transform = `translate(-50%,${-8 * t}px)`; });
+        try { verify.onVerdict?.(); } catch (_) {}
+        await delay(D(750));
+        if (!verify.ok) {
+          // 8) No coincide: la ball se abre y el Pokémon se libera
+          const f3 = document.createElement("div");
+          f3.style.cssText = `position:absolute;left:${hand.x + B / 2 - 36}px;top:${hand.y + B / 2 - 36}px;width:72px;height:72px;border-radius:50%;background:radial-gradient(#fff,rgba(255,255,255,0) 70%);z-index:23;`;
+          layer.appendChild(f3);
+          tween(D(400), (t) => { f3.style.transform = `scale(${0.3 + 1.5 * t})`; f3.style.opacity = String(1 - t); });
+          tween(D(300), (t) => place(hand.x, hand.y, 0, 0.8 + 0.4 * t, 1 - t));
+          if (enemy?.src) {
+            const gh = document.createElement("img");
+            gh.src = enemy.src; gh.alt = "";
+            gh.style.cssText = `position:absolute;left:${hand.x + B / 2}px;top:${hand.y + B / 2}px;height:64px;width:auto;z-index:24;image-rendering:pixelated;transform-origin:center bottom;`;
+            layer.appendChild(gh);
+            await tween(D(750), (t) => {
+              gh.style.transform = `translate(-50%,${-10 - 46 * t}px) scale(${0.2 + 0.8 * easeOut(Math.min(1, t * 2))})`;
+              gh.style.opacity = String(t < 0.5 ? 1 : 1 - (t - 0.5) * 2);
+              gh.style.filter = `brightness(${1 + 2 * (1 - t)})`;
+            });
+          } else await delay(D(500));
+        } else {
+          await tween(D(500), (t) => { const k = 0.8 + 0.2 * Math.sin(Math.PI * t); place(hand.x, hand.y, 0, k, 1 - Math.max(0, t - 0.6) * 2.5); ball.style.filter = `brightness(${1 + Math.sin(Math.PI * t)}) drop-shadow(0 2px 3px rgba(0,0,0,.55))`; });
+        }
+        bub.style.opacity = "0";
+        trainer.classList.add("out");
+        await delay(D(350));
+      }
     } else {
       // Se escapa: la ball se abre y el Pokémon reaparece
       const f2 = document.createElement("div");

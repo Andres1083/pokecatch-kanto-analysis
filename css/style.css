@@ -7470,3 +7470,8 @@ body { background-color: transparent !important; }
 .bf-item { width: 44px; height: 44px; border-radius: 12px; background: #151a30; border: 2px dashed #3a4268; display: grid; place-items: center; opacity: .75; }
 .bf-item.once { border-style: solid; border-color: #b58a1e; opacity: 1; }
 .bf-item.got { border-color: #3f7d4a; }
+
+/* v129: verificación de naturaleza tras la captura */
+.cap-verify { position: absolute; z-index: 25; transform: translate(-50%,0); opacity: 0; white-space: nowrap; padding: 5px 11px; border-radius: 999px; font: 700 .95rem var(--font-ui, inherit); letter-spacing: .03em; border: 2px solid; background: #141a2ce8; box-shadow: 0 3px 10px rgba(0,0,0,.5); pointer-events: none; }
+.cap-verify.ok { color: #7dec9a; border-color: #3cc263; }
+.cap-verify.no { color: #ffa0a0; border-color: #e06666; }
