@@ -1,5 +1,8 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.8", date: "5 nov 2026", title: "Inicio sin scroll", items: [
+    "Al pulsar Continuar el juego empieza siempre arriba, sin heredar el scroll de la pantalla de título.",
+  ] },
   { v: "3.7", date: "4 nov 2026", title: "Captura con verificación de naturaleza", items: [
     "Con filtro de naturaleza activo, tras capturar la Poké Ball vuelve a la mano del entrenador y se comprueba la naturaleza.",
     "Si no coincide, la ball se abre, el Pokémon se libera con su mensaje y el juego sigue al siguiente combate.",

@@ -1,54 +1,54 @@
-import { startIntro } from "./ui/intro.js?v=129";
-import { showConfirm } from "./ui/confirm.js?v=129";
-import { showTitle } from "./ui/title.js?v=129";
-import { showOptions } from "./ui/options.js?v=129";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=129";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=129";
-import { LEGENDS } from "./data/legends.js?v=129";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=129";
+import { startIntro } from "./ui/intro.js?v=130";
+import { showConfirm } from "./ui/confirm.js?v=130";
+import { showTitle } from "./ui/title.js?v=130";
+import { showOptions } from "./ui/options.js?v=130";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=130";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=130";
+import { LEGENDS } from "./data/legends.js?v=130";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=130";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=129";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=129";
-import { runIdleBattle } from "./engine/idle-battle.js?v=129";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=129";
-import { showTeamScreen } from "./ui/team.js?v=129";
-import { showCollection } from "./ui/collection.js?v=129";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=129";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=129";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=129";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=129";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=129";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=129";
-import { Sfx } from "./engine/sfx.js?v=129";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=129";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=129";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=129";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=129";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=129";
-import { SCENES } from "./data/scenes.js?v=129";
-import { BG_DATA } from "./data/backgrounds.js?v=129";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=129";
-import { evosOf } from "./data/evolutions.js?v=129";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=129";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=129";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=129";
-import { renderRouteBar } from "./ui/route-bar.js?v=129";
-import { renderBag, bindBag } from "./ui/bag.js?v=129";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=129";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=129";
-import { itemImg } from "./ui/item-icon.js?v=129";
-import { pixelIcon } from "./ui/pixel.js?v=129";
-import { SHINY_RATE } from "./data/shiny.js?v=129";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=129";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=129";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=129";
-import { EGG_LEVEL } from "./data/breeding.js?v=129";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=129";
-import { openAchievements } from "./ui/achievements.js?v=129";
-import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=129";
-import { casinoUnlocked } from "./data/casino.js?v=129";
-import { sceneWipe } from "./ui/transition.js?v=129";
-import { dissolve, imgReady } from "./ui/sendout.js?v=129";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=130";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=130";
+import { runIdleBattle } from "./engine/idle-battle.js?v=130";
+import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=130";
+import { showTeamScreen } from "./ui/team.js?v=130";
+import { showCollection } from "./ui/collection.js?v=130";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=130";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=130";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=130";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=130";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=130";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=130";
+import { Sfx } from "./engine/sfx.js?v=130";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=130";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=130";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=130";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=130";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=130";
+import { SCENES } from "./data/scenes.js?v=130";
+import { BG_DATA } from "./data/backgrounds.js?v=130";
+import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=130";
+import { evosOf } from "./data/evolutions.js?v=130";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=130";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=130";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=130";
+import { renderRouteBar } from "./ui/route-bar.js?v=130";
+import { renderBag, bindBag } from "./ui/bag.js?v=130";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=130";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=130";
+import { itemImg } from "./ui/item-icon.js?v=130";
+import { pixelIcon } from "./ui/pixel.js?v=130";
+import { SHINY_RATE } from "./data/shiny.js?v=130";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=130";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=130";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=130";
+import { EGG_LEVEL } from "./data/breeding.js?v=130";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=130";
+import { openAchievements } from "./ui/achievements.js?v=130";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=130";
+import { casinoUnlocked } from "./data/casino.js?v=130";
+import { sceneWipe } from "./ui/transition.js?v=130";
+import { dissolve, imgReady } from "./ui/sendout.js?v=130";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -2313,6 +2313,7 @@ async function doEncounter() {
 })();
 
 async function bootGame() {
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; window.scrollTo(0, 0); } catch (_) {}
   const existing = loadGame();
   if (!(existing && existing.playerTeam?.length)) {
     startIntro({ onComplete: onIntroComplete });
@@ -2396,6 +2397,9 @@ async function bootGame() {
 
   if (report) openGate(showWelcomeBack(report));
   startRoute();
+  // Al entrar desde el título el navegador puede conservar el scroll de esa pantalla: empezar siempre arriba
+  const toTop = () => { try { window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; } catch (_) {} };
+  toTop(); requestAnimationFrame(toTop); setTimeout(toTop, 120); setTimeout(toTop, 600);
 
   // Vista previa de presentaciones: index.html?demo=mewtwo | zapdos | mew | lance | vs
   const demo = new URLSearchParams(location.search).get("demo");

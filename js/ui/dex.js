@@ -1,13 +1,13 @@
-import { DEX_NAMES } from "../data/dex-names.js?v=129";
-import { iconSprite, frontSprite } from "../data/sprites.js?v=129";
-import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=129";
-import { pixelIcon } from "./pixel.js?v=129";
-import { badgeHtml } from "./badge.js?v=129";
-import { NATURES, natureLabel } from "../data/natures.js?v=129";
-import { shinyOdds } from "../data/shiny.js?v=129";
-import { placeMenu } from "./dropdown.js?v=129";
-import { showTip } from "./tip.js?v=129";
-import { getPokemon } from "../data/pokeapi.js?v=129";
+import { DEX_NAMES } from "../data/dex-names.js?v=130";
+import { iconSprite, frontSprite } from "../data/sprites.js?v=130";
+import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=130";
+import { pixelIcon } from "./pixel.js?v=130";
+import { badgeHtml } from "./badge.js?v=130";
+import { NATURES, natureLabel } from "../data/natures.js?v=130";
+import { shinyOdds } from "../data/shiny.js?v=130";
+import { placeMenu } from "./dropdown.js?v=130";
+import { showTip } from "./tip.js?v=130";
+import { getPokemon } from "../data/pokeapi.js?v=130";
 
 /** Dos naturalezas recomendadas según las estadísticas base. */
 function recommendNatures(b) {

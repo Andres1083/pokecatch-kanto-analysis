@@ -1,14 +1,14 @@
 // Pantalla de Crianza: guardería (2 parejas → huevos) + incubadoras.
-import { showTip } from "./tip.js?v=129";
-import { showConfirm, showAlert } from "./confirm.js?v=129";
-import { iconSprite } from "../data/sprites.js?v=129";
-import { ensureNursery, setParent, retrieveParent, startIncubation, compatible, nextEggMs, useBerry, freeIncubator, unlockIncubator, toggleHeld } from "../engine/nursery.js?v=129";
-import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=129";
-import { ITEMS } from "../data/items.js?v=129";
-import { itemImg } from "./item-icon.js?v=129";
-import { getNature } from "../data/natures.js?v=129";
-import { TYPE_INFO } from "./collection.js?v=129";
-import { frontSprite } from "../data/sprites.js?v=129";
+import { showTip } from "./tip.js?v=130";
+import { showConfirm, showAlert } from "./confirm.js?v=130";
+import { iconSprite } from "../data/sprites.js?v=130";
+import { ensureNursery, setParent, retrieveParent, startIncubation, compatible, nextEggMs, useBerry, freeIncubator, unlockIncubator, toggleHeld } from "../engine/nursery.js?v=130";
+import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=130";
+import { ITEMS } from "../data/items.js?v=130";
+import { itemImg } from "./item-icon.js?v=130";
+import { getNature } from "../data/natures.js?v=130";
+import { TYPE_INFO } from "./collection.js?v=130";
+import { frontSprite } from "../data/sprites.js?v=130";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (ms) => { const s = Math.ceil(ms / 1000); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return h ? `${h} h ${String(m).padStart(2, "0")} min` : `${m}:${String(x).padStart(2, "0")}`; };
