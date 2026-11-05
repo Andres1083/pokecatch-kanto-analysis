@@ -1,54 +1,55 @@
-import { startIntro } from "./ui/intro.js?v=130";
-import { showConfirm } from "./ui/confirm.js?v=130";
-import { showTitle } from "./ui/title.js?v=130";
-import { showOptions } from "./ui/options.js?v=130";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=130";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=130";
-import { LEGENDS } from "./data/legends.js?v=130";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=130";
+import { startIntro } from "./ui/intro.js?v=131";
+import { showConfirm } from "./ui/confirm.js?v=131";
+import { showTitle } from "./ui/title.js?v=131";
+import { showOptions } from "./ui/options.js?v=131";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=131";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=131";
+import { LEGENDS } from "./data/legends.js?v=131";
+import { TYPE_DEX_IDS } from "./data/legend-unlocks.js?v=131";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=131";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=130";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=130";
-import { runIdleBattle } from "./engine/idle-battle.js?v=130";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=130";
-import { showTeamScreen } from "./ui/team.js?v=130";
-import { showCollection } from "./ui/collection.js?v=130";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=130";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=130";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=130";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=130";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=130";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=130";
-import { Sfx } from "./engine/sfx.js?v=130";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=130";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=130";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=130";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=130";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=130";
-import { SCENES } from "./data/scenes.js?v=130";
-import { BG_DATA } from "./data/backgrounds.js?v=130";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=130";
-import { evosOf } from "./data/evolutions.js?v=130";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=130";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=130";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=130";
-import { renderRouteBar } from "./ui/route-bar.js?v=130";
-import { renderBag, bindBag } from "./ui/bag.js?v=130";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=130";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=130";
-import { itemImg } from "./ui/item-icon.js?v=130";
-import { pixelIcon } from "./ui/pixel.js?v=130";
-import { SHINY_RATE } from "./data/shiny.js?v=130";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=130";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=130";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=130";
-import { EGG_LEVEL } from "./data/breeding.js?v=130";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=130";
-import { openAchievements } from "./ui/achievements.js?v=130";
-import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=130";
-import { casinoUnlocked } from "./data/casino.js?v=130";
-import { sceneWipe } from "./ui/transition.js?v=130";
-import { dissolve, imgReady } from "./ui/sendout.js?v=130";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=131";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=131";
+import { runIdleBattle } from "./engine/idle-battle.js?v=131";
+import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=131";
+import { showTeamScreen } from "./ui/team.js?v=131";
+import { showCollection } from "./ui/collection.js?v=131";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=131";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=131";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=131";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=131";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=131";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=131";
+import { Sfx } from "./engine/sfx.js?v=131";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=131";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=131";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=131";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=131";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=131";
+import { SCENES } from "./data/scenes.js?v=131";
+import { BG_DATA } from "./data/backgrounds.js?v=131";
+import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=131";
+import { evosOf } from "./data/evolutions.js?v=131";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=131";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=131";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=131";
+import { renderRouteBar } from "./ui/route-bar.js?v=131";
+import { renderBag, bindBag } from "./ui/bag.js?v=131";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=131";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=131";
+import { itemImg } from "./ui/item-icon.js?v=131";
+import { pixelIcon } from "./ui/pixel.js?v=131";
+import { SHINY_RATE } from "./data/shiny.js?v=131";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=131";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=131";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=131";
+import { EGG_LEVEL } from "./data/breeding.js?v=131";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=131";
+import { openAchievements } from "./ui/achievements.js?v=131";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=131";
+import { casinoUnlocked } from "./data/casino.js?v=131";
+import { sceneWipe } from "./ui/transition.js?v=131";
+import { dissolve, imgReady } from "./ui/sendout.js?v=131";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -1901,11 +1902,17 @@ async function nodeLegend() {
   // Valores del original: nivel 100, vida/poder escalados, 40 Poké Balls con 1,176 % cada una
   const lg = { ...(ORIGINAL_LEGENDS[node.id] || {}), id: node.id };
   const level = lg.level || node.level;
-  if (lg.needType && !state.playerTeam.some(m => (m.types || []).includes(lg.needType))) {
-    const typeNames = { electric: "Eléctrico", ice: "Hielo", fire: "Fuego" };
-    setMsg(`Para encontrar a ${LEGENDS[node.id]?.name || "este legendario"}, necesitas un Pokémon de tipo ${typeNames[lg.needType] || lg.needType} en tu equipo.`);
-    await delay(1100);
-    return false;
+  if (lg.needType) {
+    // Como el original: capturar (registrar) todos los Pokémon de ese tipo de Kanto, sin legendarios
+    const ids = TYPE_DEX_IDS[lg.needType] || [];
+    const got = new Set(state.stats.caught || []);
+    const have = ids.filter(id => got.has(id)).length;
+    if (have < ids.length) {
+      const typeNames = { electric: "Eléctrico", ice: "Hielo", fire: "Fuego" };
+      setMsg(`Para encontrar a ${LEGENDS[node.id]?.name || "este legendario"}: captura a todos los Pokémon de tipo ${typeNames[lg.needType] || lg.needType} (${have}/${ids.length})`);
+      await delay(1100);
+      return false;
+    }
   }
   const prevWeather = state.weather;
   const restoreWeather = () => { if (state.weather !== prevWeather) { state.weather = prevWeather; try { initWeatherParticles(); } catch (_) {} } };

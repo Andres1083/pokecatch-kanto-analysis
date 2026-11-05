@@ -1,6 +1,6 @@
 // Medallas de Kanto (sprites FRLG): una tira de 8 imágenes de 16×16 por color.
-import { BADGE_STRIPS } from "./badge-data.js?v=130";
-import { CHAPTERS } from "../engine/story.js?v=130";
+import { BADGE_STRIPS } from "./badge-data.js?v=131";
+import { CHAPTERS } from "../engine/story.js?v=131";
 
 // Qué variante de color usa cada medalla (frlg-N.png)
 const FILE = [1, 2, 3, 4, 5, 6, 7, 8];

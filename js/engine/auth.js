@@ -1,5 +1,5 @@
 // Sesión: invitado (local) o Google (Firebase Auth). La partida sigue guardándose en este dispositivo.
-import { FIREBASE_CONFIG } from "../data/auth-config.js?v=130";
+import { FIREBASE_CONFIG } from "../data/auth-config.js?v=131";
 
 const KEY = "pokecatch-session-v1";
 const FB = "https://www.gstatic.com/firebasejs/10.12.2";

@@ -1,5 +1,9 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "3.9", date: "5 nov 2026", title: "Requisito de las aves legendarias", items: [
+    "Zapdos, Articuno y Moltres, como en el original, piden haber capturado a todos los Pokémon de su tipo en Kanto (Eléctrico, Hielo y Fuego), sin contar legendarios, en lugar de llevar uno en el equipo.",
+    "El aviso muestra tu progreso, por ejemplo 3/8.",
+  ] },
   { v: "3.8", date: "5 nov 2026", title: "Inicio sin scroll", items: [
     "Al pulsar Continuar el juego empieza siempre arriba, sin heredar el scroll de la pantalla de título.",
   ] },
