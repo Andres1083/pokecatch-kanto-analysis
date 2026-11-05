@@ -1,6 +1,6 @@
 // Captura + almacenamiento por familia + PE a la familia si está llena
 
-import { familyRoot, familySlots, countFamily, canStore } from "../data/families.js?v=131";
+import { familyRoot, familySlots, countFamily, canStore } from "../data/families.js?v=133";
 
 export function captureChance(enemy, { ball = "poke" } = {}) {
   const ballMod = { poke: 1, great: 1.5, ultra: 2 }[ball] || 1;
@@ -25,11 +25,11 @@ export function familyCandyXp(enemy) {
 /**
  * Intenta guardar. Si la familia está llena, reparte PE entre la familia.
  */
-export function storeCaptured(mon, state, { applyXpFn } = {}) {
-  const all = [...state.playerTeam, ...(state.box || [])];
+export function storeCaptured(mon, state, { applyXpFn, forceFamilyXp = false, extraFamily = [] } = {}) {
+  const all = [...state.playerTeam, ...(state.box || []), ...extraFamily];
 
-  // Un variocolor siempre se guarda, aunque la familia esté llena
-  if (!mon.shiny && !canStore(all, mon.id)) {
+  // Un variocolor siempre se guarda, aunque la familia esté llena (o el filtro lo convierta en PE)
+  if (!mon.shiny && (forceFamilyXp || !canStore(all, mon.id))) {
     const root = familyRoot(mon.id);
     const family = all.filter(m => familyRoot(m.id) === root);
     const totalXp = familyCandyXp(mon);

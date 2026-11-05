@@ -1,7 +1,7 @@
 // Lógica de guardería (crianza) e incubadora. Sin red ni DOM.
-import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=131";
-import { familyRoot } from "../data/families.js?v=131";
-import { familyStages } from "../data/evolutions.js?v=131";
+import { BREED_MS, HATCH_MS, EGG_CAP, INCUBATORS, INC_PRICES, PAIRS, pairUnlocked, BREED_BERRIES } from "../data/breeding.js?v=133";
+import { familyRoot } from "../data/families.js?v=133";
+import { familyStages } from "../data/evolutions.js?v=133";
 
 export function ensureNursery(state) {
   const n = state.nursery || (state.nursery = {});

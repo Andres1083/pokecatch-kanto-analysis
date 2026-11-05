@@ -1,5 +1,14 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "4.1", date: "5 nov 2026", title: "Filtro de naturaleza en los huevos", items: [
+    "Al eclosionar, la cría pasa por tu filtro de naturaleza: si no coincide, se cambia por PE para su familia (incluidos los padres de la guardería). Los variocolor siempre se guardan.",
+  ] },
+  { v: "4.0", date: "5 nov 2026", title: "Guardería como el original", items: [
+    "Nueva Guardería: cabecera rosa, aviso de Ditto, prado con los padres paseando animados, bayas con su cantidad y estado de la puesta.",
+    "Pestañas Huéspedes e Incubadora con contadores; huevos en espera e incubadoras ahora van juntos en la segunda pestaña.",
+    "Tu caja aparece debajo con buscador y 5 por fila: toca un Pokémon y se coloca solo en el hueco que le toca.",
+    "El selector de huéspedes también tiene buscador y 5 por fila.",
+  ] },
   { v: "3.9", date: "5 nov 2026", title: "Requisito de las aves legendarias", items: [
     "Zapdos, Articuno y Moltres, como en el original, piden haber capturado a todos los Pokémon de su tipo en Kanto (Eléctrico, Hielo y Fuego), sin contar legendarios, en lugar de llevar uno en el equipo.",
     "El aviso muestra tu progreso, por ejemplo 3/8.",

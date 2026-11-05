@@ -1,55 +1,55 @@
-import { startIntro } from "./ui/intro.js?v=131";
-import { showConfirm } from "./ui/confirm.js?v=131";
-import { showTitle } from "./ui/title.js?v=131";
-import { showOptions } from "./ui/options.js?v=131";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=131";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=131";
-import { LEGENDS } from "./data/legends.js?v=131";
-import { TYPE_DEX_IDS } from "./data/legend-unlocks.js?v=131";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=131";
+import { startIntro } from "./ui/intro.js?v=133";
+import { showConfirm } from "./ui/confirm.js?v=133";
+import { showTitle } from "./ui/title.js?v=133";
+import { showOptions } from "./ui/options.js?v=133";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=133";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=133";
+import { LEGENDS } from "./data/legends.js?v=133";
+import { TYPE_DEX_IDS } from "./data/legend-unlocks.js?v=133";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=133";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=131";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=131";
-import { runIdleBattle } from "./engine/idle-battle.js?v=131";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=131";
-import { showTeamScreen } from "./ui/team.js?v=131";
-import { showCollection } from "./ui/collection.js?v=131";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=131";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=131";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=131";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=131";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=131";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=131";
-import { Sfx } from "./engine/sfx.js?v=131";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=131";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=131";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=131";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=131";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=131";
-import { SCENES } from "./data/scenes.js?v=131";
-import { BG_DATA } from "./data/backgrounds.js?v=131";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=131";
-import { evosOf } from "./data/evolutions.js?v=131";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=131";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=131";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=131";
-import { renderRouteBar } from "./ui/route-bar.js?v=131";
-import { renderBag, bindBag } from "./ui/bag.js?v=131";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=131";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=131";
-import { itemImg } from "./ui/item-icon.js?v=131";
-import { pixelIcon } from "./ui/pixel.js?v=131";
-import { SHINY_RATE } from "./data/shiny.js?v=131";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=131";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=131";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=131";
-import { EGG_LEVEL } from "./data/breeding.js?v=131";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=131";
-import { openAchievements } from "./ui/achievements.js?v=131";
-import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=131";
-import { casinoUnlocked } from "./data/casino.js?v=131";
-import { sceneWipe } from "./ui/transition.js?v=131";
-import { dissolve, imgReady } from "./ui/sendout.js?v=131";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=133";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=133";
+import { runIdleBattle } from "./engine/idle-battle.js?v=133";
+import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=133";
+import { showTeamScreen } from "./ui/team.js?v=133";
+import { showCollection } from "./ui/collection.js?v=133";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=133";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=133";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=133";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=133";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=133";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=133";
+import { Sfx } from "./engine/sfx.js?v=133";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=133";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=133";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=133";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=133";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=133";
+import { SCENES } from "./data/scenes.js?v=133";
+import { BG_DATA } from "./data/backgrounds.js?v=133";
+import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=133";
+import { evosOf } from "./data/evolutions.js?v=133";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=133";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=133";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=133";
+import { renderRouteBar } from "./ui/route-bar.js?v=133";
+import { renderBag, bindBag } from "./ui/bag.js?v=133";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=133";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=133";
+import { itemImg } from "./ui/item-icon.js?v=133";
+import { pixelIcon } from "./ui/pixel.js?v=133";
+import { SHINY_RATE } from "./data/shiny.js?v=133";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=133";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=133";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=133";
+import { EGG_LEVEL } from "./data/breeding.js?v=133";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=133";
+import { openAchievements } from "./ui/achievements.js?v=133";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=133";
+import { casinoUnlocked } from "./data/casino.js?v=133";
+import { sceneWipe } from "./ui/transition.js?v=133";
+import { dissolve, imgReady } from "./ui/sendout.js?v=133";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -1071,9 +1071,14 @@ async function hatchEgg(egg) {
   dexAdd("seen", mon.id);
   dexAdd("caught", mon.id);
   if (mon.shiny) dexAdd("shiny", mon.id);
-  const stored = storeCaptured(mon, state, { applyXpFn: applyXp });
+  // Filtro de naturaleza: si la cría no es de las que quieres, se cambia por PE para su familia (los variocolor siempre se guardan)
+  const want = state.captureFilter?.[mon.id];
+  const filtered = !mon.shiny && want && want.length && !want.includes(natureIndex);
+  const nur = ensureNursery(state);
+  const stored = storeCaptured(mon, state, { applyXpFn: applyXp, forceFamilyXp: !!filtered, extraFamily: nur.parents.filter(Boolean) });
   state.stats.hatched = (state.stats.hatched || 0) + 1;
-  if (!stored.added && stored.familyXp) mon._familyXp = stored.totalXp;
+  if (filtered) state.stats.autoReleased = (state.stats.autoReleased || 0) + 1;
+  if (!stored.added && stored.familyXp) { mon._familyXp = stored.totalXp; if (filtered) mon._filtered = true; }
   return mon;
 }
 
@@ -1095,7 +1100,7 @@ async function tickNursery() {
       saveGame();
       if (hatched.length) {
         if (hatched.length <= 3 && !document.hidden) { for (const m of hatched) await showHatchAnim(m); }
-        else toast(`🥚 ¡Eclosionaron ${hatched.map(m => (m.shiny ? "✦ " : "") + (m.nameEs || m.name)).join(", ")}!`);
+        else toast(`🥚 ¡Eclosionaron ${hatched.map(m => (m.shiny ? "✦ " : "") + (m.nameEs || m.name) + (m._filtered ? ` (no coincide: +${m._familyXp} PE)` : "")).join(", ")}!`);
       }
       else toast(`🥚 ¡Hay ${made} huevo${made > 1 ? "s" : ""} nuevo${made > 1 ? "s" : ""} en la guardería!`);
       if (state.view === "nursery") refreshNursery();
