@@ -44,7 +44,7 @@ export function showPokedexCard(mon, { isNew = true, onClose } = {}) {
       <div class="pokedex-header">
         <span class="pokedex-name">${name}</span>
         ${isNew ? '<span class="pokedex-new">NUEVO</span>' : ""}
-        <span class="pokedex-num">Nº ${dexNum} · Kanto ${mon.id}/151</span>
+        <span class="pokedex-num">Nº ${dexNum} · ${mon.id > 151 ? `Johto ${mon.id - 151}/100` : `Kanto ${mon.id}/151`}</span>
       </div>
       <div class="pokedex-body">
         <div class="pokedex-sprite-wrap">

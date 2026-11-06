@@ -1,3 +1,4 @@
+import { JOHTO as JOHTO_CHAPTERS } from "./johto-story.js?v=135";
 // Capítulos de Kanto (datos del Poke'Catch original, nombres en español)
 export const CHAPTERS = [
  {
@@ -15,7 +16,7 @@ export const CHAPTERS = [
       7
      ],
      "level": 5,
-     "text": "Le Prof. Chen te propose un Pokémon !"
+     "text": "¡El Prof. Oak te ofrece un Pokémon!"
     }
    },
    {
@@ -1461,4 +1462,6 @@ export const CHAPTERS = [
    }
   ]
  }
+,
+...JOHTO_CHAPTERS
 ];

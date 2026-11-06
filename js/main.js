@@ -1,55 +1,56 @@
-import { startIntro } from "./ui/intro.js?v=134";
-import { showConfirm } from "./ui/confirm.js?v=134";
-import { showTitle } from "./ui/title.js?v=134";
-import { showOptions } from "./ui/options.js?v=134";
-import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=134";
-import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=134";
-import { LEGENDS } from "./data/legends.js?v=134";
-import { TYPE_DEX_IDS } from "./data/legend-unlocks.js?v=134";
-import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=134";
+import { startIntro } from "./ui/intro.js?v=135";
+import { showConfirm } from "./ui/confirm.js?v=135";
+import { showTitle } from "./ui/title.js?v=135";
+import { showOptions } from "./ui/options.js?v=135";
+import { playVsIntro, playBossIntro, playLegendAnnounce } from "./engine/presentations.js?v=135";
+import { playMewtwoIntro } from "./engine/mewtwo-intro.js?v=135";
+import { LEGENDS } from "./data/legends.js?v=135";
+import { TYPE_DEX_IDS } from "./data/legend-unlocks.js?v=135";
+import { installSpriteFit, fitSprite } from "./ui/sprite-fit.js?v=135";
 installSpriteFit();
-import { showPokedexCard } from "./ui/pokedex-card.js?v=134";
-import { getPokemonForBattle } from "./data/pokeapi.js?v=134";
-import { runIdleBattle } from "./engine/idle-battle.js?v=134";
-import { frontSprite, backSprite, battleSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=134";
-import { showTeamScreen } from "./ui/team.js?v=134";
-import { showCollection } from "./ui/collection.js?v=134";
-import { showPokemonDetail } from "./ui/pokemon-detail.js?v=134";
-import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=134";
-import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=134";
-import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=134";
-import { openRaidsLobby } from "./ui/raids-lobby.js?v=134";
-import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=134";
-import { Sfx } from "./engine/sfx.js?v=134";
-import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=134";
-import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=134";
-import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=134";
-import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=134";
-import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=134";
-import { SCENES } from "./data/scenes.js?v=134";
-import { BG_DATA } from "./data/backgrounds.js?v=134";
-import { renderProgress, bindProgress, leagueTrainers, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=134";
-import { evosOf } from "./data/evolutions.js?v=134";
-import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=134";
-import { showBriefing, showLeague } from "./ui/briefing.js?v=134";
-import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=134";
-import { renderRouteBar } from "./ui/route-bar.js?v=134";
-import { renderBag, bindBag } from "./ui/bag.js?v=134";
-import { showWelcomeBack } from "./ui/welcome-back.js?v=134";
-import { simulateOffline, OFFLINE } from "./engine/offline.js?v=134";
-import { itemImg } from "./ui/item-icon.js?v=134";
-import { pixelIcon } from "./ui/pixel.js?v=134";
-import { SHINY_RATE } from "./data/shiny.js?v=134";
-import { badgeHtml, badgeIndex } from "./ui/badge.js?v=134";
-import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=134";
-import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=134";
-import { EGG_LEVEL } from "./data/breeding.js?v=134";
-import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=134";
-import { openAchievements } from "./ui/achievements.js?v=134";
-import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=134";
-import { casinoUnlocked } from "./data/casino.js?v=134";
-import { sceneWipe } from "./ui/transition.js?v=134";
-import { dissolve, imgReady } from "./ui/sendout.js?v=134";
+import { showPokedexCard } from "./ui/pokedex-card.js?v=135";
+import { getPokemonForBattle } from "./data/pokeapi.js?v=135";
+import { runIdleBattle } from "./engine/idle-battle.js?v=135";
+import { frontSprite, backSprite, battleSprite, artSprite, spriteSizeStyle, spriteSizePx } from "./data/sprites.js?v=135";
+import { DEX_NAMES } from "./data/dex-names.js?v=135";
+import { showTeamScreen } from "./ui/team.js?v=135";
+import { showCollection } from "./ui/collection.js?v=135";
+import { showPokemonDetail } from "./ui/pokemon-detail.js?v=135";
+import { tryCapture, storeCaptured, releasePokemon } from "./engine/capture.js?v=135";
+import { playMoveFx, playCaptureFx } from "./engine/battle-fx.js?v=135";
+import { runRaid, bossOfDay, ensureRaidSave, RAID_CFG, monName, raidProgressHtml } from "./engine/raids.js?v=135";
+import { openRaidsLobby } from "./ui/raids-lobby.js?v=135";
+import { avatarHtml, getAspect, openPlayerEditor } from "./ui/player-avatar.js?v=135";
+import { Sfx } from "./engine/sfx.js?v=135";
+import { checkLevelEvolutions, stoneEvoReady, evolveMon } from "./engine/evolve.js?v=135";
+import { randomNature, getNature, applyNatureToStats } from "./data/natures.js?v=135";
+import { weatherForNow, getGameWeather, formatClock, formatHour } from "./data/weather.js?v=135";
+import { randomTrainerName, randomTrainer } from "./data/route-map.js?v=135";
+import { CHAPTERS, buildChapter, pickEncounter, makeTrainerTeam, periodOf, chapterSpecies } from "./engine/story.js?v=135";
+import { SCENES } from "./data/scenes.js?v=135";
+import { BG_DATA } from "./data/backgrounds.js?v=135";
+import { renderProgress, bindProgress, leagueTrainers, leagueOf, REGION_DEFS, LEAGUE_FIRST, LEAGUE_LAST } from "./ui/progress.js?v=135";
+import { evosOf } from "./data/evolutions.js?v=135";
+import { renderDex, bindDex, showTrainerCard } from "./ui/dex.js?v=135";
+import { showBriefing, showLeague } from "./ui/briefing.js?v=135";
+import { rollReward, applyReward, addItem, ITEMS } from "./data/items.js?v=135";
+import { renderRouteBar } from "./ui/route-bar.js?v=135";
+import { renderBag, bindBag } from "./ui/bag.js?v=135";
+import { showWelcomeBack } from "./ui/welcome-back.js?v=135";
+import { simulateOffline, OFFLINE } from "./engine/offline.js?v=135";
+import { itemImg } from "./ui/item-icon.js?v=135";
+import { pixelIcon } from "./ui/pixel.js?v=135";
+import { SHINY_RATE } from "./data/shiny.js?v=135";
+import { badgeHtml, badgeIndex } from "./ui/badge.js?v=135";
+import { renderNursery, bindNursery, showHatchAnim } from "./ui/nursery.js?v=135";
+import { ensureNursery, produceEggs, readyIncubators } from "./engine/nursery.js?v=135";
+import { EGG_LEVEL } from "./data/breeding.js?v=135";
+import { renderCasino, bindCasino, casinoBusy } from "./ui/casino.js?v=135";
+import { openAchievements } from "./ui/achievements.js?v=135";
+import { ACHIEVEMENTS, evaluateAchievements, FRAME_REWARD_MAP } from "./data/achievements.js?v=135";
+import { casinoUnlocked } from "./data/casino.js?v=135";
+import { sceneWipe } from "./ui/transition.js?v=135";
+import { dissolve, imgReady } from "./ui/sendout.js?v=135";
 
 // BASE_EXP simplificado (valores del original)
 const BASE_EXP = {
@@ -391,14 +392,16 @@ function finishChapter(gym) {
     state.money += gym.reward;
     if (gym.badgeEs && !state.badges.includes(gym.badgeEs)) state.badges.push(gym.badgeEs);
   }
-  state.chapter++;
+  // Tras el último capítulo (Monte Plateado) se repite como endgame; no vuelve a Kanto
+  state.chapter = Math.min(state.chapter + 1, CHAPTERS.length - 1);
   loadChapter();
 }
 
 /** Tras una derrota total: vuelve al inicio del mapa (nivel 1 del capítulo actual). */
 function retreat() {
   // Liga: una derrota te devuelve al primer entrenador
-  if (state.chapter > LEAGUE_FIRST && state.chapter <= LEAGUE_LAST) { state.chapter = LEAGUE_FIRST; loadChapter(); return; }
+  const lg = leagueOf(state.chapter);
+  if (lg && state.chapter > lg.lf) { state.chapter = lg.lf; loadChapter(); return; }
   state.routeProgress = 0;
 }
 
@@ -485,6 +488,7 @@ async function warmEnemies() {
 }
 
 function makeTrainer(seg) {
+  if (seg?.named) return { name: seg.named.trainer, sprite: seg.named.sprite, mons: seg.named.team.map(([id, level]) => ({ id, level })) };
   return { ...randomTrainer(seg), mons: makeTrainerTeam(seg, encCtx()) };
 }
 
@@ -696,7 +700,7 @@ window.__pokeAway = (ms) => { hiddenAt = Date.now() - ms; onBecameVisible(); };
 
 function showChapterBriefing() {
   const owned = new Set([...state.playerTeam, ...(state.box || [])].map(m => m.id));
-  const ch = CHAPTERS[state.chapter % CHAPTERS.length];
+  const ch = CHAPTERS[Math.min(state.chapter, CHAPTERS.length - 1)];
   const gymSeg = state.chapSegs.find(x => x.gym);
   return showBriefing({ chapterName: ch.name, segs: state.chapSegs, owned, weather: state.weather, bg: sceneBg(gymSeg?.bg), have: { bag: state.bag, flags: state.storyFlags } });
 }
@@ -797,11 +801,73 @@ const BG_FILES = {
   center: "assets/bg/scenes/50-centre-pokemon-v2-710x400.webp",
   casino: "assets/bg/scenes/55-casino-celadopole-710x400.webp",
   shop: "assets/bg/scenes/60-boutique-pokemon-710x400.webp",
+
+  // Johto (original)
+  "johto-acajou": "assets/bg/scenes/johto-acajou-710x400.webp",
+  "johto-antre-dragon-v2": "assets/bg/scenes/johto-antre-dragon-v2-710x400.webp",
+  "johto-arene-acajou": "assets/bg/scenes/johto-arene-acajou-710x400.webp",
+  "johto-arene-doublonville": "assets/bg/scenes/johto-arene-doublonville-710x400.webp",
+  "johto-arene-ebenelle": "assets/bg/scenes/johto-arene-ebenelle-710x400.webp",
+  "johto-arene-ecorcia": "assets/bg/scenes/johto-arene-ecorcia-710x400.webp",
+  "johto-arene-irisia": "assets/bg/scenes/johto-arene-irisia-710x400.webp",
+  "johto-arene-mauville": "assets/bg/scenes/johto-arene-mauville-710x400.webp",
+  "johto-arene-oliville": "assets/bg/scenes/johto-arene-oliville-710x400.webp",
+  "johto-arene-rosalia": "assets/bg/scenes/johto-arene-rosalia-710x400.webp",
+  "johto-bois-chenes-v2": "assets/bg/scenes/johto-bois-chenes-v2-710x400.webp",
+  "johto-bourg-geon": "assets/bg/scenes/johto-bourg-geon-710x400.webp",
+  "johto-caves-jumelles-v8": "assets/bg/scenes/johto-caves-jumelles-v8-710x400.webp",
+  "johto-cote": "assets/bg/scenes/johto-cote-710x400.webp",
+  "johto-doublonville": "assets/bg/scenes/johto-doublonville-710x400.webp",
+  "johto-ebenelle": "assets/bg/scenes/johto-ebenelle-710x400.webp",
+  "johto-ecorcia": "assets/bg/scenes/johto-ecorcia-710x400.webp",
+  "johto-iles-tourbillon": "assets/bg/scenes/johto-iles-tourbillon-710x400.webp",
+  "johto-irisia": "assets/bg/scenes/johto-irisia-710x400.webp",
+  "johto-labo-orme": "assets/bg/scenes/johto-labo-orme-710x400.webp",
+  "johto-lac-colere-v2": "assets/bg/scenes/johto-lac-colere-v2-710x400.webp",
+  "johto-ligue-aldo": "assets/bg/scenes/johto-ligue-aldo-710x400.webp",
+  "johto-ligue-clement": "assets/bg/scenes/johto-ligue-clement-710x400.webp",
+  "johto-ligue-koga": "assets/bg/scenes/johto-ligue-koga-710x400.webp",
+  "johto-ligue-marion-v2": "assets/bg/scenes/johto-ligue-marion-v2-710x400.webp",
+  "johto-maison-irisia": "assets/bg/scenes/johto-maison-irisia-710x400.webp",
+  "johto-maitre-peter": "assets/bg/scenes/johto-maitre-peter-710x400.webp",
+  "johto-mauville": "assets/bg/scenes/johto-mauville-710x400.webp",
+  "johto-mont-argente-v2": "assets/bg/scenes/johto-mont-argente-v2-710x400.webp",
+  "johto-mont-creuset": "assets/bg/scenes/johto-mont-creuset-710x400.webp",
+  "johto-oliville": "assets/bg/scenes/johto-oliville-710x400.webp",
+  "johto-parc-naturel": "assets/bg/scenes/johto-parc-naturel-710x400.webp",
+  "johto-phare-oliville": "assets/bg/scenes/johto-phare-oliville-710x400.webp",
+  "johto-prairies": "assets/bg/scenes/johto-prairies-710x400.webp",
+  "johto-puits-ramoloss": "assets/bg/scenes/johto-puits-ramoloss-710x400.webp",
+  "johto-repaire-rocket": "assets/bg/scenes/johto-repaire-rocket-710x400.webp",
+  "johto-rosalia": "assets/bg/scenes/johto-rosalia-710x400.webp",
+  "johto-route-glace-v2": "assets/bg/scenes/johto-route-glace-v2-710x400.webp",
+  "johto-ruines-alpha": "assets/bg/scenes/johto-ruines-alpha-710x400.webp",
+  "johto-sentier-montagne": "assets/bg/scenes/johto-sentier-montagne-710x400.webp",
+  "johto-sommet-mont-argente": "assets/bg/scenes/johto-sommet-mont-argente-710x400.webp",
+  "johto-sous-sol-doublonville": "assets/bg/scenes/johto-sous-sol-doublonville-710x400.webp",
+  "johto-theatre-rosalia": "assets/bg/scenes/johto-theatre-rosalia-710x400.webp",
+  "johto-tour-carillon-v2": "assets/bg/scenes/johto-tour-carillon-v2-710x400.webp",
+  "johto-tour-cendree": "assets/bg/scenes/johto-tour-cendree-710x400.webp",
+  "johto-tour-chetiflor": "assets/bg/scenes/johto-tour-chetiflor-710x400.webp",
+  "johto-tour-radio-v2": "assets/bg/scenes/johto-tour-radio-v2-710x400.webp",
+  "johto-ville-griotte": "assets/bg/scenes/johto-ville-griotte-710x400.webp",
 };
 
 function sceneKey(key) {
   if (key && BG_FILES[key]) return key;
   if (key && SCENES[key]) return key;
+  const GYM_ALIAS = {
+    "gym-flying": "johto-arene-mauville",
+    "gym-bug": "johto-arene-ecorcia",
+    "gym-normal": "johto-arene-doublonville",
+    "gym-ghost": "johto-arene-rosalia",
+    "gym-fighting": "johto-arene-irisia",
+    "gym-steel": "johto-arene-oliville",
+    "gym-ice": "johto-arene-acajou",
+    "gym-dragon": "johto-arene-ebenelle",
+    "gym-dark": "johto-repaire-rocket",
+  };
+  if (key && GYM_ALIAS[key]) return GYM_ALIAS[key];
   if (key && String(key).startsWith("gym")) return "gym-rock";
   if (key && String(key).startsWith("league")) return "league-master";
   return "prairie";
@@ -818,7 +884,7 @@ const progressApi = {
     const owned = new Set([...state.playerTeam, ...(state.box || [])].map(m => m.id));
     const c = buildChapter(i);
     const gym = c.segs.find(x => x.gym)?.gym;
-    const isBadge = !!gym?.badgeEs && gym.badgeEs !== "Maestro";
+    const isBadge = !!gym?.badgeEs && !/^Maestro/.test(gym.badgeEs) && gym.badgeEs !== "Leyenda";
     const status = i < state.chapter ? "done" : i === state.chapter ? "current" : "todo";
     const bi = isBadge ? badgeIndex(gym.badgeEs) : -1;
     showBriefing({
@@ -830,14 +896,19 @@ const progressApi = {
       onAction: () => progressApi.onReplay(i),
     });
   },
-  onLeague() {
-    const lt = leagueTrainers();
+  onLeague(ri = 0) {
+    const rd = REGION_DEFS[ri] || REGION_DEFS[0];
+    const lt = leagueTrainers(ri);
     showLeague({
-      trainers: lt, bg: sceneBg("gym-psychic"),
-      unlocked: state.chapter >= LEAGUE_FIRST,
-      beaten: state.chapter > LEAGUE_LAST,
-      onAction: () => progressApi.onReplay(LEAGUE_FIRST, true),
+      trainers: lt, bg: sceneBg("gym-psychic"), title: rd.leagueName,
+      unlocked: state.chapter >= rd.lf,
+      beaten: state.chapter > rd.ll,
+      onAction: () => progressApi.onReplay(rd.lf, true),
     });
+  },
+  rerender() {
+    const el = $(".view-progress");
+    if (el) { el.innerHTML = renderProgress(state, sceneBg); bindProgress(progressApi); }
   },
   async onReplay(i, noConfirm) {
     if (!noConfirm && !(await showConfirm({ title: `¿Volver a «${CHAPTERS[i].name}»? Se reinicia el recorrido de ese capítulo.`, confirmLabel: "Repetir" }))) return;
@@ -1136,7 +1207,7 @@ function renderRoute() {
       <div class="route-header hud">
         <div class="trainer-chip" id="trainer-chip" role="button">
           ${avatarHtml(state, { cls: "chip-av" })}
-          <span class="hud-dex">${(state.stats?.caught || []).length} / 151</span>
+          <span class="hud-dex">${(state.stats?.caught || []).length} / ${state.chapter >= 15 || (state.stats?.caught || []).some(i => i > 151) ? 251 : 151}</span>
         </div>
         <span class="money hud-money" id="money">${fmtMoney(state.money)} ₽</span>
         <button type="button" class="hud-btn" id="hud-save" aria-label="Guardar"><i class="hud-floppy"></i><b class="hud-dot"></b></button>
@@ -1818,14 +1889,14 @@ function captureWildOffline(enemy) {
   return { ...r, id: enemy.id, name: enemy.nameEs || enemy.name, shiny: !!enemy.shiny, level: enemy.level };
 }
 
-async function nodeWild() {
-  const { id, level } = pickEncounter(curSeg(), encCtx());
+async function nodeWild(forced = null) {
+  const { id, level } = forced || pickEncounter(curSeg(), encCtx());
   const enemy = await loadEnemy(id, level);
   try { await showTrainerSendOut(); } catch (e) { if (e instanceof AbortFight) throw e; }
 
-  enemy.shiny = Math.random() < SHINY_RATE;
+  enemy.shiny = forced?.shiny != null ? !!forced.shiny : Math.random() < SHINY_RATE;
   showEnemy(enemy);
-  setMsg(enemy.shiny ? `✦ ¡Un ${enemy.nameEs} VARIOCOLOR salvaje apareció! ✦` : `¡Un ${enemy.nameEs} salvaje apareció!`);
+  setMsg(forced?.text && !enemy.shiny ? forced.text : enemy.shiny ? `✦ ¡Un ${enemy.nameEs} VARIOCOLOR salvaje apareció! ✦` : `¡Un ${enemy.nameEs} salvaje apareció!`);
   await delay(600);
 
   state.keepEnemyOnFaint = true;
@@ -1880,6 +1951,73 @@ async function nodeWild() {
   }
   saveGame();
   await delay(900);
+  return true;
+}
+
+
+/** Encuentro fijo (estático): Sudowoodo, Gyarados rojo, Lugia… Con `once` solo ocurre una vez. */
+async function nodeStatic() {
+  const node = curNode();
+  const flag = node.key ? `static-${node.key}` : null;
+  state.storyFlags = state.storyFlags || [];
+  if (flag && state.storyFlags.includes(flag)) { advanceRoute(); saveGame(); return true; }
+  const prevWeather = state.weather;
+  if (node.weather) state.weather = node.weather;
+  let ok;
+  try { ok = await nodeWild({ id: node.id, level: node.level, shiny: node.shiny ? true : null, text: node.text }); }
+  finally { state.weather = prevWeather; }
+  if (ok && flag && !state.storyFlags.includes(flag)) { state.storyFlags.push(flag); saveGame(); }
+  return ok;
+}
+
+/** Elegir un Pokémon entre varios (inicial de Johto, etc.). Devuelve el id elegido. */
+function chooseGift(choices, title) {
+  return new Promise((resolve) => {
+    const ov = document.createElement("div");
+    ov.className = "gift-ov";
+    ov.innerHTML = `<div class="gift-box"><h3>${title}</h3><div class="gift-row">${choices.map(id => `<button type="button" class="gift-card" data-id="${id}"><img src="${artSprite({ id })}" alt="" draggable="false" onerror="this.onerror=null;this.src='${frontSprite({ id })}'"><b>${DEX_NAMES[id - 1] || "#" + id}</b></button>`).join("")}</div><small>Toca uno para elegirlo</small></div>`;
+    document.body.appendChild(ov);
+    ov.onclick = (e) => { const b = e.target.closest("[data-id]"); if (!b) return; ov.remove(); resolve(Number(b.dataset.id)); };
+  });
+}
+
+/** Regalo de la historia (inicial, Eevee, Tyrogue…). Pasa a tu equipo o a la caja. */
+async function nodeGift() {
+  const node = curNode();
+  const g = node.gift;
+  state.storyFlags = state.storyFlags || [];
+  const flag = `gift-${g.key}`;
+  if (state.storyFlags.includes(flag)) { advanceRoute(); saveGame(); return true; }
+  setMsg(g.text || "¡Te regalan un Pokémon!");
+  await delay(700);
+  let id = g.choices[0];
+  if (g.choices.length > 1) id = await chooseGift(g.choices, g.text || "Elige un Pokémon");
+  const mon = await loadEnemy(id, g.level);
+  mon.shiny = false;
+  const r = resolveCapture(mon, { ignoreFilter: true });
+  state.storyFlags.push(flag);
+  advanceRoute();
+  setMsg(r.status === "team" ? `¡${mon.nameEs} se unió al equipo!` : r.status === "box" ? `¡${mon.nameEs} fue a tu caja!` : `¡${mon.nameEs} recibido!`);
+  saveGame();
+  await delay(1400);
+  return true;
+}
+
+/** Huevo regalado: va a la cola de huevos de la Guardería. */
+async function nodeEgg() {
+  const node = curNode();
+  state.storyFlags = state.storyFlags || [];
+  const flag = `egg-${node.key}`;
+  if (state.storyFlags.includes(flag)) { advanceRoute(); saveGame(); return true; }
+  const n = ensureNursery(state);
+  const ids = Array.isArray(node.id) ? node.id : [node.id];
+  const id = ids[Math.floor(Math.random() * ids.length)];
+  n.eggs.push({ id, uid: Date.now() + Math.random(), gift: true });
+  state.storyFlags.push(flag);
+  advanceRoute();
+  setMsg(node.text || "¡Recibiste un huevo! Irá a incubar a la Guardería.");
+  saveGame();
+  await delay(1800);
   return true;
 }
 
@@ -2185,7 +2323,7 @@ async function nodeGym() {
     await delay(900);
   }
   await showBanner(`¡Has derrotado a ${gym.leaderEs}!`);
-  setMsg(gym.badgeEs === "Maestro" ? `¡Eres el Campeón de la Liga! +${fmtMoney(gym.reward)} ₽`
+  setMsg(/^Maestro/.test(gym.badgeEs || "") ? `¡Eres el Campeón de la Liga! +${fmtMoney(gym.reward)} ₽`
     : gym.badgeEs ? (state.badges.includes(gym.badgeEs) ? `¡Gimnasio repetido! +${fmtMoney(gym.reward)} ₽` : `¡Ganaste la Medalla ${gym.badgeEs}! +${fmtMoney(gym.reward)} ₽`)
     : `¡Derrotaste a ${gym.leaderEs}! +${fmtMoney(gym.reward)} ₽`);
   const repeat = !!gym.badgeEs && state.badges.includes(gym.badgeEs); // ya la tenías: sin felicitación
@@ -2198,7 +2336,7 @@ async function nodeGym() {
 
 function showMedalWin(gym) {
   const next = CHAPTERS[state.chapter];
-  const champ = gym.badgeEs === "Maestro";
+  const champ = /^Maestro/.test(gym.badgeEs || "") || gym.badgeEs === "Leyenda";
   const isMedal = !!gym.badgeEs && !champ;
   return new Promise(res => {
     const ov = document.createElement("div");
@@ -2266,10 +2404,13 @@ async function doEncounter() {
     else if (node.t === "center") await nodeCenter();
     else if (node.t === "unlock") await nodeUnlock();
     else if (node.t === "legend") ok = await nodeLegend();
+    else if (node.t === "static") ok = await nodeStatic();
+    else if (node.t === "gift") await nodeGift();
+    else if (node.t === "egg") await nodeEgg();
     else ok = await nodeWild();
 
     hideEnemy();
-    if (ok && (node.t === "wild" || node.t === "trainer" || node.t === "gym" || node.t === "legend") && state.playerTeam[state.activeIndex]?.currentHp > 0) {
+    if (ok && (node.t === "wild" || node.t === "trainer" || node.t === "gym" || node.t === "legend" || node.t === "static") && state.playerTeam[state.activeIndex]?.currentHp > 0) {
       try { await showTrainerSendOut("out"); } catch (_) {}
     }
     state.busy = false;

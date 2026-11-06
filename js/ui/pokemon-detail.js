@@ -1,13 +1,13 @@
 // Detalle de Pokémon (estilo ficha del original)
 
-import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=134";
-import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=134";
-import { ITEMS } from "../data/items.js?v=134";
-import { itemImg } from "./item-icon.js?v=134";
-import { pixelIcon } from "./pixel.js?v=134";
-import { countFamily, familySlots } from "../data/families.js?v=134";
-import { getNature, natureEffectHtml } from "../data/natures.js?v=134";
-import { showConfirm, showAlert } from "./confirm.js?v=134";
+import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=135";
+import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=135";
+import { ITEMS } from "../data/items.js?v=135";
+import { itemImg } from "./item-icon.js?v=135";
+import { pixelIcon } from "./pixel.js?v=135";
+import { countFamily, familySlots } from "../data/families.js?v=135";
+import { getNature, natureEffectHtml } from "../data/natures.js?v=135";
+import { showConfirm, showAlert } from "./confirm.js?v=135";
 
 const TYPE_ES = {
   normal: "Normal", fire: "Fuego", water: "Agua", electric: "Eléctrico",

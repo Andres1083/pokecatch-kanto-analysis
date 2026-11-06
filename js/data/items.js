@@ -60,6 +60,16 @@ export const ITEMS = {
                      desc: "Hace evolucionar a ciertos Pokémon. Guárdala: las evoluciones llegarán pronto." },
   "stone-moon":    { name: "Piedra Lunar",  cat: "stone", shape: "gem", pal: { a: "#7a6fc4", b: "#463c8a", c: "#cfc8ff" }, weight: 2,
                      desc: "Hace evolucionar a ciertos Pokémon. Guárdala: las evoluciones llegarán pronto." },
+  "sun-stone":    { name: "Piedra Solar",  cat: "stone", shape: "gem", pal: { a: "#f59a2a", b: "#b0600f", c: "#ffe0a0" }, weight: 2,
+                    desc: "Hace evolucionar a ciertos Pokémon (Gloom, Sunkern, Eevee…)." },
+  "kings-rock":   { name: "Roca del Rey",  cat: "stone", shape: "gem", pal: { a: "#d8b24a", b: "#8a6a1a", c: "#fff0b0" }, weight: 1,
+                    desc: "Objeto raro: evoluciona a Poliwhirl y Slowpoke." },
+  "metal-coat":   { name: "Revestimiento Metálico", cat: "stone", shape: "gem", pal: { a: "#9aa5b4", b: "#5a6676", c: "#e2e8f0" }, weight: 1,
+                    desc: "Objeto raro: evoluciona a Onix y Scyther." },
+  "dragon-scale": { name: "Escama Dragón", cat: "stone", shape: "gem", pal: { a: "#4a7cd8", b: "#24468a", c: "#b8d0ff" }, weight: 1,
+                    desc: "Objeto raro: evoluciona a Seadra." },
+  "soothe-bell":  { name: "Cascabel Alivio", cat: "held", shape: "gem", pal: { a: "#f0a8c8", b: "#a8587e", c: "#ffe0ee" }, weight: 1,
+                    desc: "Un cascabel que calma. Objeto de la historia de Johto." },
 };
 
 export const ITEM_IDS = Object.keys(ITEMS);

@@ -1,5 +1,11 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "5.0", date: "6 nov 2026", title: "¡Johto!", items: [
+    "Segunda región: 17 capítulos tras la Liga de Kanto (Céfiro a Dragón, Calle Victoria, Alto Mando de Johto, Campeón y Monte Plateado).",
+    "Elige tu inicial de Johto, recibe huevos (Togepi y otros) y encuentros fijos como el Gyarados rojo.",
+    "Progreso con selector Kanto/Johto, medallas de Johto y su Liga; Pokédex hasta 251 con sección propia.",
+    "Evoluciones y familias de Johto (incluido Pichu, Cleffa, Crobat, Steelix…) y nuevos objetos: Piedra Solar, Roca del Rey, Revestimiento Metálico y Escama Dragón.",
+  ] },
   { v: "4.2", date: "6 nov 2026", title: "Requisitos de Mewtwo y Mew", items: [
     "Mewtwo solo aparece tras ganar la Liga Pokémon de Kanto.",
     "Mew solo aparece con la Pokédex de Kanto completa (1–150, sin contar a Mew); el aviso muestra tu progreso.",

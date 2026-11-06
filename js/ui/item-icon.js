@@ -1,6 +1,6 @@
 // Icono de objeto: usa el PNG de assets/items/<id>.png y, si falta, el icono generado.
-import { ITEMS } from "../data/items.js?v=134";
-import { pixelIcon } from "./pixel.js?v=134";
+import { ITEMS } from "../data/items.js?v=135";
+import { pixelIcon } from "./pixel.js?v=135";
 
 export function itemIconSrc(id) { return `assets/items/${id}.png`; }
 export function itemFallback(id) {
@@ -10,5 +10,5 @@ export function itemFallback(id) {
 /** <img> listo para insertar. */
 export function itemImg(id, size = 26, cls = "item-sprite") {
   const it = ITEMS[id] || {};
-  return `<img class="${cls}" src="${itemIconSrc(id)}" alt="${it.name || id}" width="${size}" height="${size}" style="width:${size}px;height:${size}px;image-rendering:pixelated" data-fb="${itemFallback(id)}" onerror="this.onerror=null;this.src=this.dataset.fb||''" />`;
+  return `<img class="${cls}" src="${itemIconSrc(id)}" alt="${it.name || id}" width="${size}" height="${size}" style="width:${size}px;height:${size}px;image-rendering:pixelated" data-fb="${itemFallback(id)}" onerror="if(!this.dataset.r){this.dataset.r=1;this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${id}.png'}else{this.onerror=null;this.src=this.dataset.fb||''}" />`;
 }

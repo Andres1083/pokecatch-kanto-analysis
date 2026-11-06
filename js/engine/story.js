@@ -1,8 +1,11 @@
 // Historia de Kanto: capítulos → tramos → nodos, y tablas de aparición.
 // Datos tomados del Poke'Catch original (pesos, horarios, clima).
 
-import { CHAPTERS } from "../data/story.js?v=134";
-import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=134";
+import { CHAPTERS } from "../data/story.js?v=135";
+import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=135";
+import JOHTO_ENCOUNTERS from "../data/encounters-johto.js?v=135";
+
+const ALL_ENCOUNTERS = { ...KANTO_ENCOUNTERS, ...JOHTO_ENCOUNTERS };
 
 export { CHAPTERS };
 
@@ -45,7 +48,7 @@ export function buildChapter(ci, rand = Math.random) {
   steps.forEach((st, si) => {
     if (st.kind === "route") {
       const segIdx = segs.length;
-      segs.push({ name: st.name, kind: "route", areas: st.areas || [], bg: st.bg, lv: st.lv || null, step: si, item: !!st.item });
+      segs.push({ name: st.name, kind: "route", areas: st.areas || [], bg: st.bg, lv: st.lv || null, step: si, item: !!st.item, species: st.species || null, classes: st.classes || null, indoor: !!st.indoor });
       for (const L of layoutFor(ci, si, st, rand)) nodes.push({ t: LETTER[L], seg: segIdx });
     } else if (st.kind === "heal") {
       let segIdx = segs.length - 1;
@@ -82,9 +85,33 @@ export function buildChapter(ci, rand = Math.random) {
         level: st.level,
         once: st.once || `legend-${st.id}`,
       });
+    } else if (st.kind === "gift") {
+      // El primer Pokémon de Kanto ("starter") lo da la intro; el resto se entrega aquí
+      if (st.gift?.key && st.gift.key !== "starter") {
+        const segIdx = Math.max(0, segs.length - 1);
+        if (!segs.length) segs.push({ name: st.name, kind: "town", areas: [], bg: st.bg || "town", step: si });
+        nodes.push({ t: "gift", seg: segIdx, gift: st.gift, key: st.gift.key });
+      }
+    } else if (st.kind === "egg") {
+      const segIdx = Math.max(0, segs.length - 1);
+      nodes.push({ t: "egg", seg: segIdx, id: st.id, key: st.once, text: st.text });
+    } else if (st.kind === "static") {
+      const segIdx = segs.length;
+      segs.push({ name: st.name, kind: "static", areas: [], bg: st.bg || "cave", step: si, staticId: st.id, staticLevel: st.level });
+      nodes.push({ t: "static", seg: segIdx, id: st.id, level: st.level, key: st.once || null, shiny: !!st.shiny, rate: st.rate || null, weather: st.weather || null, text: st.text, reward: st.reward || null });
+    } else if (st.kind === "trainer") {
+      const segIdx = segs.length;
+      segs.push({ name: st.name, kind: "trainer", areas: [], bg: st.bg || "town", step: si, named: st });
+      nodes.push({ t: "trainer", seg: segIdx, named: true });
     }
-    // gift / static / trade: aún no implementados (se omiten)
+    // trade: aún no implementado (se omite)
   });
+  // Rutas sin tabla propia (solo lista de especies): niveles a partir del gimnasio del capítulo
+  const gymLv = steps.filter(x => x.kind === "gym").flatMap(g => g.team.map(t => t[1]));
+  if (gymLv.length) {
+    const hi = Math.max(...gymLv), lo = Math.max(2, Math.min(...gymLv) - 4);
+    for (const sg of segs) if (sg.species && !sg.lv) sg.lv = [lo, Math.max(lo, hi - 2)];
+  }
   return { segs, nodes };
 }
 
@@ -130,13 +157,30 @@ export function periodOf(d = new Date()) {
 const DROP_FACTOR = 0.2; // las especies «dropeadas» no desaparecen, solo se vuelven 5 veces más raras
 const TW_INDEX = { morning: 0, day: 0, dusk: 1, night: 2 };
 
-function walkEntries(areas) {
+function walkEntries(areas, period = "day", seg = null) {
   const out = [];
+  const pi = period === "night" ? 2 : period === "morning" ? 0 : 1;
   for (const a of areas) {
-    for (const e of KANTO_ENCOUNTERS[a] || []) {
-      if ((e[4] || "walk").split("|").some(m => m === "walk")) out.push({ id: e[0], min: e[1], max: e[2], w: e[3] || 1, area: a });
+    for (const e of ALL_ENCOUNTERS[a] || []) {
+      if (Array.isArray(e)) {
+        if (!(e[4] || "walk").split("|").some(m => m === "walk")) continue;
+        const w = Array.isArray(e[5]) ? e[5][pi] : (e[3] || 1);
+        if (w > 0) out.push({ id: e[0], min: e[1], max: e[2], w, area: a });
+      }
     }
   }
+  // Tramos con lista fija de especies (sin tabla de zona)
+  if (!out.length && seg?.species?.length) {
+    const [lo, hi] = seg.lv || [5, 10];
+    for (const id of seg.species) out.push({ id, min: lo, max: hi, w: 10, area: "fixed" });
+  }
+  return out;
+}
+
+/** Apariciones raras de un tramo ({id, share}), p. ej. la evolución final de un inicial. */
+function rareEntries(areas) {
+  const out = [];
+  for (const a of areas) for (const e of ALL_ENCOUNTERS[a] || []) if (!Array.isArray(e) && e && e.id) out.push(e);
   return out;
 }
 
@@ -145,7 +189,7 @@ function walkEntries(areas) {
  * pct suma 100.
  */
 export function encounterTable(seg, { period = "day", weather = "clear" } = {}) {
-  const entries = walkEntries(seg.areas || []);
+  const entries = walkEntries(seg.areas || [], period, seg);
   if (!entries.length) return [];
   const tw = TW_INDEX[period] ?? 0;
 
@@ -176,12 +220,18 @@ export function encounterTable(seg, { period = "day", weather = "clear" } = {}) 
   }
   const baseTotal = [...base.values()].reduce((s, b) => s + b.w, 0) || 1;
   // Solo especies de la tabla del área (sin inyectar ajenos)
+  const rares = rareEntries(seg.areas || []);
+  const rareShare = Math.min(0.5, rares.reduce((t, r) => t + (r.share || 0), 0));
   const out = [...base.values()].map(b => ({
     id: b.id,
-    pct: (b.w / baseTotal) * 100,
+    pct: (b.w / baseTotal) * 100 * (1 - rareShare),
     min: b.min,
     max: b.max,
   }));
+  if (rares.length) {
+    const hi = Math.max(...out.map(o => o.max)), lo = Math.max(...out.map(o => o.min));
+    for (const r of rares) out.push({ id: r.id, pct: (r.share || 0) * 100, min: Math.min(lo, hi), max: hi, rare: true });
+  }
   return out.sort((a, b) => b.pct - a.pct);
 }
 
@@ -211,11 +261,13 @@ export function makeTrainerTeam(seg, ctx = {}, rand = Math.random) {
 export function chapterSpecies(segs) {
   const set = new Map();
   for (const seg of segs) {
-    for (const e of walkEntries(seg.areas || [])) {
+    for (const e of walkEntries(seg.areas || [], "day", seg)) {
       const [a, b] = seg.lv || [e.min, e.max];
       for (let l = a; l <= b + 1; l++) set.set(`${e.id}:${l}`, { id: e.id, level: l });
     }
     if (seg.gym) for (const [id, level] of seg.gym.team) set.set(`${id}:${level}`, { id, level });
+    if (seg.named) for (const [id, level] of seg.named.team) set.set(`${id}:${level}`, { id, level });
+    if (seg.staticId) set.set(`${seg.staticId}:${seg.staticLevel}`, { id: seg.staticId, level: seg.staticLevel });
     if (seg.legendId) set.set(`${seg.legendId}:${seg.legendLevel}`, { id: seg.legendId, level: seg.legendLevel });
   }
   return [...set.values()];

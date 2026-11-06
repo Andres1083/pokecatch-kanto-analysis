@@ -1,10 +1,10 @@
 // Pantalla previa al gimnasio: nivel recomendado, premio y Pokémon que aparecen con su %.
 
-import { frontSprite } from "../data/sprites.js?v=134";
-import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=134";
-import { pixelIcon } from "./pixel.js?v=134";
-import { ITEMS } from "../data/items.js?v=134";
-import { itemImg } from "./item-icon.js?v=134";
+import { frontSprite } from "../data/sprites.js?v=135";
+import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=135";
+import { pixelIcon } from "./pixel.js?v=135";
+import { ITEMS } from "../data/items.js?v=135";
+import { itemImg } from "./item-icon.js?v=135";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const pctLabel = (p) => (p < 1 ? "<1 %" : `${p >= 10 ? Math.round(p) : p.toFixed(1).replace(".", ",")} %`);
@@ -151,7 +151,7 @@ export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel
 }
 
 /** Detalle de la Liga Pokémon: lista de entrenadores con nivel recomendado y tope. */
-export function showLeague({ trainers, bg, unlocked, beaten, onAction }) {
+export function showLeague({ trainers, bg, unlocked, beaten, onAction, title = "Liga Pokémon" }) {
   return new Promise((resolve) => {
     const lo = Math.min(...trainers.map(t => t.lo)), hi = Math.max(...trainers.map(t => t.hi));
     const reward = trainers.reduce((a, t) => a + (t.reward || 0), 0);
@@ -166,7 +166,7 @@ export function showLeague({ trainers, bg, unlocked, beaten, onAction }) {
       <div class="bf-hero bf-league" style="background-image:url('${bg}')">
         <button type="button" class="bf-x" aria-label="Cerrar">✕</button>${hero}</div>
       <div class="bf-scroll"><div class="bf-body">
-        <div class="bf-title"><i class="bf-master"></i><h2>Liga Pokémon</h2></div>
+        <div class="bf-title"><i class="bf-master"></i><h2>${title}</h2></div>
         <div class="bf-chips col">
           <span class="bf-chip gold">Nv. recomendado <b>${lo}–${hi}</b></span>
           <span class="bf-chip">${trainers.length} Entrenadores seguidos</span>
@@ -177,7 +177,7 @@ export function showLeague({ trainers, bg, unlocked, beaten, onAction }) {
         <div class="bf-trs">${rows}</div>
         <div class="bf-gap"></div>
       </div></div>
-      <div class="bf-foot"><button type="button" class="bf-go" ${unlocked ? "" : "disabled"}>${unlocked ? "ENTRAR EN LA LIGA" : "🔒 VENCE A LOS 8 LÍDERES"}</button></div>`, "#c9a227");
+      <div class="bf-foot"><button type="button" class="bf-go" ${unlocked ? "" : "disabled"}>${unlocked ? "ENTRAR EN LA LIGA" : "🔒 VENCE A LOS LÍDERES"}</button></div>`, "#c9a227");
     const close = () => { overlay.remove(); resolve(); };
     overlay.querySelector(".bf-x")?.addEventListener("click", close);
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });

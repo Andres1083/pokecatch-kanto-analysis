@@ -7556,3 +7556,13 @@ body { background-color: transparent !important; }
 @media (prefers-reduced-motion: reduce) { .gd-wander, .gd-wander img { animation: none; } }
 
 .hatch-filt { display:block; margin-top:6px; max-width:260px; color:#ffb4b4; font-size:.8rem; line-height:1.25; }
+
+/* v135: elegir regalo (inicial de Johto) */
+.gift-ov { position: fixed; inset: 0; z-index: 300; display: grid; place-items: center; background: rgba(8,10,18,.82); }
+.gift-box { width: min(92vw, 440px); padding: 18px 14px 14px; border-radius: 20px; background: #1b1f33; border: 3px solid #d05aa6; text-align: center; color: #fff; }
+.gift-box h3 { margin: 0 0 12px; font-size: 1.15rem; }
+.gift-box small { display: block; margin-top: 10px; color: #a79fc4; }
+.gift-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gift-card { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: 14px; border: 2px solid #3a2f5a; background: #14101f; color: #fff; font: inherit; cursor: pointer; }
+.gift-card:hover, .gift-card:active { border-color: #ffcb05; }
+.gift-card img { width: 84px; height: 84px; object-fit: contain; image-rendering: pixelated; }

@@ -1,13 +1,13 @@
-import { DEX_NAMES } from "../data/dex-names.js?v=134";
-import { iconSprite, frontSprite } from "../data/sprites.js?v=134";
-import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=134";
-import { pixelIcon } from "./pixel.js?v=134";
-import { badgeHtml } from "./badge.js?v=134";
-import { NATURES, natureLabel } from "../data/natures.js?v=134";
-import { shinyOdds } from "../data/shiny.js?v=134";
-import { placeMenu } from "./dropdown.js?v=134";
-import { showTip } from "./tip.js?v=134";
-import { getPokemon } from "../data/pokeapi.js?v=134";
+import { DEX_NAMES } from "../data/dex-names.js?v=135";
+import { iconSprite, frontSprite } from "../data/sprites.js?v=135";
+import { openPlayerEditor, avatarHtml, getAspect, aspectSrc, frameClass } from "./player-avatar.js?v=135";
+import { pixelIcon } from "./pixel.js?v=135";
+import { badgeHtml } from "./badge.js?v=135";
+import { NATURES, natureLabel } from "../data/natures.js?v=135";
+import { shinyOdds } from "../data/shiny.js?v=135";
+import { placeMenu } from "./dropdown.js?v=135";
+import { showTip } from "./tip.js?v=135";
+import { getPokemon } from "../data/pokeapi.js?v=135";
 
 /** Dos naturalezas recomendadas según las estadísticas base. */
 function recommendNatures(b) {
@@ -50,14 +50,14 @@ let dexFilter = { q: "", mode: "all", open: true, shiny: false };
 
 const norm = (t) => String(t).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-function gridHtml(state) {
+function gridHtml(state, from = 1, to = 151) {
   const { caught, seen } = dexSets(state);
   const q = norm(dexFilter.q.trim().replace(/^#|^n\.?º?\s*/i, ""));
   const shinies = new Set(state.stats?.shiny || []);
   const filt = state.captureFilter || {};
   const fresh = new Set((state.stats?.caughtOrder || []).slice(-3));
   let out = "";
-  for (let id = 1; id <= 151; id++) {
+  for (let id = from; id <= to; id++) {
     const c = caught.has(id), s = seen.has(id);
     if (dexFilter.mode === "caught" && !c) continue;
     if (dexFilter.mode === "missing" && c) continue;
@@ -77,11 +77,15 @@ function gridHtml(state) {
 export function renderDex(state) {
   const { caught, seen } = dexSets(state);
   const n = [...caught].filter(id => id >= 1 && id <= 151).length;
-  const pct = Math.round(n / 151 * 100);
+  const nj = [...caught].filter(id => id >= 152 && id <= 251).length;
+  const johto = state.chapter >= 15 || nj > 0;
+  const tot = johto ? 251 : 151, ncaught = n + nj;
+  const pct = Math.round(ncaught / tot * 100);
   const shinies = (state.stats?.shiny || []).length;
   const order = state.stats?.caughtOrder || [];
-  const last = order.filter(id => id >= 1 && id <= 151).slice(-12).reverse();
-  const missShiny = Math.max(0, 151 - shinies);
+  const last = order.filter(id => id >= 1 && id <= 251).slice(-12).reverse();
+  const missShiny = Math.max(0, 151 - (state.stats?.shiny || []).filter(i => i <= 151).length);
+  const shJ = (state.stats?.shiny || []).filter(i => i > 151).length;
   return `
   <div class="dx-page">
     <section class="dx-card dx-top">
@@ -94,7 +98,7 @@ export function renderDex(state) {
         <div class="dx-stats">
           <span>Vistos <b>${seen.size}</b></span>
           <span>✦ Variocolor <b>${shinies}</b></span>
-          <span>Regiones completas <b>${n >= 151 ? 1 : 0}/4</b></span>
+          <span>Regiones completas <b>${(n >= 151 ? 1 : 0) + (nj >= 100 ? 1 : 0)}/4</b></span>
         </div>
       </header>
 
@@ -102,7 +106,7 @@ export function renderDex(state) {
         <div class="dx-ring" style="--p:${pct}">
           <div class="dx-ring-inner">
             <b>${pct}&nbsp;%</b>
-            <small>${n}&nbsp;/&nbsp;151</small>
+            <small>${ncaught}&nbsp;/&nbsp;${tot}</small>
           </div>
         </div>
         <div class="dx-regions">
@@ -111,11 +115,15 @@ export function renderDex(state) {
             <div class="dx-bar"><i style="width:${(n / 151) * 100}%"></i></div>
             <em>${n}&nbsp;/&nbsp;151</em>
           </div>
-          <div class="dx-reg lock">
+          ${johto ? `<div class="dx-reg">
+            <span>Johto</span>
+            <div class="dx-bar"><i style="width:${nj}%"></i></div>
+            <em>${nj}&nbsp;/&nbsp;100</em>
+          </div>` : `<div class="dx-reg lock">
             <span>Johto</span>
             <div class="dx-bar"></div>
             <em>🔒</em>
-          </div>
+          </div>`}
           <div class="dx-reg lock">
             <span>Hoenn</span>
             <div class="dx-bar"></div>
@@ -160,8 +168,22 @@ export function renderDex(state) {
         </div>
       </button>
       <div class="dx-regbar"><div class="dx-bar"><i style="width:${(n / 151) * 100}%"></i></div></div>
-      <div class="dx-grid" id="dx-grid">${gridHtml(state)}</div>
+      <div class="dx-grid" id="dx-grid">${gridHtml(state, 1, 151)}</div>
     </section>
+    ${johto ? `<section class="dx-card dx-kanto dx-johto ${dexFilter.openJ === false ? "closed" : ""}">
+      <button type="button" class="dx-region-head" id="dx-toggle-j">
+        <div class="dx-rh-left">
+          <h2>Johto</h2>
+          <em class="dx-shchip">✦×${shJ} faltan ${Math.max(0, 100 - shJ)}</em>
+        </div>
+        <div class="dx-rh-right">
+          <span>${nj}&nbsp;/&nbsp;100</span>
+          <i class="dx-caret">▾</i>
+        </div>
+      </button>
+      <div class="dx-regbar"><div class="dx-bar"><i style="width:${nj}%"></i></div></div>
+      <div class="dx-grid" id="dx-grid-j">${gridHtml(state, 152, 251)}</div>
+    </section>` : ""}
   </div>`;
 }
 
@@ -221,7 +243,10 @@ function openNaturePicker(state, id, refresh) {
 export function bindDex(state) {
   const q = document.getElementById("dx-q");
   if (!q) return;
-  const upd = () => { document.getElementById("dx-grid").innerHTML = gridHtml(state); };
+  const upd = () => {
+    document.getElementById("dx-grid").innerHTML = gridHtml(state, 1, 151);
+    const gj = document.getElementById("dx-grid-j"); if (gj) gj.innerHTML = gridHtml(state, 152, 251);
+  };
   q.oninput = () => { dexFilter.q = q.value; upd(); };
   const mb = document.getElementById("dx-mode-btn"), mm = document.getElementById("dx-mode-menu");
   const closeMenu = () => { mm.hidden = true; mb.setAttribute("aria-expanded", "false"); };
@@ -242,12 +267,16 @@ export function bindDex(state) {
   if (sb) sb.onclick = () => { dexFilter.shiny = !dexFilter.shiny; sb.classList.toggle("on", dexFilter.shiny); upd(); };
   const chip = document.getElementById("dx-shchip");
   if (chip) chip.onclick = (e) => { e.stopPropagation(); showTip(chip, "Variocolores", `Cada encuentro salvaje tiene ${shinyOdds()} de probabilidad de ser variocolor. Los variocolor siempre se guardan, sin importar el filtro de naturaleza.`); };
-  document.getElementById("dx-grid").onclick = (e) => {
+  const pick = (e) => {
     const cell = e.target.closest(".dx-pick");
     if (cell) openNaturePicker(state, Number(cell.dataset.id), upd);
   };
+  document.getElementById("dx-grid").onclick = pick;
+  const gj = document.getElementById("dx-grid-j"); if (gj) gj.onclick = pick;
+  const tj = document.getElementById("dx-toggle-j");
+  if (tj) tj.onclick = () => { dexFilter.openJ = dexFilter.openJ === false; document.querySelector(".dx-johto").classList.toggle("closed", dexFilter.openJ === false); };
   const tg = document.getElementById("dx-toggle");
-  if (tg) tg.onclick = () => { dexFilter.open = !dexFilter.open; document.querySelector(".dx-kanto").classList.toggle("closed", !dexFilter.open); };
+  if (tg) tg.onclick = () => { dexFilter.open = !dexFilter.open; document.querySelector(".dx-kanto:not(.dx-johto)").classList.toggle("closed", !dexFilter.open); };
   const hp = document.getElementById("dx-help");
   if (hp) hp.onclick = () => showTip(hp, "Pokédex", "Los Pokémon capturados se ven en color, los vistos en sombra oscura y el resto como silueta. Busca por nombre o número.");
 }
@@ -304,7 +333,8 @@ export function showTrainerCard(state, { sprite, onRename, onSave } = {}) {
   const tile = (icon, label, value, extra = "") => `<div class="tc-st">${icon}<div><small>${label}</small><b>${value}${extra}</b></div></div>`;
   const back = () => `
     <div class="tc-sub">POKÉDEX POR REGIÓN</div>
-    <div class="tc-box wide"><div class="tc-row"><span>Kanto</span><span>${caught.size} / 151</span></div><div class="dx-bar"><i style="width:${caught.size / 151 * 100}%"></i></div></div>
+    <div class="tc-box wide"><div class="tc-row"><span>Kanto</span><span>${[...caught].filter(i => i <= 151).length} / 151</span></div><div class="dx-bar"><i style="width:${[...caught].filter(i => i <= 151).length / 151 * 100}%"></i></div></div>
+    ${[...caught].some(i => i > 151) || state.chapter >= 15 ? `<div class="tc-box wide"><div class="tc-row"><span>Johto</span><span>${[...caught].filter(i => i > 151).length} / 100</span></div><div class="dx-bar"><i style="width:${[...caught].filter(i => i > 151).length}%"></i></div></div>` : ""}
     <hr class="tc-hr">
     <div class="tc-sub">COMBATES</div>
     <div class="tc-stats">

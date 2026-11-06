@@ -38,6 +38,8 @@ const CLASSES = {
   youngster: "Joven", lass: "Chica", bugcatcher: "Cazabichos", hiker: "Montañero", fisherman: "Pescador",
   biker: "Motorista", beauty: "Belleza", camper: "Campista", picnicker: "Excursionista",
   birdkeeper: "Pajarero", supernerd: "Friki",
+  sage: "Sabio", rocketgrunt: "Recluta Rocket", "rocketgrunt-f": "Recluta Rocket", scientist: "Científico",
+  acetrainer: "Entrenador", "acetrainer-f": "Entrenadora", blackbelt: "Cinturón negro", psychic: "Médium",
 };
 const POOLS = {
   forest: ["bugcatcher", "bugcatcher", "camper", "picnicker"],
@@ -52,7 +54,7 @@ const POOLS = {
 const FIRST = ["Rémi", "Marcos", "Pablo", "Lucía", "Tomás", "Iván", "Sara", "Elena", "Dani", "Hugo", "Nora", "Leo", "Ada", "Biel"];
 
 export function randomTrainer(seg, rand = Math.random) {
-  let pool = POOLS[seg?.bg] || POOLS.prairie;
+  let pool = (seg?.classes?.length ? seg.classes : null) || POOLS[seg?.bg] || POOLS.prairie;
   if (/Bici/i.test(seg?.name || "")) pool = ["biker"];
   const sprite = pool[Math.floor(rand() * pool.length)];
   return { sprite, name: `${CLASSES[sprite]} ${FIRST[Math.floor(rand() * FIRST.length)]}` };
