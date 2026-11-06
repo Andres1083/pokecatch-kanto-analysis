@@ -1,6 +1,6 @@
 // Escena de canje del Casino (como el original): moneda → plataforma → silueta → revelación → «¡Recibes a X Nv. N!»
-import { COIN_CASE } from "../data/casino-assets.js?v=133";
-import { frontSprite, artSprite } from "../data/sprites.js?v=133";
+import { COIN_CASE } from "../data/casino-assets.js?v=134";
+import { frontSprite, artSprite } from "../data/sprites.js?v=134";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 

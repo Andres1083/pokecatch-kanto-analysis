@@ -1,8 +1,8 @@
 // Ventana de Opciones con pestañas (como el original): General, Guardado, Novedades y Avanzado.
-import { CHANGELOG, LATEST } from "../data/changelog.js?v=133";
-import { showConfirm } from "./confirm.js?v=133";
-import { getSession, signOut } from "../engine/auth.js?v=133";
-import { renderChangelogList } from "./changelog-view.js?v=133";
+import { CHANGELOG, LATEST } from "../data/changelog.js?v=134";
+import { showConfirm } from "./confirm.js?v=134";
+import { getSession, signOut } from "../engine/auth.js?v=134";
+import { renderChangelogList } from "./changelog-view.js?v=134";
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const SEEN_KEY = "pokecatch-kanto-changelog";

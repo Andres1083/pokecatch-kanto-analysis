@@ -1,5 +1,10 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "4.2", date: "6 nov 2026", title: "Requisitos de Mewtwo y Mew", items: [
+    "Mewtwo solo aparece tras ganar la Liga Pokémon de Kanto.",
+    "Mew solo aparece con la Pokédex de Kanto completa (1–150, sin contar a Mew); el aviso muestra tu progreso.",
+    "Si un legendario está bloqueado, el juego avisa y sigue la ruta en vez de quedarse atascado en ese paso (también las aves).",
+  ] },
   { v: "4.1", date: "5 nov 2026", title: "Filtro de naturaleza en los huevos", items: [
     "Al eclosionar, la cría pasa por tu filtro de naturaleza: si no coincide, se cambia por PE para su familia (incluidos los padres de la guardería). Los variocolor siempre se guardan.",
   ] },

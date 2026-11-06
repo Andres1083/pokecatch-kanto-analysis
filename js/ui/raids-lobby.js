@@ -2,11 +2,11 @@
  * Lobby de Incursiones — más fiel al original
  * (boss shiny animado, fondo de escena, marco del jugador, scroll completo)
  */
-import { frontSprite } from "../data/sprites.js?v=133";
-import { avatarHtml } from "./player-avatar.js?v=133";
+import { frontSprite } from "../data/sprites.js?v=134";
+import { avatarHtml } from "./player-avatar.js?v=134";
 import {
   bossOfDay, ensureRaidSave, RAID_CFG, monName, todayKey, pityReady,
-} from "../engine/raids.js?v=133";
+} from "../engine/raids.js?v=134";
 
 const TYPE_ES = {
   normal: "Normal", fire: "Fuego", water: "Agua", electric: "Eléctrico",
