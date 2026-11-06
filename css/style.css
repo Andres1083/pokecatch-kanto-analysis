@@ -7566,3 +7566,14 @@ body { background-color: transparent !important; }
 .gift-card { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 4px; border-radius: 14px; border: 2px solid #3a2f5a; background: #14101f; color: #fff; font: inherit; cursor: pointer; }
 .gift-card:hover, .gift-card:active { border-color: #ffcb05; }
 .gift-card img { width: 84px; height: 84px; object-fit: contain; image-rendering: pixelated; }
+
+/* v136: globo de tipos (ventajas / debilidades) */
+.bf-chip.tp-tap { cursor: pointer; }
+.tp-pop { position: fixed; z-index: 5000; padding: 14px; border-radius: 16px; background: #1b1f33; border: 2px solid #3a4266; box-shadow: 0 12px 30px rgba(0,0,0,.55); color: #fff; font-family: var(--font-ui, inherit); }
+.tp-pill { display: inline-block; padding: 3px 10px; border-radius: 10px; background: color-mix(in srgb, var(--tc) 55%, #1b1f33); border: 2px solid var(--tc); font-weight: 700; font-size: .85rem; margin: 2px; }
+.tp-pill.big { font-size: 1rem; padding: 4px 14px; margin: 0 0 6px; }
+.tp-h { margin: 10px 0 4px; font-weight: 800; font-size: .85rem; letter-spacing: .04em; }
+.tp-row { display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; }
+.tp-l { flex: 0 0 38%; font-weight: 700; font-size: .85rem; padding-top: 4px; }
+.tp-l.g { color: #6fdc8c; } .tp-l.r { color: #ff7a7a; } .tp-l.n { color: #c3c8da; }
+.tp-p { display: flex; flex-wrap: wrap; }

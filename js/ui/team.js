@@ -1,12 +1,12 @@
 // Pantalla de equipo + detalle (estilo original)
 
-import { frontSprite, iconSprite, spriteFallback } from "../data/sprites.js?v=135";
-import { DEX_NAMES } from "../data/dex-names.js?v=135";
-import { pixelDropdown } from "./dropdown.js?v=135";
-import { cropSprite } from "./sprite-fit.js?v=135";
-import { showPokemonDetail } from "./pokemon-detail.js?v=135";
-import { TYPE_INFO } from "./collection.js?v=135";
-import { NATURES, natureLabel } from "../data/natures.js?v=135";
+import { frontSprite, iconSprite, spriteFallback } from "../data/sprites.js?v=136";
+import { DEX_NAMES } from "../data/dex-names.js?v=136";
+import { pixelDropdown } from "./dropdown.js?v=136";
+import { cropSprite } from "./sprite-fit.js?v=136";
+import { showPokemonDetail } from "./pokemon-detail.js?v=136";
+import { TYPE_INFO } from "./collection.js?v=136";
+import { NATURES, natureLabel } from "../data/natures.js?v=136";
 
 const filters = { nature: "", types: new Set(), sort: "recent", shiny: false };
 const power = (m) => ["hp", "atk", "def", "spa", "spd", "spe"].reduce((a, k) => a + (m.stats?.[k] || 0), 0);

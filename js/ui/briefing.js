@@ -1,10 +1,11 @@
 // Pantalla previa al gimnasio: nivel recomendado, premio y Pokémon que aparecen con su %.
 
-import { frontSprite } from "../data/sprites.js?v=135";
-import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=135";
-import { pixelIcon } from "./pixel.js?v=135";
-import { ITEMS } from "../data/items.js?v=135";
-import { itemImg } from "./item-icon.js?v=135";
+import { showTypeTip } from "./type-tip.js?v=136";
+import { frontSprite } from "../data/sprites.js?v=136";
+import { encounterTable, periodOf, recommendedLevels } from "../engine/story.js?v=136";
+import { pixelIcon } from "./pixel.js?v=136";
+import { ITEMS } from "../data/items.js?v=136";
+import { itemImg } from "./item-icon.js?v=136";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const pctLabel = (p) => (p < 1 ? "<1 %" : `${p >= 10 ? Math.round(p) : p.toFixed(1).replace(".", ",")} %`);
@@ -121,7 +122,7 @@ export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel
           ${gym ? `<div class="bf-chips">
             <span class="bf-chip green">Nv. recomendado <b>${lo}–${hi}</b></span>
             <span class="bf-chip">${gym.leaderEs}</span>
-            <span class="bf-chip type" style="--tc:${gym.color || "#94a3b8"}">${gym.typeEs}</span>
+            <span class="bf-chip type tp-tap" data-type="${gym.typeEs}" style="--tc:${gym.color || "#94a3b8"}">${gym.typeEs}</span>
             <span class="bf-chip">Recompensa ${fmt(gym.reward)} ₽</span>
             <span class="bf-chip blue2">${periodChip}</span>
           </div>` : ""}
@@ -144,6 +145,7 @@ export function showBriefing({ chapterName, segs, owned, weather, bg, closeLabel
     };
     // Idle: si no tocas, sigue solo a los 4.5 s
     const autoT = setTimeout(close, 4500);
+    overlay.addEventListener("click", (e) => { const c = e.target.closest(".tp-tap"); if (c) { clearTimeout(autoT); showTypeTip(c, c.dataset.type); } });
     overlay.querySelector(".bf-x")?.addEventListener("click", close);
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
     overlay.querySelector(".bf-go")?.addEventListener("click", () => { close(); if (actionLabel && onAction) onAction(); });
@@ -159,7 +161,7 @@ export function showLeague({ trainers, bg, unlocked, beaten, onAction, title = "
     const rows = trainers.map(t => {
       const hidden = t.champ && !beaten;
       return `<div class="bf-tr"><span class="bf-trf"><img class="${hidden ? "sil" : ""}" src="assets/trainers/${t.sprite}.png" alt="" onerror="this.remove()"></span>
-        <div class="bf-trn"><b>${hidden ? "???" : t.name}</b>${hidden ? "" : `<span class="bf-chip type" style="--tc:${t.color}">${t.type}</span>`}</div>
+        <div class="bf-trn"><b>${hidden ? "???" : t.name}</b>${hidden ? "" : `<span class="bf-chip type tp-tap" data-type="${t.type}" style="--tc:${t.color}">${t.type}</span>`}</div>
         <div class="bf-trr"><span class="bf-chip ${t.hi >= 86 ? "gold" : "green"}">Nv. recomendado <b>${t.lo}–${t.hi}</b></span><small>Tope <b>${t.top}</b></small></div></div>`;
     }).join("");
     const overlay = overlayShell(`
@@ -179,6 +181,7 @@ export function showLeague({ trainers, bg, unlocked, beaten, onAction, title = "
       </div></div>
       <div class="bf-foot"><button type="button" class="bf-go" ${unlocked ? "" : "disabled"}>${unlocked ? "ENTRAR EN LA LIGA" : "🔒 VENCE A LOS LÍDERES"}</button></div>`, "#c9a227");
     const close = () => { overlay.remove(); resolve(); };
+    overlay.addEventListener("click", (e) => { const c = e.target.closest(".tp-tap"); if (c) showTypeTip(c, c.dataset.type); });
     overlay.querySelector(".bf-x")?.addEventListener("click", close);
     overlay.addEventListener("click", (e) => { if (e.target === overlay) close(); });
     overlay.querySelector(".bf-go").onclick = () => { if (!unlocked) return; close(); onAction?.(); };

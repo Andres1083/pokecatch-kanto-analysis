@@ -1,6 +1,6 @@
 // Johto: normaliza los capítulos importados al mismo formato que Kanto
 // (nombres en español de líder / medalla / tipo) y marca la región.
-import { JOHTO_CHAPTERS } from "./johto-story-raw.js?v=135";
+import { JOHTO_CHAPTERS } from "./johto-story-raw.js?v=136";
 
 const TYPE_ES = {
   normal: "Normal", fire: "Fuego", water: "Agua", electric: "Eléctrico", grass: "Planta", ice: "Hielo",

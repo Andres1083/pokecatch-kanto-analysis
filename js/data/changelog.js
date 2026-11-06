@@ -1,5 +1,8 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "5.1", date: "6 nov 2026", title: "Tipos de los líderes", items: [
+    "Al tocar la etiqueta de tipo de un líder (gimnasio o Liga) se abre un globo con lo que es superefectivo, poco efectivo o sin efecto, tanto en ataque como en defensa.",
+  ] },
   { v: "5.0", date: "6 nov 2026", title: "¡Johto!", items: [
     "Segunda región: 17 capítulos tras la Liga de Kanto (Céfiro a Dragón, Calle Victoria, Alto Mando de Johto, Campeón y Monte Plateado).",
     "Elige tu inicial de Johto, recibe huevos (Togepi y otros) y encuentros fijos como el Gyarados rojo.",

@@ -1,14 +1,14 @@
 // Casino: tragaperras + tienda de premios (fichas)
-import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=135";
-import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=135";
-import { frontSprite } from "../data/sprites.js?v=135";
-import { DEX_NAMES } from "../data/dex-names.js?v=135";
-import { itemImg } from "./item-icon.js?v=135";
-import { dexSets } from "./dex.js?v=135";
-import { showTip } from "./tip.js?v=135";
-import { showConfirm } from "./confirm.js?v=135";
-import { playCasinoReveal } from "./casino-reveal.js?v=135";
-import { showPokedexCard } from "./pokedex-card.js?v=135";
+import { SYMBOLS, PAYS, PAY_TWO, MULTS, BASE_BET, prizeFor, SPIN_SPEED, STRIP, SHOP_KANTO, SHOP_NEXT, spinGrid, evalGrid, casinoUnlocked, CASINO_BADGES } from "../data/casino.js?v=136";
+import { CASINO_BG, COIN_CASE, COIN_FRAMES } from "../data/casino-assets.js?v=136";
+import { frontSprite } from "../data/sprites.js?v=136";
+import { DEX_NAMES } from "../data/dex-names.js?v=136";
+import { itemImg } from "./item-icon.js?v=136";
+import { dexSets } from "./dex.js?v=136";
+import { showTip } from "./tip.js?v=136";
+import { showConfirm } from "./confirm.js?v=136";
+import { playCasinoReveal } from "./casino-reveal.js?v=136";
+import { showPokedexCard } from "./pokedex-card.js?v=136";
 
 const fmt = (n) => Number(n).toLocaleString("es-ES");
 const ui = { tab: "slots", mult: 1, spinning: false, auto: false, grid: null };

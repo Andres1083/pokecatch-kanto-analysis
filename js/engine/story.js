@@ -1,9 +1,9 @@
 // Historia de Kanto: capítulos → tramos → nodos, y tablas de aparición.
 // Datos tomados del Poke'Catch original (pesos, horarios, clima).
 
-import { CHAPTERS } from "../data/story.js?v=135";
-import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=135";
-import JOHTO_ENCOUNTERS from "../data/encounters-johto.js?v=135";
+import { CHAPTERS } from "../data/story.js?v=136";
+import KANTO_ENCOUNTERS from "../data/encounters-kanto.js?v=136";
+import JOHTO_ENCOUNTERS from "../data/encounters-johto.js?v=136";
 
 const ALL_ENCOUNTERS = { ...KANTO_ENCOUNTERS, ...JOHTO_ENCOUNTERS };
 
