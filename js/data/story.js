@@ -1,4 +1,4 @@
-import { JOHTO as JOHTO_CHAPTERS } from "./johto-story.js?v=136";
+import { JOHTO as JOHTO_CHAPTERS } from "./johto-story.js?v=137";
 // Capítulos de Kanto (datos del Poke'Catch original, nombres en español)
 export const CHAPTERS = [
  {

@@ -1,6 +1,6 @@
 // Motor de combates simple pero sólido (Gen 1 style)
 
-import { getTypeEffectiveness } from "../data/pokeapi.js?v=136";
+import { getTypeEffectiveness } from "../data/pokeapi.js?v=137";
 
 /**
  * Calcula el daño usando la fórmula clásica de Pokémon

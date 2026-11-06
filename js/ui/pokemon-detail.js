@@ -1,13 +1,14 @@
 // Detalle de Pokémon (estilo ficha del original)
 
-import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=136";
-import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=136";
-import { ITEMS } from "../data/items.js?v=136";
-import { itemImg } from "./item-icon.js?v=136";
-import { pixelIcon } from "./pixel.js?v=136";
-import { countFamily, familySlots } from "../data/families.js?v=136";
-import { getNature, natureEffectHtml } from "../data/natures.js?v=136";
-import { showConfirm, showAlert } from "./confirm.js?v=136";
+import { frontSprite, artSprite, artFallback, sceneForMon } from "../data/sprites.js?v=137";
+import { evosOf, prevOf, familyStages, STONE_ES } from "../data/evolutions.js?v=137";
+import { ITEMS } from "../data/items.js?v=137";
+import { itemImg } from "./item-icon.js?v=137";
+import { pixelIcon } from "./pixel.js?v=137";
+import { countFamily, familySlots } from "../data/families.js?v=137";
+import { getNature, natureEffectHtml } from "../data/natures.js?v=137";
+import { showConfirm, showAlert } from "./confirm.js?v=137";
+import { comparePending, compareFromDetail } from "./compare.js?v=137";
 
 const TYPE_ES = {
   normal: "Normal", fire: "Fuego", water: "Agua", electric: "Eléctrico",
@@ -95,6 +96,7 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
         ${mon.shiny ? `<span class="detail-hero-shiny">✦</span>` : ""}
         ${inTeam ? `<span class="detail-badge">En el equipo</span>` : ""}
         <button type="button" class="detail-btn-txt detail-lock-fab ${mon.locked ? "on" : ""}" id="btn-lock">${mon.locked ? "Bloqueado" : "Bloquear"}</button>
+        <button type="button" class="detail-btn-txt detail-cmp ${comparePending() && comparePending() !== mon ? "on" : ""}" id="btn-compare">${comparePending() ? (comparePending() === mon ? "Cancelar" : `Comparar con ${comparePending().nameEs || comparePending().name}`) : "Comparar"}</button>
         <button type="button" class="detail-btn-txt detail-trash" id="btn-release">Liberar</button>
       </div>
 
@@ -212,6 +214,15 @@ export function showPokemonDetail(mon, { inTeam = true, onClose } = {}) {
       showPokemonDetail(mon, { inTeam, onClose });
     };
   });
+  const cmp = overlay.querySelector("#btn-compare");
+  if (cmp) cmp.onclick = () => {
+    const shut = compareFromDetail(mon, (t) => {
+      const el = document.createElement("div"); el.className = "poke-toast"; el.textContent = t;
+      document.body.appendChild(el); setTimeout(() => el.remove(), 2600);
+    });
+    if (shut) close();
+    else if (!comparePending()) { cmp.textContent = "Comparar"; cmp.classList.remove("on"); }
+  };
   const lk = overlay.querySelector("#btn-lock");
   if (lk) lk.onclick = () => {
     mon.locked = !mon.locked;

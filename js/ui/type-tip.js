@@ -66,3 +66,16 @@ export function showTypeTip(anchor, typeEs) {
   cur = el;
   setTimeout(() => document.addEventListener("pointerdown", onDoc, true), 0);
 }
+
+/** Multiplicadores de daño recibido por un Pokémon con esos tipos: { tipo: factor } (solo ≠ 1). */
+export function incomingMult(types = []) {
+  const out = {};
+  for (const a of TYPES) {
+    let m = 1;
+    for (const t of types) { const [se, nve, no] = ATK[a]; if (se.includes(t)) m *= 2; else if (nve.includes(t)) m *= 0.5; else if (no.includes(t)) m *= 0; }
+    if (m !== 1) out[a] = m;
+  }
+  return out;
+}
+export const TYPE_NAME_ES = ES;
+export const TYPE_COLOR = COL;

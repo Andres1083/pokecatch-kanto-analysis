@@ -1,5 +1,8 @@
 // Registro de cambios mostrado en el título (el más reciente primero).
 export const CHANGELOG = [
+  { v: "5.2", date: "6 nov 2026", title: "Comparar Pokémon", items: [
+    "Nuevo botón «Comparar» en la ficha: marca un Pokémon, abre otro y vuelve a pulsar. Se muestran las estadísticas enfrentadas, el total, las debilidades y un veredicto, todo en una sola pantalla sin scroll.",
+  ] },
   { v: "5.1", date: "6 nov 2026", title: "Tipos de los líderes", items: [
     "Al tocar la etiqueta de tipo de un líder (gimnasio o Liga) se abre un globo con lo que es superefectivo, poco efectivo o sin efecto, tanto en ataque como en defensa.",
   ] },
